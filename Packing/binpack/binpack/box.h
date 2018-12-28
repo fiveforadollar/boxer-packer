@@ -1,5 +1,4 @@
-#ifndef BOX_H
-#define BOX_H
+#pragma once 
 
 #include <vector>
 
@@ -32,5 +31,3 @@ public:
 		return myOrientations;
 	}
 };
-
-#endif
