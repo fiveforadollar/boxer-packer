@@ -38,12 +38,11 @@ class Grid : SCNNode {
         let planeNode = self.childNodes.first!
         planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: self.planeGeometry, options: nil))
         
-        if let textGeometry = self.childNode(withName: "textNode", recursively: true)?.geometry as? SCNText {
-            let widthString = String(format: "%.1f\"", anchor.width)
-            let lengthString = String(format: "%.1f\"", anchor.length)
-            return (widthString + " by " + lengthString)
-        }
-        return ""
+        //if let textGeometry = self.childNode(withName: "textNode", recursively: true)?.geometry as? SCNText {
+        //    let widthString = String(format: "%.1f\"", anchor.width)
+        //    let lengthString = String(format: "%.1f\"", anchor.length)
+        //}
+        return String(format: "%.1f\"", anchor.width) + " by " + String(format: "%.1f\"", anchor.length)
     }
     
     private func setup() {
