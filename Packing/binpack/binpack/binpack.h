@@ -4,6 +4,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include "pallet.h"
 #include "box.h"
 
@@ -45,3 +46,18 @@ bool overlap(Box* box1, Box* box2, const int axisId1, const int axisId2);
 	@Return: boolean true if intersection exists
 */
 bool intersect(Box* box1, Box* box2);
+
+/*
+	Set up pallets and initial boxes
+	@Params:= none
+	@Return: none
+*/
+void initiatePacking();
+
+/*
+	Read box dimensions from JSON file
+	@Params:
+		fp: Filepath to JSON file of box dimensions
+	@Return: vector of Box pointers
+*/
+std::vector<Box*> readBoxesFromJson(std::string fp);

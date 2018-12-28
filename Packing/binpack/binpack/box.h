@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <vector>
+#include <iostream>
 
 class Box {
 public:
@@ -33,4 +34,15 @@ public:
 		std::vector<Box*> myOrientations{ lwh, lhw, whl, wlh, hwl, hlw };
 		return myOrientations;
 	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Box& box);
 };
+
+std::ostream& operator<<(std::ostream& os, const Box& box)
+{
+	os << "Box with dimensions:" << box.length << ":" << box.width << ":" << box.height;
+	if (box.position.size())
+		os << " and positioned at:" << "(" << box.position[0] << "," << box.position[1] << "," << box.position[2] << ")";
+	os << std::endl;
+	return os;
+}

@@ -42,18 +42,58 @@ bool intersect(Box* box1, Box* box2) {
 		overlap(box1, box2, WIDTH_AXIS_ID, HEIGHT_AXIS_ID));
 }
 
+void initiatePacking() {
+	openNewPallet();
+	std::vector<Box*> unpackedBoxes = readBoxesFromJson("my filepath");
+	
+	// DEBUG TESTING
+	bool debug = true;
+	if (debug) {
+		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
+		Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1);
+		unpackedBoxes.push_back(box1);
+		unpackedBoxes.push_back(box2);
+	}
+	// END DEBUG
+
+	while (unpackedBoxes.size() != 0) {
+		std::cout << "Start one packing iteration..." << std::endl;
+		std::cout << "Before packing, number of unpacked boxes:" << unpackedBoxes.size() << std::endl;
+		std::cout << "Before packing, number of pallets:" << openPallets.size() << std::endl;
+		for (int i = 0; i < openPallets.size(); i++) {
+			std::cout << "\tPallet contains " << openPallets[i]->items.size() << "boxes" << std::endl;
+		}
+		
+		//unpackedBoxes = runBestFit(unpackedBoxes);
+
+		std::cout << "After packing, number of unpacked boxes:" << unpackedBoxes.size() << std::endl;
+		std::cout << "After packing, number of pallets:" << openPallets.size() << std::endl;
+		for (int i = 0; i < openPallets.size(); i++) {
+			std::cout << "\tPallet contains " << openPallets[i]->items.size() << "boxes" << std::endl;
+		}
+
+	}
+}
+
+std::vector<Box*> readBoxesFromJson(std::string fp) {
+	std::vector<Box*> myBoxes;
+	// TO DO
+	return myBoxes; 
+}
+
 int main()
 {	
 	Box myBox(1, 2, 3);
 	std::vector<Box*> myBoxOs = myBox.getOrientations();
 	for (auto x : myBoxOs) {
 		cout << x->length << x->width << x->height << endl;
+		cout << *x << endl;
 	}
 
 	cin.get();
 
 	// Create intiial, empty pallet
-	openNewPallet(); 
+	//initiatePacking();
 
 
 
