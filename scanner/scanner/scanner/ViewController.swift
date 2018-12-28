@@ -12,6 +12,7 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var dimensionsLabel: UILabel!
     var grids = [Grid]()
     
     override func viewDidLoad() {
@@ -90,6 +91,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return
         }
         
-        foundGrid.update(anchor: anchor as! ARPlaneAnchor)
+        var dimensions = foundGrid.update(anchor: anchor as! ARPlaneAnchor)
+        dimensionsLabel.text = dimensions
     }
 }
