@@ -2,12 +2,14 @@
 //
 
 #include "binpack.h"
+#include "pallet.h"
 
 using namespace std;
 
+
 int main()
 {
-	cout << "Hello CMake." << endl;
+	cout << "Hello World." << endl;
 	cout << "Press ENTER to exit." << endl;
 	cin.get();
 	return 0;
