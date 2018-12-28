@@ -1,9 +1,15 @@
 ﻿#include "binpack.h"
 
+#define DEBUG 1
+
 /* Pallets in use */
 std::vector<Pallet*> openPallets;
 
-int axisIds[3] = {LENGTH_AXIS_ID, WIDTH_AXIS_ID, HEIGHT_AXIS_ID };
+int axisIds[3] = {
+	LENGTH_AXIS_ID, 
+	WIDTH_AXIS_ID, 
+	HEIGHT_AXIS_ID 
+};
 
 
 void openNewPallet() {
@@ -48,8 +54,7 @@ void initiatePacking() {
 	std::vector<Box*> unpackedBoxes = readBoxesFromJson("my filepath");
 	
 	// DEBUG TESTING
-	bool debug = true;
-	if (debug) {
+	if (DEBUG) {
 		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
 		Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1);
 		unpackedBoxes.push_back(box1);
@@ -65,14 +70,13 @@ void initiatePacking() {
 			std::cout << "\tPallet contains " << openPallets[i]->items.size() << "boxes" << std::endl;
 		}
 		
-		//unpackedBoxes = runBestFit(unpackedBoxes);
+		unpackedBoxes = runBestFit(unpackedBoxes);
 
 		std::cout << "After packing, number of unpacked boxes:" << unpackedBoxes.size() << std::endl;
 		std::cout << "After packing, number of pallets:" << openPallets.size() << std::endl;
 		for (int i = 0; i < openPallets.size(); i++) {
 			std::cout << "\tPallet contains " << openPallets[i]->items.size() << "boxes" << std::endl;
 		}
-
 	}
 }
 
@@ -190,6 +194,15 @@ std::vector<Box *> runBestFit(std::vector<Box *> items) {
 	return notPacked;
 }
 
+void teardown() {
+	for (Pallet *pallet : openPallets) {
+		for (Box *box : pallet->items) {
+			delete(box);
+		}
+		delete(pallet);
+	}
+}
+
 int main()
 {	
 	Box myBox(1, 2, 3);
@@ -199,13 +212,11 @@ int main()
 		std::cout << *x << std::endl;
 	}
 
-	std::cin.get();
-
 	// Create intiial, empty pallet
-	//initiatePacking();
+	initiatePacking();
+	teardown();
 
-
-
+	std::cin.get();
 
 	return 0;
 }

@@ -78,3 +78,10 @@ std::vector<Box*> readBoxesFromJson(std::string fp);
 	@Return: Vector of Box pointers for items that were unable to be placed
 */	
 std::vector<Box *> runBestFit(std::vector<Box *> items);
+
+/*
+	Free all dynamically allocated memory
+	@Params: None
+	@Return: None
+*/
+void teardown();
