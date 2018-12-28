@@ -14,6 +14,7 @@
 		0E24848721D6CB41001173D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E24848621D6CB41001173D2 /* Assets.xcassets */; };
 		0E24848A21D6CB41001173D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E24848821D6CB41001173D2 /* LaunchScreen.storyboard */; };
 		0E24849521D6CB41001173D2 /* scannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E24849421D6CB41001173D2 /* scannerTests.swift */; };
+		0E2484A021D6CCF8001173D2 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E24849F21D6CCF8001173D2 /* Grid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		0E24849021D6CB41001173D2 /* scannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = scannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E24849421D6CB41001173D2 /* scannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scannerTests.swift; sourceTree = "<group>"; };
 		0E24849621D6CB41001173D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0E24849F21D6CCF8001173D2 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Grid.swift; path = ../../../../../Downloads/Assets/Grid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		0E24847C21D6CB40001173D2 /* scanner */ = {
 			isa = PBXGroup;
 			children = (
+				0E24849F21D6CCF8001173D2 /* Grid.swift */,
 				0E24847D21D6CB40001173D2 /* AppDelegate.swift */,
 				0E24847F21D6CB40001173D2 /* art.scnassets */,
 				0E24848121D6CB40001173D2 /* ViewController.swift */,
@@ -202,6 +205,7 @@
 			files = (
 				0E24848221D6CB40001173D2 /* ViewController.swift in Sources */,
 				0E24847E21D6CB40001173D2 /* AppDelegate.swift in Sources */,
+				0E2484A021D6CCF8001173D2 /* Grid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
