@@ -3,6 +3,7 @@
 
 #include "binpack.h"
 #include "pallet.h"
+#include "box.h"
 
 using namespace std;
 
