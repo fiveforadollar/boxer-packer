@@ -7,11 +7,14 @@ public:
 	double length;
 	double width;
 	double height;
+	double volume;
+	std::vector<double> position;
 
 	Box(double _length, double _width, double _height) {
 		length = _length;
 		width = _width;
 		height = _height;
+		volume = length * width * height;
 	}
 
 	std::vector <double> getDimensions() {
