@@ -1,7 +1,4 @@
-﻿// binpack.h : Include file for standard system include files,
-// or project specific include files.
-
-#pragma once
+﻿#pragma once
 
 #include <iostream>
 #include <string>
@@ -22,10 +19,22 @@ void openNewPallet();
 /* 
 	Try to place box in container
 	@Params: 
-		item: 
-	@Return: 
+		item: Box object to be placed
+		palletNum: Pallet's index within the global vector of open pallets
+		pivot: Location vector of form <length, width, height> at which the item will be placed
+	@Return: bool indicating if placement was successful
 */
-bool placeItem(const Box item, const int containerNum, vector<double> pivot);
+bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivot);
+
+/*
+	Check if box can fit in the pallet given a pivot point
+	@Params:
+		item: Box object to be placed
+		palletNum: Pallet's index within the global vector of open pallets
+		pivot: Location vector of form <length, width, height> at which the item will be placed
+	@Return: bool indicating if the box will fit in the pallet at the given pivot
+*/
+bool boxInBounds(Box *item, Pallet *pallet, std::vector<double> pivot);
 
 /*
 	Checks for overlap of the positions of two boxes along 2 given axes
@@ -61,3 +70,11 @@ void initiatePacking();
 	@Return: vector of Box pointers
 */
 std::vector<Box*> readBoxesFromJson(std::string fp);
+
+/* 
+	Attempt to find placements for each box 
+	@Params:
+		items: Vector of Box pointers for items to be placed
+	@Return: Vector of Box pointers for items that were unable to be placed
+*/	
+std::vector<Box *> runBestFit(std::vector<Box *> items);

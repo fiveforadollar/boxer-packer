@@ -15,7 +15,7 @@ public:
 	double width;
 	double height;
 	double volume;
-	std::vector<Box> items;
+	std::vector<Box*> items;
 
 	Pallet() {
 		length = P_LENGTH;
