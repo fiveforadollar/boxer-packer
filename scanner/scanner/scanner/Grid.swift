@@ -30,7 +30,7 @@ class Grid : SCNNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(anchor: ARPlaneAnchor) {
+    func update(anchor: ARPlaneAnchor) -> String {
         planeGeometry.width = CGFloat(anchor.extent.x);
         planeGeometry.height = CGFloat(anchor.extent.z);
         position = SCNVector3Make(anchor.center.x, 0, anchor.center.z);
@@ -41,8 +41,9 @@ class Grid : SCNNode {
         if let textGeometry = self.childNode(withName: "textNode", recursively: true)?.geometry as? SCNText {
             let widthString = String(format: "%.1f\"", anchor.width)
             let lengthString = String(format: "%.1f\"", anchor.length)
-            print(widthString + " by " + lengthString)
+            return (widthString + " by " + lengthString)
         }
+        return ""
     }
     
     private func setup() {
