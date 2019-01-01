@@ -9,11 +9,7 @@
 #define WIDTH_AXIS_ID 1
 #define HEIGHT_AXIS_ID 2
 
-/* 
-	Adds a new, empty pallet of (P_LENGTH, P_WIDTH, P_HEIGHT) dimensions to a vector of open pallets
-	@Params: none
-	@Return: none
-*/
+/* Adds a new, empty pallet of (P_LENGTH, P_WIDTH, P_HEIGHT) dimensions to a vector of open pallets */
 void openNewPallet(); 
 
 /* 
@@ -25,6 +21,15 @@ void openNewPallet();
 	@Return: bool indicating if placement was successful
 */
 bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivot);
+
+/*
+	Test all possible pallet/item/pivot permutations for placing the given item 
+	Calls placeItem() to attempt actual placement at each pivot point
+	@Params:
+		toBePlaedItem: Box object to be placed
+	@Return: bool indicating if placement was successful
+*/
+bool permutePlacements(Box *toBePlacedItem);
 
 /*
 	Check if box can fit in the pallet given a pivot point
@@ -56,11 +61,7 @@ bool overlap(Box* box1, Box* box2, const int axisId1, const int axisId2);
 */
 bool intersect(Box* box1, Box* box2);
 
-/*
-	Set up pallets and initial boxes
-	@Params:= none
-	@Return: none
-*/
+/* Set up pallets and initial boxes */
 void initiatePacking();
 
 /*
@@ -79,9 +80,5 @@ std::vector<Box*> readBoxesFromJson(std::string fp);
 */	
 std::vector<Box *> runBestFit(std::vector<Box *> items);
 
-/*
-	Free all dynamically allocated memory
-	@Params: None
-	@Return: None
-*/
+/* Free all dynamically allocated memory */
 void teardown();

@@ -11,8 +11,10 @@ int axisIds[3] = {
 	HEIGHT_AXIS_ID 
 };
 
-
 void openNewPallet() {
+	if (DEBUG) {
+		std::cout << "Creating new pallet (#" << openPallets.size() << ")\n";
+	}
 	openPallets.push_back(new Pallet());
 }
 
@@ -50,32 +52,36 @@ bool intersect(Box* box1, Box* box2) {
 }
 
 void initiatePacking() {
-	openNewPallet();
 	std::vector<Box*> unpackedBoxes = readBoxesFromJson("my filepath");
 	
 	// DEBUG TESTING
 	if (DEBUG) {
 		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
 		Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1);
+		Box* box3 = new Box(1, 1, 1);
 		unpackedBoxes.push_back(box1);
 		unpackedBoxes.push_back(box2);
+		unpackedBoxes.push_back(box3);
 	}
 	// END DEBUG
 
+	int iteration = 1;
 	while (unpackedBoxes.size() != 0) {
-		std::cout << "Start one packing iteration..." << std::endl;
-		std::cout << "Before packing, number of unpacked boxes:" << unpackedBoxes.size() << std::endl;
-		std::cout << "Before packing, number of pallets:" << openPallets.size() << std::endl;
+		openNewPallet(); 
+		std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
+		std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+		std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
 		for (int i = 0; i < openPallets.size(); i++) {
-			std::cout << "\tPallet contains " << openPallets[i]->items.size() << "boxes" << std::endl;
+			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
 		}
 		
 		unpackedBoxes = runBestFit(unpackedBoxes);
+		++iteration;
 
-		std::cout << "After packing, number of unpacked boxes:" << unpackedBoxes.size() << std::endl;
-		std::cout << "After packing, number of pallets:" << openPallets.size() << std::endl;
+		std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+		std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
 		for (int i = 0; i < openPallets.size(); i++) {
-			std::cout << "\tPallet contains " << openPallets[i]->items.size() << "boxes" << std::endl;
+			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
 		}
 	}
 }
@@ -88,9 +94,9 @@ std::vector<Box*> readBoxesFromJson(std::string fp) {
 
 bool boxInBounds(Box *item, Pallet *pallet, std::vector<double> pivot) {
 	return (
-		pivot[LENGTH_AXIS_ID] + item->length < pallet->length &&
-		pivot[WIDTH_AXIS_ID] + item->width < pallet->width &&
-		pivot[HEIGHT_AXIS_ID] + item->height < pallet->height
+		pivot[LENGTH_AXIS_ID] + item->length <= pallet->length &&
+		pivot[WIDTH_AXIS_ID] + item->width <= pallet->width &&
+		pivot[HEIGHT_AXIS_ID] + item->height <= pallet->height
 	);
 }
 
@@ -98,6 +104,8 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 	double pLength = pallet->length;
 	double pWidth = pallet->width;
 	double pHeight = pallet->height;
+
+	item->position = pivotPoint;
 
 	bool foundPlacement = false;
 	std::vector <Box*> itemOrientations = item->getOrientations();
@@ -122,6 +130,14 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 			item->length = itemOrientation->length;
 			item->width = itemOrientation->width;
 			item->height = itemOrientation->height;
+
+			if (DEBUG) {
+				std::cout << "Placing:\n";
+				std::cout << "	" << *item;
+				std::cout << "in:\n";
+				std::cout << "	" << *pallet;
+			}
+
 			pallet->items.push_back(item);
 
 			foundPlacement = true;
@@ -135,60 +151,73 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 	return foundPlacement;
 }
 
+bool permutePlacements(Box *toBePlacedItem) {
+	for (Pallet *currPallet : openPallets) {
+		// Check all items in the pallet
+		for (Box *currPlacedItem : currPallet->items) {
+			// Check all pivots for the current item
+			for (int axisId : axisIds) {
+				std::vector<double> pivotPoint;
+
+				switch (axisId) {
+				case LENGTH_AXIS_ID: {
+					pivotPoint = {
+						currPlacedItem->position[LENGTH_AXIS_ID] + currPlacedItem->length,
+						currPlacedItem->position[WIDTH_AXIS_ID],
+						currPlacedItem->position[HEIGHT_AXIS_ID]
+					};
+					break;
+				}
+				case WIDTH_AXIS_ID: {
+					pivotPoint = {
+						currPlacedItem->position[LENGTH_AXIS_ID],
+						currPlacedItem->position[WIDTH_AXIS_ID] + currPlacedItem->width,
+						currPlacedItem->position[HEIGHT_AXIS_ID]
+					};
+					break;
+				}
+				case HEIGHT_AXIS_ID: {
+					pivotPoint = {
+						currPlacedItem->position[LENGTH_AXIS_ID],
+						currPlacedItem->position[WIDTH_AXIS_ID],
+						currPlacedItem->position[HEIGHT_AXIS_ID] + currPlacedItem->height
+					};
+					break;
+				}
+				default: {
+					std::cout << "ERROR: Invalid Axis ID provided\n";
+				}
+				}
+
+				// Successful placement of item
+				if (placeItem(toBePlacedItem, currPallet, pivotPoint)) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 std::vector<Box *> runBestFit(std::vector<Box *> items) {
 	std::vector<Box *> notPacked;
+
+	/*  If there exists an empty pallet:
+		1. It will be the last one in openPallets
+		2. The next item should be placed in it at pivot point (0,0,0) */
+	if (openPallets.back()->items.size() == 0) {
+		Box *toBePlacedItem = items.back();
+		items.pop_back();
+		placeItem(toBePlacedItem, openPallets.back(), { 0, 0, 0 });
+	}
 
 	while (items.size() > 0) {
 		Box *toBePlacedItem = items.back();
 		items.pop_back();
 
-		// Check across all pallets 
-		for (Pallet *currPallet : openPallets) {
-			// Check all items in the pallet
-			for (Box *currPlacedItem : currPallet->items) {
-				bool foundPlacement = false;
-				// Check all pivots for the current item
-				for (int axisId : axisIds) {
-					std::vector<double> pivotPoint;
-
-					switch (axisId) {
-						case LENGTH_AXIS_ID: {
-							pivotPoint = {
-								currPlacedItem->position[LENGTH_AXIS_ID] + currPlacedItem->length,
-								currPlacedItem->position[WIDTH_AXIS_ID],
-								currPlacedItem->position[HEIGHT_AXIS_ID]
-							};
-						}
-						case WIDTH_AXIS_ID: {
-							pivotPoint = {
-								currPlacedItem->position[LENGTH_AXIS_ID],
-								currPlacedItem->position[WIDTH_AXIS_ID] + currPlacedItem->width,
-								currPlacedItem->position[HEIGHT_AXIS_ID]
-							};
-						}
-						case HEIGHT_AXIS_ID: {
-							pivotPoint = {
-								currPlacedItem->position[LENGTH_AXIS_ID],
-								currPlacedItem->position[WIDTH_AXIS_ID],
-								currPlacedItem->position[HEIGHT_AXIS_ID] + currPlacedItem->height
-							};
-						}
-						default: {
-							std::cout << "ERROR: Invalid Axis ID provided\n"; 
-						}
-					}
-
-					// Successful placement of item
-					if (placeItem(toBePlacedItem, currPallet, pivotPoint)) {
-						foundPlacement = true;
-						break;
-					}
-				}
-				// Did not find a placement for the item
-				if (!foundPlacement) {
-					notPacked.push_back(toBePlacedItem);
-				}
-			}
+		// Did not find a placement for the item
+		if (!permutePlacements(toBePlacedItem)) {
+			notPacked.push_back(toBePlacedItem);
 		}
 	}
 	return notPacked;
@@ -205,12 +234,12 @@ void teardown() {
 
 int main()
 {	
-	Box myBox(1, 2, 3);
-	std::vector<Box*> myBoxOs = myBox.getOrientations();
-	for (auto x : myBoxOs) {
-		std::cout << x->length << x->width << x->height << std::endl;
-		std::cout << *x << std::endl;
-	}
+	//Box myBox(1, 2, 3);
+	//std::vector<Box*> myBoxOs = myBox.getOrientations();
+	//for (auto x : myBoxOs) {
+	//	std::cout << x->length << x->width << x->height << std::endl;
+	//	std::cout << *x << std::endl;
+	//}
 
 	// Create intiial, empty pallet
 	initiatePacking();

@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <vector>
+#include <iostream>
 #include "box.h"
 
 /* Pallet dimensions in inches */
@@ -11,6 +12,8 @@
 
 class Pallet {
 public:
+	static int idCounter;
+	int id;
 	double length;
 	double width;
 	double height;
@@ -22,6 +25,7 @@ public:
 		width = P_WIDTH;
 		height = P_HEIGHT;
 		volume = length * width * height;
+		id = idCounter++;
 	}
 
 	Pallet(double _length, double _width, double _height) {
@@ -29,7 +33,22 @@ public:
 		width = _width;
 		height = _height;
 		volume = length * width * height;
+		id = idCounter++;
 	}
 
 	~Pallet() {}
 };
+
+int Pallet::idCounter = 0;
+
+std::ostream& operator<<(std::ostream& os, const Pallet& pallet)
+{
+	os << "Pallet " << pallet.id << " with dimensions (L,W,H): (" << pallet.length << "," << pallet.width << "," << pallet.height << ")\n";
+	os << "	With " << pallet.items.size() << " item(s):" << std::endl;
+
+	for (Box *item : pallet.items) {
+		os << "	" << *item << std::endl;
+	}
+
+	return os;
+}
