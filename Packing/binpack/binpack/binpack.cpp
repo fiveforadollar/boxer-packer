@@ -17,17 +17,17 @@ int axisIds[3] = {
 
 /****************** Helpers ******************/
 
+std::vector<Box*> readBoxesFromJson(std::string fp) {
+	std::vector<Box*> myBoxes;
+	// TO DO
+	return myBoxes;
+}
+
 void openNewPallet() {
 	if (DEBUG) {
 		std::cout << "Creating new pallet (#" << openPallets.size() << ")\n";
 	}
 	openPallets.push_back(new Pallet());
-}
-
-std::vector<Box*> readBoxesFromJson(std::string fp) {
-	std::vector<Box*> myBoxes;
-	// TO DO
-	return myBoxes;
 }
 
 bool intersect(Box* box1, Box* box2) {
