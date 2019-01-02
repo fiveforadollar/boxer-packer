@@ -17,6 +17,23 @@ int axisIds[3] = {
 
 /****************** Helpers ******************/
 
+std::vector<Box*> initiatePacking() {
+	std::vector<Box*> unpackedBoxes = readBoxesFromJson("my filepath");
+
+	// DEBUG TESTING
+	if (DEBUG) {
+		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
+		Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1);
+		Box* box3 = new Box(1, 1, 1);
+		unpackedBoxes.push_back(box1);
+		unpackedBoxes.push_back(box2);
+		unpackedBoxes.push_back(box3);
+	}
+	// END DEBUG
+
+	return unpackedBoxes;
+}
+
 std::vector<Box*> readBoxesFromJson(std::string fp) {
 	std::vector<Box*> myBoxes;
 	// TO DO
@@ -82,44 +99,11 @@ void teardown() {
 
 /*********************************************/
 
-/***************** Best Fit ******************/
+/**************** First Fit ******************/
 
-void initiatePacking() {
-	std::vector<Box*> unpackedBoxes = readBoxesFromJson("my filepath");
-	
-	// DEBUG TESTING
-	if (DEBUG) {
-		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
-		Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1);
-		Box* box3 = new Box(1, 1, 1);
-		unpackedBoxes.push_back(box1);
-		unpackedBoxes.push_back(box2);
-		unpackedBoxes.push_back(box3);
-	}
-	// END DEBUG
+std::vector<Box *> runFirstFit(std::vector<Box *> items) {
+	openNewPallet();
 
-	int iteration = 1;
-	while (unpackedBoxes.size() != 0) {
-		openNewPallet(); 
-		std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
-		std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
-		std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
-		for (int i = 0; i < openPallets.size(); i++) {
-			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
-		}
-		
-		unpackedBoxes = runBestFit(unpackedBoxes);
-		++iteration;
-
-		std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
-		std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
-		for (int i = 0; i < openPallets.size(); i++) {
-			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
-		}
-	}
-}
-
-std::vector<Box *> runBestFit(std::vector<Box *> items) {
 	std::vector<Box *> notPacked;
 
 	/*  If there exists an empty pallet:
@@ -248,8 +232,27 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
-	// Create intiial, empty pallet
-	initiatePacking();
+	std::vector<Box *> unpackedBoxes = initiatePacking();
+
+	int iteration = 1;
+	while (unpackedBoxes.size() != 0) {
+		std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
+		std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+		std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
+		for (int i = 0; i < openPallets.size(); i++) {
+			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+		}
+
+		unpackedBoxes = runFirstFit(unpackedBoxes);
+		++iteration;
+
+		std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+		std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
+		for (int i = 0; i < openPallets.size(); i++) {
+			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+		}
+	}
+
 	teardown();
 
 	std::cin.get();

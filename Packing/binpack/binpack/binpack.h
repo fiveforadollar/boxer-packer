@@ -61,8 +61,12 @@ bool overlap(Box* box1, Box* box2, const int axisId1, const int axisId2);
 */
 bool intersect(Box* box1, Box* box2);
 
-/* Set up pallets and initial boxes */
-void initiatePacking();
+/*
+	Setup initial boxes
+	@Params: None
+	@Return: Vector of input boxes
+*/
+std::vector<Box*> initiatePacking();
 
 /*
 	Read box dimensions from JSON file
@@ -78,7 +82,7 @@ std::vector<Box*> readBoxesFromJson(std::string fp);
 		items: Vector of Box pointers for items to be placed
 	@Return: Vector of Box pointers for items that were unable to be placed
 */	
-std::vector<Box *> runBestFit(std::vector<Box *> items);
+std::vector<Box *> runFirstFit(std::vector<Box *> items);
 
 /* Free all dynamically allocated memory */
 void teardown();
