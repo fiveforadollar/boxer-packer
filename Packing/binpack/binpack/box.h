@@ -27,7 +27,7 @@ public:
 		height = _height;
 		volume = length * width * height;
 		position = _position;
-		id = idCounter++;
+		id = idCounter;
 	}
 
 	std::vector <double> getDimensions() {
