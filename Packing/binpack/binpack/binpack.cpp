@@ -36,7 +36,13 @@ std::vector<Box*> initiatePacking() {
 
 std::vector<Box*> readBoxesFromJson(std::string fp) {
 	std::vector<Box*> myBoxes;
-	// TO DO
+	std::ifstream infile{ fp };
+	nlohmann::json boxes;
+	infile >> boxes;
+	for (int i = 0; i < boxes.size(); i++) {
+		Box * tempBox = new Box(boxes[i]["length"], boxes[i]["width"], boxes[i]["height"]);
+		myBoxes.push_back(tempBox);
+	}
 	return myBoxes;
 }
 
