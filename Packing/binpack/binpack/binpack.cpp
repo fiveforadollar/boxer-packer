@@ -240,7 +240,7 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
-	HttpHandler *  h = new HttpHandler(U("http://127.0.0.1:"), U("34568"));
+	HttpHandler *  h = new HttpHandler(U("http://192.168.1.172:"), U("8080"));
 	h->open().wait();
 	ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
 
