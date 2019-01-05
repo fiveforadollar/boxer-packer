@@ -240,11 +240,18 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
-
 	// Use a mock client to test the http listener
 	if (DEBUG) {
-		HttpClient httpClient = HttpClient(U("http://192.168.1.172:8080"), U("POST"), U("application/json"));
-		httpClient.sendRequest();
+		utility::string_t outputPath = U("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\mock_client_results.txt");
+		HttpClient httpClient = HttpClient(U("http://192.168.1.172:8080"), outputPath);
+
+		// Dummy JSON data to attach to POST request
+		json::value postData;
+		postData[L"length"] = json::value::string(L"2");
+		postData[L"width"] = json::value::string(L"3");
+		postData[L"height"] = json::value::string(L"4");
+
+		httpClient.sendRequest("POST", U("application/json"), postData);
 	}
 
 	HttpHandler *  h = new HttpHandler(U("http://192.168.1.172:"), U("8080"));

@@ -10,41 +10,37 @@ using namespace web::http;                  // Common HTTP functionality
 using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams
 
-// Client for sending mock POST requests
+/* Client for sending mock HTTP requests
+   Currently supports:
+	- POST
+*/
 class HttpClient {
 public:
-	utility::string_t target_url; 
-	utility::string_t http_method;
-	utility::string_t data_type;
+	utility::string_t targetUrl; 
+	utility::string_t outputPath;
 
-	HttpClient(utility::string_t _target_url, utility::string_t _http_method, utility::string_t _data_type) {
-		target_url = _target_url; 
-		http_method = _http_method;
-		data_type = _data_type;
+	HttpClient(utility::string_t _targetUrl, utility::string_t _outputPath) {
+		targetUrl = _targetUrl;
+		outputPath = _outputPath;
 	}
 
-	void sendRequest() {
+	void sendRequest(std::string httpMethod, utility::string_t dataType, json::value postData) {
 		auto fileStream = std::make_shared<ostream>();
 
 		// Open stream to output file.
-		pplx::task<void> requestTask = fstream::open_ostream(U("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\mock_client_results.txt")).then([=](ostream outFile) {
+		pplx::task<void> requestTask = fstream::open_ostream(outputPath).then([=](ostream outFile) {
 			*fileStream = outFile;
 
 			// Create http_client to send the request.
-			http_client client(target_url);
-
-			// Dummy JSON data to attach to POST request
-			json::value postData;
-			postData[L"name"] = json::value::string(L"Joe Smith");
-			postData[L"sport"] = json::value::string(L"Baseball");
+			http_client client(targetUrl);
 
 			// Create HTTP request
 			http_request client_req = http_request();
+			std::cout << "Sending " << httpMethod << " request!\n";
 
-			if (http_method == U("POST")) {
-				std::cout << "POST REQUEST\n";
+			if (httpMethod == "POST") {
 				client_req.set_method(methods::POST);
-				client_req.set_body(postData.serialize(), data_type);
+				client_req.set_body(postData.serialize(), dataType);
 				return client.request(client_req);
 			}
 		})
@@ -61,7 +57,7 @@ public:
 			return response.body().read_to_end(fileStream->streambuf());
 		})
 
-			// Close the file stream.
+		// Close the file stream.
 		.then([=](size_t) {
 			return fileStream->close();
 		});

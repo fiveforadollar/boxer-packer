@@ -341,3 +341,6 @@ ASALocalRun/
 healthchecksdb
 
 CMakeSettings.json
+
+mock_client_results.txt
+
