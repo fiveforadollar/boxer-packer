@@ -22,7 +22,7 @@ std::vector<Box*> initiatePacking() {
 	std::vector<Box*> unpackedBoxes;
 	
 	if (USE_FILE_INPUT) {
-		unpackedBoxes = readBoxesFromJson("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\example.json");
+		unpackedBoxes = readBoxesFromJson("C:\\example.json");
 	}
 	else {
 		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
@@ -240,7 +240,9 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
-	HttpHandler httpHandler = HttpHandler();
+	HttpHandler *  h = new HttpHandler(U("http://127.0.0.1:"), U("34568"));
+	h->open().wait();
+	ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
 
 	std::vector<Box *> unpackedBoxes = initiatePacking();
 
