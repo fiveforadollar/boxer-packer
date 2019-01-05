@@ -2,6 +2,8 @@
 
 #define DEBUG 1
 #define USE_FILE_INPUT 1
+#define USE_HTTP_CLIENT 0
+#define USE_HTTP_LISTENER 0
 
 /******************* Globals ******************/
 
@@ -22,7 +24,7 @@ std::vector<Box*> initiatePacking() {
 	std::vector<Box*> unpackedBoxes;
 	
 	if (USE_FILE_INPUT) {
-		unpackedBoxes = readBoxesFromJson("C:\\example.json");
+		unpackedBoxes = readBoxesFromJson("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\sample_data\\hard.json");
 	}
 	else {
 		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
@@ -45,6 +47,7 @@ std::vector<Box*> readBoxesFromJson(std::string fp) {
 		Box * tempBox = new Box(boxes[i]["length"], boxes[i]["width"], boxes[i]["height"]);
 		myBoxes.push_back(tempBox);
 	}
+
 	return myBoxes;
 }
 
@@ -241,7 +244,7 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 int main()
 {	
 	// Use a mock client to test the http listener
-	if (DEBUG) {
+	if (USE_HTTP_CLIENT) {
 		utility::string_t outputPath = U("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\mock_client_results.txt");
 		HttpClient httpClient = HttpClient(U("http://192.168.1.172:8080"), outputPath);
 
@@ -254,9 +257,11 @@ int main()
 		httpClient.sendRequest("POST", U("application/json"), postData);
 	}
 
-	HttpHandler *  h = new HttpHandler(U("http://192.168.1.172:"), U("8080"));
-	h->open().wait();
-	ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
+	if (USE_HTTP_LISTENER) {
+		HttpHandler *  h = new HttpHandler(U("http://192.168.1.172:"), U("8080"));
+		h->open().wait();
+		ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
+	}
 
 	std::vector<Box *> unpackedBoxes = initiatePacking();
 
