@@ -240,6 +240,12 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
+	// Use a mock client to test the http listener
+	if (DEBUG) {
+		HttpClient httpClient = HttpClient(U("http://192.168.1.172:8080"), U("POST"), U("application/json"));
+		httpClient.sendRequest();
+	}
+
 	HttpHandler httpHandler = HttpHandler();
 
 	std::vector<Box *> unpackedBoxes = initiatePacking();

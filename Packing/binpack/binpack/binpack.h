@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include "http_client.h"
 #include "http_handler.h"
 #include "pallet.h"
 #include "box.h"
