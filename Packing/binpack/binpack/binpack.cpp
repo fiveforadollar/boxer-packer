@@ -1,6 +1,7 @@
 ﻿#include "binpack.h"
 
 #define DEBUG 1
+#define USE_FILE_INPUT 1
 
 /******************* Globals ******************/
 
@@ -12,16 +13,18 @@ int axisIds[3] = {
 	WIDTH_AXIS_ID, 
 	HEIGHT_AXIS_ID 
 };
-
+ 
 /*********************************************/
 
 /****************** Helpers ******************/
 
 std::vector<Box*> initiatePacking() {
-	std::vector<Box*> unpackedBoxes = readBoxesFromJson("my filepath");
-
-	// DEBUG TESTING
-	if (DEBUG) {
+	std::vector<Box*> unpackedBoxes;
+	
+	if (USE_FILE_INPUT) {
+		unpackedBoxes = readBoxesFromJson("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\example.json");
+	}
+	else {
 		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
 		Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1);
 		Box* box3 = new Box(1, 1, 1);
@@ -29,7 +32,6 @@ std::vector<Box*> initiatePacking() {
 		unpackedBoxes.push_back(box2);
 		unpackedBoxes.push_back(box3);
 	}
-	// END DEBUG
 
 	return unpackedBoxes;
 }
@@ -238,6 +240,8 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
+	HttpHandler httpHandler = HttpHandler();
+
 	std::vector<Box *> unpackedBoxes = initiatePacking();
 
 	int iteration = 1;

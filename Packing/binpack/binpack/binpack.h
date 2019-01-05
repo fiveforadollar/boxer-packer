@@ -4,9 +4,11 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include "http_handler.h"
 #include "pallet.h"
 #include "box.h"
 #include "nlohmann/json.hpp"
+
 
 #define LENGTH_AXIS_ID 0
 #define WIDTH_AXIS_ID 1

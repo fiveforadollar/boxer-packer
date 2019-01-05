@@ -6,4 +6,7 @@ file(GLOB SOURCES
     ./*.cpp
 )
 
-add_executable(binpack ${SOURCES})
+find_package(cpprestsdk REQUIRED)
+
+add_executable(binpack ${SOURCES})	
+target_link_libraries(binpack PRIVATE cpprestsdk::cpprest)

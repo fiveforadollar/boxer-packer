@@ -7,3 +7,4 @@ project ("binpack")
 
 # Include sub-projects.
 add_subdirectory ("binpack")
+
