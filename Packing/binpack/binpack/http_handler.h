@@ -9,6 +9,7 @@
 #include "cpprest/filestream.h"
 #include "cpprest/containerstream.h"
 #include "cpprest/producerconsumerstream.h" 
+#include "binpack.h"
 
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.

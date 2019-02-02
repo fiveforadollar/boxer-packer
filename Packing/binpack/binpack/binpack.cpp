@@ -1,5 +1,7 @@
 ﻿#include "binpack.h"
 #include "sqlite3.h"
+#include "http_client.h"
+#include "http_handler.h"
 
 #define DEBUG 1
 #define USE_FILE_INPUT 1
