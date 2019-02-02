@@ -41,16 +41,18 @@ public:
 			if (httpMethod == "POST") {
 				client_req.set_method(methods::POST);
 				client_req.set_body(postData.serialize(), dataType);
+				ucout << utility::string_t(U("Sending request to target: ")) << targetUrl << std::endl;
+				ucout << utility::string_t(U("Data being sent: ")) << postData << std::endl;
 				return client.request(client_req);
 			}
 		})
 
 		// Handle response headers arriving.
 		.then([=](http_response response) {
-			std::cout << "Received response status code:" << response.status_code() << std::endl;
+			std::cout << "Received response status code: " << response.status_code() << std::endl;
 			if (response.status_code() == status_codes::OK) {
 				auto body = response.extract_string();
-				std::cout << body.get().c_str();
+	//			std::cout << body.get().c_str();
 			}
 
 			// Write response body into the file.

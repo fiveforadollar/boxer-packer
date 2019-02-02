@@ -6,7 +6,15 @@ file(GLOB SOURCES
     ./*.cpp
 )
 
-find_package(cpprestsdk REQUIRED)
+# Mock JSON data
+file(GLOB JSON_DATA RELATIVE ./sample_data/
+	*.json
+)
 
-add_executable(binpack ${SOURCES})	
+find_package(cpprestsdk REQUIRED)
+find_package(sqlite3 CONFIG REQUIRED)
+
+
+add_executable(binpack ${JSON_DATA} ${SOURCES})	
 target_link_libraries(binpack PRIVATE cpprestsdk::cpprest)
+target_link_libraries(binpack PRIVATE sqlite3)

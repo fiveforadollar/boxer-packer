@@ -1,4 +1,5 @@
 ﻿#include "binpack.h"
+#include "sqlite3.h"
 
 #define DEBUG 1
 #define USE_FILE_INPUT 1
@@ -24,7 +25,8 @@ std::vector<Box*> initiatePacking() {
 	std::vector<Box*> unpackedBoxes;
 	
 	if (USE_FILE_INPUT) {
-		unpackedBoxes = readBoxesFromJson("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\sample_data\\hard.json");
+		//unpackedBoxes = readBoxesFromJson("sample_data\\hard.json");
+		unpackedBoxes = readBoxesFromJson("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\hard.json");
 	}
 	else {
 		Box* box1 = new Box(P_LENGTH - 1, P_WIDTH - 1, P_HEIGHT - 1);
@@ -246,7 +248,7 @@ int main()
 	// Use a mock client to test the http listener
 	if (USE_HTTP_CLIENT) {
 		utility::string_t outputPath = U("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\mock_client_results.txt");
-		HttpClient httpClient = HttpClient(U("http://192.168.1.172:8080"), outputPath);
+		HttpClient httpClient = HttpClient(U("http://100.64.229.45:8080"), outputPath);
 
 		// Dummy JSON data to attach to POST request
 		json::value postData;
