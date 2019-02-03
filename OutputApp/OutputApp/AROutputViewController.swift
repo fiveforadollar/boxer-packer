@@ -8,13 +8,20 @@
 
 import UIKit
 import ARKit
+import Foundation
 
-class AROutputViewController: UIViewController {
+class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
-    // MARK - Properties
+    // MARK: - Properties
     @IBOutlet weak var sceneView: ARSCNView!
+    var pallets = [Pallet]()
+    let arr = [1,2,3,4,5]
+    private let itemsPerRow = 4
+    private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
-    // MARK - Gestures, Actions
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    // MARK: - Gestures, Actions
     
     @IBAction func ARToChooseButton(_ sender: Any) {
         performSegue(withIdentifier: "ARToChoose", sender: self)
@@ -23,7 +30,67 @@ class AROutputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment to configure lighting
-         configureLighting()
+        configureLighting()
+        
+        collectionView.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        let json = """
+        [
+            {
+                "id": 0,
+                "items":
+                [
+                    {
+                        "id": 0,
+                        "length": 5,
+                        "width": 10,
+                        "height": 11,
+                        "position": [0, 0, 11]
+                    },
+                    {
+                        "id": 1,
+                        "length": 15,
+                        "width": 9,
+                        "height": 7,
+                        "position": [0, 15, 0]
+                        
+                    },
+                    {
+                        "id": 2,
+                        "length": 15,
+                        "width": 9,
+                        "height": 7,
+                        "position": [12, 0, 0]
+                    },
+                    {
+                        "id": 4,
+                        "length": 12,
+                        "width": 15,
+                        "height": 11,
+                        "position": [0, 0, 0]
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "items":
+                [
+                    {
+                        "id": 3,
+                        "length": 40,
+                        "width": 40,
+                        "height": 50,
+                        "position": [0, 0, 0]
+                    }
+                ]
+            }
+        ]
+        """.data(using: .utf8)!
+        
+        parseJSON(json)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,19 +112,28 @@ class AROutputViewController: UIViewController {
         sceneView.delegate = self
         sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
         
-        addTapGestureToSceneView()
-        
     }
     
     func configureLighting() {
-        sceneView.autoenablesDefaultLighting = true
+        sceneView.autoenablesDefaultLighting = false
         sceneView.automaticallyUpdatesLighting = true
+        
+        let spotLight = SCNLight();
+        spotLight.type = SCNLight.LightType.directional;
+        
+        let spotNode = SCNNode();
+        spotNode.light = spotLight;
+        spotNode.position = SCNVector3(x: -30, y: 30, z: 60);
+        sceneView.scene.rootNode.addChildNode(spotNode);
+        
     }
     
     // ADD OBJECTS
     
-    @objc func addBoxToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
-        let tapLocation = recognizer.location(in: sceneView)
+    
+    
+    @IBAction func handleTap(_ sender: UITapGestureRecognizer) {
+        let tapLocation = sender.location(in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
         
         let width = CGFloat(0.02)
@@ -77,12 +153,10 @@ class AROutputViewController: UIViewController {
         
         boxNode.position = SCNVector3(x,y,z)
         sceneView.scene.rootNode.addChildNode(boxNode)
+        self.collectionView?.reloadData()
     }
     
-    func addTapGestureToSceneView() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(AROutputViewController.addBoxToSceneView(withGestureRecognizer:)))
-        sceneView.addGestureRecognizer(tapGestureRecognizer)
-    }
+
     
 }
 
@@ -147,11 +221,69 @@ extension float4x4 {
     }
 }
 
+// MARK: - Box Packing
+extension AROutputViewController{
+    func parseJSON(_ json: Data){
+        let decoder = JSONDecoder()
+        do {
+            pallets = try decoder.decode([Pallet].self, from: json)
+        }
+        catch {
+            return
+        }
+    }
+}
 
-// TODO:
-// 1 Parse output of algorithm for box locations and orientations
-// 2 Choose which pallet to display
-// 3 Display on any flat surface, set the center of the surface to center of bottom of pallet
-//  (sizes may be different; can use hittest select plane)
-// 4 Calculate position of front left corner of pallet in ARSCNView
-// 5 For each box for that pallet, calculate its position in ARSCNView given relative location
+extension AROutputViewController: UICollectionViewDataSource{
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("pallet count: ", arr.count)
+        return arr.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //1
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
+        //2
+        let photo = UIImage(named: "pallet-icon")
+     
+//        cell.backgroundColor = .white
+        //3
+        cell.imageView.image = photo
+        
+        return cell
+    }
+}
+
+// MARK: - Collection View Flow Layout Delegate
+extension AROutputViewController : UICollectionViewDelegateFlowLayout {
+    //1
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //2
+        let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
+        let availableWidth = sceneView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / CGFloat(itemsPerRow)
+        
+        return CGSize(width: widthPerItem, height: widthPerItem)
+    }
+    
+//    //3
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return sectionInsets
+//    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sectionInsets.left
+    }
+
+}

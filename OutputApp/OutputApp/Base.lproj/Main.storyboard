@@ -62,34 +62,96 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3P-ic-mQw">
-                                <rect key="frame" x="0.0" y="20" width="375" height="617"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="P8Y-JM-rqy" appends="YES" id="qA0-d9-f5Y"/>
+                                </connections>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GGy-25-4PX">
-                                <rect key="frame" x="22" y="636" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Back"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GGy-25-4PX">
+                                <rect key="frame" x="16" y="586" width="34" height="61"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
                                 <connections>
                                     <action selector="ARToChooseButton:" destination="Y8E-m1-Ong" eventType="touchUpInside" id="uN9-yb-d2S"/>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="ARToChoose" id="XBX-ha-FXK"/>
                                 </connections>
                             </button>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gsu-HY-3fr">
+                                <rect key="frame" x="0.0" y="20" width="375" height="70"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="UoU-pt-Vsf"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Aqj-jW-aw0">
+                                    <size key="itemSize" width="67" height="65"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="lBd-UD-bAq" customClass="CollectionImageCell" customModule="OutputApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="2.5" width="67" height="65"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="67" height="65"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="pallet-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="T1m-IH-opg">
+                                                    <rect key="frame" x="0.0" y="0.0" width="67" height="67"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="T1m-IH-opg" secondAttribute="bottom" id="D85-s7-igY"/>
+                                            <constraint firstItem="T1m-IH-opg" firstAttribute="leading" secondItem="lBd-UD-bAq" secondAttribute="leading" id="KFS-5B-05x"/>
+                                            <constraint firstAttribute="trailing" secondItem="T1m-IH-opg" secondAttribute="trailing" id="X7Z-eC-WSJ"/>
+                                            <constraint firstItem="T1m-IH-opg" firstAttribute="top" secondItem="lBd-UD-bAq" secondAttribute="top" id="djY-u7-kZ8"/>
+                                        </constraints>
+                                        <size key="customSize" width="67" height="65"/>
+                                        <connections>
+                                            <outlet property="imageView" destination="T1m-IH-opg" id="INJ-Fx-d56"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="Y8E-m1-Ong" id="AyY-sl-zfW"/>
+                                    <outlet property="delegate" destination="Y8E-m1-Ong" id="lO5-la-zQU"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="3Wh-kU-dtK" firstAttribute="bottom" secondItem="b3P-ic-mQw" secondAttribute="bottom" constant="30" id="cWc-JX-C26"/>
-                            <constraint firstItem="3Wh-kU-dtK" firstAttribute="trailing" secondItem="b3P-ic-mQw" secondAttribute="trailing" id="dhD-Fi-Gq7"/>
-                            <constraint firstItem="b3P-ic-mQw" firstAttribute="leading" secondItem="3Wh-kU-dtK" secondAttribute="leading" id="n5G-vR-UxX"/>
-                            <constraint firstItem="b3P-ic-mQw" firstAttribute="top" secondItem="3Wh-kU-dtK" secondAttribute="top" id="yX6-G0-NnG"/>
+                            <constraint firstItem="b3P-ic-mQw" firstAttribute="top" secondItem="3Wh-kU-dtK" secondAttribute="top" id="5Vw-Ae-x0Q"/>
+                            <constraint firstItem="b3P-ic-mQw" firstAttribute="trailing" secondItem="3Wh-kU-dtK" secondAttribute="trailing" id="IrI-ch-y7Y"/>
+                            <constraint firstItem="GGy-25-4PX" firstAttribute="leading" secondItem="3Wh-kU-dtK" secondAttribute="leading" constant="16" id="KVq-ID-GLx"/>
+                            <constraint firstItem="gsu-HY-3fr" firstAttribute="leading" secondItem="3Wh-kU-dtK" secondAttribute="leading" id="QWG-oS-lGJ"/>
+                            <constraint firstItem="gsu-HY-3fr" firstAttribute="top" secondItem="3Wh-kU-dtK" secondAttribute="top" id="Uun-SV-7Wk"/>
+                            <constraint firstItem="3Wh-kU-dtK" firstAttribute="bottom" secondItem="GGy-25-4PX" secondAttribute="bottom" constant="20" id="bfM-VQ-oYl"/>
+                            <constraint firstItem="b3P-ic-mQw" firstAttribute="leading" secondItem="3Wh-kU-dtK" secondAttribute="leading" id="dNb-w1-5NP"/>
+                            <constraint firstItem="b3P-ic-mQw" firstAttribute="bottom" secondItem="3Wh-kU-dtK" secondAttribute="bottom" id="iD1-EM-HRg"/>
+                            <constraint firstItem="GGy-25-4PX" firstAttribute="top" secondItem="gsu-HY-3fr" secondAttribute="bottom" constant="496" id="okw-fQ-LXe"/>
+                            <constraint firstItem="gsu-HY-3fr" firstAttribute="trailing" secondItem="3Wh-kU-dtK" secondAttribute="trailing" id="y0J-te-O6A"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3Wh-kU-dtK"/>
                     </view>
                     <connections>
+                        <outlet property="collectionView" destination="gsu-HY-3fr" id="XwO-xc-eks"/>
                         <outlet property="sceneView" destination="b3P-ic-mQw" id="W1C-Iv-R8m"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zqg-sL-Cup" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="P8Y-JM-rqy">
+                    <connections>
+                        <action selector="handleTap:" destination="Y8E-m1-Ong" id="ryc-UA-8ca"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1012" y="107"/>
+            <point key="canvasLocation" x="1012" y="106.59670164917542"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="pallet-icon.png" width="879" height="879"/>
+    </resources>
 </document>
