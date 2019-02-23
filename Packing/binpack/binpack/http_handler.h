@@ -17,6 +17,8 @@ using namespace web::http;                  // Common HTTP functionality
 using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams
 using namespace web::http::experimental::listener;
+using namespace web::json;
+
 
 class HttpHandler {
 public:
@@ -45,12 +47,28 @@ public:
 	void handle_GET(http_request message) {
 		ucout << message.to_string() << std::endl;
 		message.reply(status_codes::OK, message.to_string());
+
+		json::value v = message.extract_json().get();
+		utility::string_t jsonval = v.serialize();
+		ucout << "MYJSON:" << jsonval << "\n";
 		return;
 	}
 
 	void handle_POST(http_request message) {
 		ucout << message.to_string() << std::endl;
 		message.reply(status_codes::OK, message.to_string());
+
+		json::value v = message.extract_json().get();
+		utility::string_t jsonval = v.serialize();
+		ucout << "MYJSON:" << jsonval << "\n";
+
+		//auto http_get_vars = uri::split_query(message.request_uri().query());
+		//for (auto it = http_get_vars.cbegin(); it != http_get_vars.cend(); ++it)
+		//{
+		//	ucout << it->first << " " << it->second << "\n";
+		//}
+
+
 		return;
 	}
 
@@ -58,5 +76,4 @@ public:
 		delete listener;
 	}
 
-	bool handle_post();
 };
