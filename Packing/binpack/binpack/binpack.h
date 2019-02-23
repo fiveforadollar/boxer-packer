@@ -7,7 +7,7 @@
 #include "pallet.h"
 #include "box.h"
 #include "nlohmann/json.hpp"
-
+#include "database_handler.h"
 
 #define LENGTH_AXIS_ID 0
 #define WIDTH_AXIS_ID 1

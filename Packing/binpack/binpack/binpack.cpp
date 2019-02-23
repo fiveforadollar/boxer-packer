@@ -1,5 +1,4 @@
 ﻿#include "binpack.h"
-#include "sqlite3.h"
 #include "http_client.h"
 #include "http_handler.h"
 
@@ -262,11 +261,10 @@ int main()
 	}
 
 	if (USE_HTTP_LISTENER) {
-		HttpHandler *  h = new HttpHandler(U("http://192.168.1.172:"), U("8080"));
+		HttpHandler *  h = new HttpHandler(U("http://127.0.0.1:"), U("8080"));
 		h->open().wait();
 		ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
 	}
-
 	std::vector<Box *> unpackedBoxes = initiatePacking();
 
 	int iteration = 1;
