@@ -28,7 +28,7 @@ int initializeDatabase() {
 		fprintf(stdout, "Opened database successfully\n");
 	}
 
-	/* Create SQL statement */
+	/* Create Boxes Table */
 	sql = "CREATE TABLE IF NOT EXISTS BOXES("  \
 		"ID INT PRIMARY KEY     NOT NULL," \
 		"READY          INT     NOT NULL," \
@@ -39,7 +39,7 @@ int initializeDatabase() {
 		"CAM2WIDTH      FLOAT," \
 		"CAM2DIST       FLOAT," \
 		"DONE           INT," \
-		"BOXSET         INT );";
+		"SETID         INT );";
 
 	/* Execute SQL statement */
 	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
@@ -49,7 +49,23 @@ int initializeDatabase() {
 		sqlite3_free(zErrMsg);
 	}
 	else {
-		fprintf(stdout, "Table created successfully\n");
+		fprintf(stdout, "Table BOXES created successfully\n");
+	}
+
+	/* Create Current Box Table*/
+	sql = "CREATE TABLE IF NOT EXISTS CURRENTBOX("  \
+		"SETID          INT PRIMARY KEY DEFAULT 0," \
+		"BOXID          INT DEFAULT 0);";
+
+	/* Execute SQL statement */
+	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "SQL error: %s\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+	}
+	else {
+		fprintf(stdout, "Table CURRENTBOX created successfully\n");
 	}
 	sqlite3_close(db);
 	return 0;
