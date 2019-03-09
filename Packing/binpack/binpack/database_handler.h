@@ -124,43 +124,55 @@ std::string performSqlCommand(const char * sql) {
 	return retStr;
 }
 
-std::vector<std::string> performSqlCommandMultiRow(const char * sql) {
+std::vector<std::map<std::string, std::string>> performSqlCommandMultiRow(const char * sql) {
 	sqlite3 *db;
 	char *zErrMsg = 0;
 	int rc;
-	std::vector<std::string> queryRows;
+	std::vector<std::map<std::string, std::string>> listOfRows;
 
 	/* Open database */
 	rc = sqlite3_open("test.db", &db);
 
 	if (rc) {
 		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-		return(queryRows);
+		return(listOfRows);
 	}
 	else {
 		fprintf(stderr, "Opened database successfully\n");
 	}
 
 	sqlite3_stmt *stmt;
+	std::cout << sql << std::endl;
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	
 	if (rc != SQLITE_OK) {
 		std::cerr << "SELECT failed: " << sqlite3_errmsg(db) << std::endl;
-		return queryRows;
+		return listOfRows;
 	}
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		int colCount = sqlite3_column_count(stmt);
-		std::cout << "Num cols:" << colCount << std::endl;
-		const char* id = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-		//const char* ready = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-		//const char* cam1len = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+		std::map<std::string, std::string> mappedRow;
 
-		std::string myRow = id;
-		std::cout << "myRow: " << id << std::endl;
-		//myRow += ready;
+		for (int i = 0; i < colCount; i++) {
+			const char* colName = reinterpret_cast<const char*>(sqlite3_column_name(stmt, i));
+			const char* colData = reinterpret_cast<const char*>(sqlite3_column_text(stmt, i));
 
-		queryRows.push_back(myRow);
+			if (!colData) {
+				//std::cout << colName << ": NULL" << std::endl;
+				std::string cName = colName;
+				mappedRow[cName] = "NULL";
+			}
+			else {
+				//std::cout << colName << ":" << colData << std::endl;
+				std::string cName = colName;
+				std::string cData = colData;
+				mappedRow[cName] = cData;
+			}
+		}
+
+		listOfRows.push_back(mappedRow);
+
 	}
 	if (rc != SQLITE_DONE) {
 		std::cerr << "SELECT failed: " << sqlite3_errmsg(db) << std::endl;
@@ -170,5 +182,5 @@ std::vector<std::string> performSqlCommandMultiRow(const char * sql) {
 
 	sqlite3_close(db);
 
-	return queryRows;
+	return listOfRows;
 }
