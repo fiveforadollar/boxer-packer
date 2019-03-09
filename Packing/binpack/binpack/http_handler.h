@@ -57,10 +57,17 @@ public:
 		}
 
 		std::string sqlCmd = "SELECT * FROM BOXES";
-		std::vector<std::string> resultStr = performSqlCommandMultiRow(sqlCmd.c_str());
-		std::cout << "Results:" << *resultStr.begin() << std::endl;
-		std::cout << "ResultsSize:" << resultStr.size() << std::endl;
+		std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
 
+		for (auto it = listOfRows.begin(); it != listOfRows.end(); it++) {
+			std::cout << "" << std::endl;
+			for (auto it1 = it->begin(); it1 != it->end(); ++it1) {
+				std::cout << it1->first << " " << it1->second << std::endl;
+			}
+		}
+
+		//sqlCmd = "UPDATE BOXES set ready = 1 WHERE id = 1";
+		//performSqlCommand(sqlCmd.c_str());
 
 		return;
 	}
@@ -90,9 +97,11 @@ public:
 			// Compare the JSON values to BOXES table
 			std::string sqlCmd = "SELECT READY from BOXES where (ID = " + jsonBoxID + " and SETID == " + jsonSetID + ")";
 			std::string resultStr = performSqlCommand(sqlCmd.c_str());
+
 			std::string retCurs = "{ \"boxReady\" : false }";
 			if (resultStr == "READY = 1")
 				retCurs = "{ \"boxReady\" : true }";
+
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 		}
 		else if(relURIss == "/datacheck") {
