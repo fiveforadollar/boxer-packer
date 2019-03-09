@@ -56,7 +56,7 @@ int initializeDatabase() {
 		"CAM2WIDTH      FLOAT," \
 		"CAM2DIST       FLOAT," \
 		"DONE           INT," \
-		"SETID         INT );";
+		"SETID         INT NOT NULL); DELETE FROM BOXES; INSERT INTO BOXES (ID, READY, SETID) VALUES (1, 0, 0);";
 
 	/* Execute SQL statement */
 	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
@@ -71,8 +71,8 @@ int initializeDatabase() {
 
 	/* Create Current Box Table*/
 	sql = "CREATE TABLE IF NOT EXISTS CURRENTBOX("  \
-		"SETID          INT PRIMARY KEY DEFAULT 0," \
-		"BOXID          INT DEFAULT 0);";
+		"SETID          INT PRIMARY KEY DEFAULT 0 NOT NULL," \
+		"BOXID          INT DEFAULT 0); DELETE FROM CURRENTBOX; INSERT INTO CURRENTBOX (SETID, BOXID) VALUES (0, 1);";
 
 	/* Execute SQL statement */
 	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
