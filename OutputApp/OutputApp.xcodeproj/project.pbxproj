@@ -7,19 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		820C48A322221AB500C0DC5E /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 820C48A222221AB500C0DC5E /* art.scnassets */; };
 		824715C121ED03300056A045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824715C021ED03300056A045 /* AppDelegate.swift */; };
 		824715C321ED03300056A045 /* ChooseOutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824715C221ED03300056A045 /* ChooseOutputViewController.swift */; };
 		824715C621ED03300056A045 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 824715C421ED03300056A045 /* Main.storyboard */; };
 		824715C821ED03340056A045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 824715C721ED03340056A045 /* Assets.xcassets */; };
 		824715CB21ED03340056A045 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 824715C921ED03340056A045 /* LaunchScreen.storyboard */; };
-		824715D421ED04050056A045 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 824715D321ED04050056A045 /* art.scnassets */; };
 		824715D621ED071F0056A045 /* AROutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824715D521ED071F0056A045 /* AROutputViewController.swift */; };
 		8269F047220655850076C800 /* Pallets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8269F046220655850076C800 /* Pallets.swift */; };
 		8269F049220680A90076C800 /* CollectionImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8269F048220680A90076C800 /* CollectionImageCell.swift */; };
-		8269F04D22068B960076C800 /* pallet-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8269F04C22068B950076C800 /* pallet-icon.png */; };
+		826EE41B22342E10004F4DFD /* pallet-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 826EE41A22342E10004F4DFD /* pallet-icon.png */; };
+		826EE41D22342F56004F4DFD /* pallet-icon-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 826EE41C22342F56004F4DFD /* pallet-icon-blue.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		820C48A222221AB500C0DC5E /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		824715BD21ED03300056A045 /* OutputApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutputApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		824715C021ED03300056A045 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		824715C221ED03300056A045 /* ChooseOutputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseOutputViewController.swift; sourceTree = "<group>"; };
@@ -27,11 +29,11 @@
 		824715C721ED03340056A045 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		824715CA21ED03340056A045 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		824715CC21ED03340056A045 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		824715D321ED04050056A045 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		824715D521ED071F0056A045 /* AROutputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AROutputViewController.swift; sourceTree = "<group>"; };
 		8269F046220655850076C800 /* Pallets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pallets.swift; sourceTree = "<group>"; };
 		8269F048220680A90076C800 /* CollectionImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionImageCell.swift; sourceTree = "<group>"; };
-		8269F04C22068B950076C800 /* pallet-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pallet-icon.png"; sourceTree = "<group>"; };
+		826EE41A22342E10004F4DFD /* pallet-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pallet-icon.png"; sourceTree = "<group>"; };
+		826EE41C22342F56004F4DFD /* pallet-icon-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pallet-icon-blue.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,8 +66,8 @@
 		824715BF21ED03300056A045 /* OutputApp */ = {
 			isa = PBXGroup;
 			children = (
-				8269F04C22068B950076C800 /* pallet-icon.png */,
-				824715D321ED04050056A045 /* art.scnassets */,
+				826EE41922342E06004F4DFD /* Images */,
+				820C48A222221AB500C0DC5E /* art.scnassets */,
 				824715C021ED03300056A045 /* AppDelegate.swift */,
 				824715C221ED03300056A045 /* ChooseOutputViewController.swift */,
 				824715D521ED071F0056A045 /* AROutputViewController.swift */,
@@ -77,6 +79,15 @@
 				824715CC21ED03340056A045 /* Info.plist */,
 			);
 			path = OutputApp;
+			sourceTree = "<group>";
+		};
+		826EE41922342E06004F4DFD /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				826EE41C22342F56004F4DFD /* pallet-icon-blue.png */,
+				826EE41A22342E10004F4DFD /* pallet-icon.png */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,11 +148,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				826EE41D22342F56004F4DFD /* pallet-icon-blue.png in Resources */,
 				824715CB21ED03340056A045 /* LaunchScreen.storyboard in Resources */,
+				820C48A322221AB500C0DC5E /* art.scnassets in Resources */,
 				824715C821ED03340056A045 /* Assets.xcassets in Resources */,
-				824715D421ED04050056A045 /* art.scnassets in Resources */,
 				824715C621ED03300056A045 /* Main.storyboard in Resources */,
-				8269F04D22068B960076C800 /* pallet-icon.png in Resources */,
+				826EE41B22342E10004F4DFD /* pallet-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +321,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fiveforadollar.OutputApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kathyhuang.OutputApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -327,7 +339,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fiveforadollar.OutputApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kathyhuang.OutputApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

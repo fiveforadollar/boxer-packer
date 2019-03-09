@@ -248,7 +248,7 @@ extension AROutputViewController: UICollectionViewDataSource{
         //1
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
         //2
-        let photo = UIImage(named: "pallet-icon")
+        let photo = UIImage(named: "pallet-icon.png")
      
 //        cell.backgroundColor = .white
         //3
