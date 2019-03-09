@@ -155,6 +155,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         sceneView.scene.rootNode.addChildNode(boxNode)
         self.collectionView?.reloadData()
     }
+
     
 
     
@@ -250,8 +251,6 @@ extension AROutputViewController: UICollectionViewDataSource{
         //2
         let photo = UIImage(named: "pallet-icon.png")
      
-//        cell.backgroundColor = .white
-        //3
         cell.imageView.image = photo
         
         return cell
@@ -260,11 +259,11 @@ extension AROutputViewController: UICollectionViewDataSource{
 
 // MARK: - Collection View Flow Layout Delegate
 extension AROutputViewController : UICollectionViewDelegateFlowLayout {
-    //1
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //2
+        
         let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
         let availableWidth = sceneView.frame.width - paddingSpace
         let widthPerItem = availableWidth / CGFloat(itemsPerRow)
@@ -272,14 +271,6 @@ extension AROutputViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: widthPerItem)
     }
     
-//    //3
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return sectionInsets
-//    }
-    
-    // 4
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
