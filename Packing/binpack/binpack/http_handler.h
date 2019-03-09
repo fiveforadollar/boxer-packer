@@ -56,6 +56,12 @@ public:
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 		}
 
+		std::string sqlCmd = "SELECT * FROM BOXES";
+		std::vector<std::string> resultStr = performSqlCommandMultiRow(sqlCmd.c_str());
+		std::cout << "Results:" << *resultStr.begin() << std::endl;
+		std::cout << "ResultsSize:" << resultStr.size() << std::endl;
+
+
 		return;
 	}
 
@@ -81,8 +87,12 @@ public:
 			std::string jsonSetID = j["setID"];
 			std::string jsonBoxID = j["boxID"];
 
-			// TODO: Compare the JSON values to BOXES table
-			std::string retCurs = "{ \"boxReady\" : true }";
+			// Compare the JSON values to BOXES table
+			std::string sqlCmd = "SELECT READY from BOXES where (ID = " + jsonBoxID + " and SETID == " + jsonSetID + ")";
+			std::string resultStr = performSqlCommand(sqlCmd.c_str());
+			std::string retCurs = "{ \"boxReady\" : false }";
+			if (resultStr == "READY = 1")
+				retCurs = "{ \"boxReady\" : true }";
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 		}
 		else if(relURIss == "/datacheck") {
