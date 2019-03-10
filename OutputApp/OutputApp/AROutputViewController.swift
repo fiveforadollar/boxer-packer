@@ -21,12 +21,19 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var buttonConfirmPlane: UIButton!
+    
     // MARK: - Gestures, Actions
     
     @IBAction func ARToChooseButton(_ sender: Any) {
         performSegue(withIdentifier: "ARToChoose", sender: self)
     }
     
+    @IBAction func confirmPlane(_ sender: Any) {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = []
+        sceneView.session.run(configuration)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment to configure lighting
@@ -95,6 +102,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        buttonConfirmPlane.isHidden = true
         setUpSceneView()
         
     }
@@ -152,10 +160,26 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         let boxNode = SCNNode(geometry: box)
         
         boxNode.position = SCNVector3(x,y,z)
+        boxNode.name = "box"
         sceneView.scene.rootNode.addChildNode(boxNode)
         self.collectionView?.reloadData()
     }
-    
+
+    func addBoxesForPallet(_ palletID: Int){
+        // remove box nodes from previously selected pallet
+        let children = sceneView.scene.rootNode.childNodes
+        for child in children{
+            if child.name == "box"{
+                child.removeFromParentNode()
+            }
+        }
+        
+        for i in 0...pallets[palletID].items.count {
+            
+            
+
+        }
+    }
 
     
 }
@@ -185,6 +209,8 @@ extension AROutputViewController: ARSCNViewDelegate {
         
         // 6
         node.addChildNode(planeNode)
+        
+        buttonConfirmPlane.isHidden = false
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -240,8 +266,8 @@ extension AROutputViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("pallet count: ", arr.count)
-        return arr.count
+        print("pallet count: ", pallets.count)
+        return pallets.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -250,8 +276,6 @@ extension AROutputViewController: UICollectionViewDataSource{
         //2
         let photo = UIImage(named: "pallet-icon.png")
      
-//        cell.backgroundColor = .white
-        //3
         cell.imageView.image = photo
         
         return cell
@@ -260,11 +284,11 @@ extension AROutputViewController: UICollectionViewDataSource{
 
 // MARK: - Collection View Flow Layout Delegate
 extension AROutputViewController : UICollectionViewDelegateFlowLayout {
-    //1
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //2
+        
         let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
         let availableWidth = sceneView.frame.width - paddingSpace
         let widthPerItem = availableWidth / CGFloat(itemsPerRow)
@@ -272,14 +296,6 @@ extension AROutputViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: widthPerItem)
     }
     
-//    //3
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return sectionInsets
-//    }
-    
-    // 4
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {

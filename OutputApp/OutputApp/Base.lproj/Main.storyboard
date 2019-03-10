@@ -120,6 +120,14 @@
                                     <outlet property="delegate" destination="Y8E-m1-Ong" id="lO5-la-zQU"/>
                                 </connections>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Z4-mi-i7j">
+                                <rect key="frame" x="139" y="601" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Confirm Plane"/>
+                                <connections>
+                                    <action selector="confirmPlane:" destination="Y8E-m1-Ong" eventType="touchUpInside" id="AfH-hF-2kf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -137,6 +145,7 @@
                         <viewLayoutGuide key="safeArea" id="3Wh-kU-dtK"/>
                     </view>
                     <connections>
+                        <outlet property="buttonConfirmPlane" destination="6Z4-mi-i7j" id="k9u-gk-5Rs"/>
                         <outlet property="collectionView" destination="gsu-HY-3fr" id="XwO-xc-eks"/>
                         <outlet property="sceneView" destination="b3P-ic-mQw" id="W1C-Iv-R8m"/>
                     </connections>
