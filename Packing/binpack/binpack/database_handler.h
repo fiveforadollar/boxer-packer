@@ -55,7 +55,6 @@ int initializeDatabase() {
 		"CAM2LEN        FLOAT," \
 		"CAM2WIDTH      FLOAT," \
 		"CAM2DIST       FLOAT," \
-		"DONE           INT," \
 		"SETID         INT NOT NULL); DELETE FROM BOXES; INSERT INTO BOXES (ID, READY, SETID) VALUES (1, 0, 0);";
 
 	/* Execute SQL statement */

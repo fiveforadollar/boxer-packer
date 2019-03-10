@@ -81,6 +81,43 @@ public:
 			performSqlCommand(sqlCmd.c_str());
 			message.reply(status_codes::OK, utility::conversions::to_string_t(""));
 		}
+		else if (relURIss == "/setdone") {
+
+			// get the current box
+			std::string sqlCmd = "SELECT * FROM CURRENTBOX";
+			std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
+
+			std::string currentSetID;
+			std::string currentBoxID;
+			currentSetID = listOfRows[0]["SETID"];
+			currentBoxID = listOfRows[0]["BOXID"];
+
+			// increment both currentSetID and currentBoxID
+			// update currentbox
+			// create new row in boxes
+			std::string updatedBoxID = std::to_string(std::stoi(currentBoxID) + 1);
+			std::string updatedSetID = std::to_string(std::stoi(currentSetID) + 1);
+
+			sqlCmd = "UPDATE CURRENTBOX SET BOXID = " + updatedBoxID + ", SETID = " + updatedSetID;
+			performSqlCommandMultiRow(sqlCmd.c_str());
+
+			sqlCmd = "INSERT INTO BOXES (ID, READY, SETID) VALUES (" + updatedBoxID + ",0," + updatedSetID + ");";
+			performSqlCommandMultiRow(sqlCmd.c_str());
+
+			// get the updated box (sanity check)
+			sqlCmd = "SELECT * FROM CURRENTBOX";
+			std::vector<std::map<std::string, std::string>> listOfNewRows = performSqlCommandMultiRow(sqlCmd.c_str());
+
+			std::string  currentSetID2 = listOfNewRows[0]["SETID"];
+			std::string  currentBoxID2 = listOfNewRows[0]["BOXID"];
+
+			std::string retCurs = "{ \"currentSetID\" : " + currentSetID2 + ", \"currentBoxID\" : " + currentBoxID2 + " }";
+			std::cout << retCurs << std::endl;
+			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+
+			// TO DO: perform bin packing
+
+		}
 
 		//std::string sqlCmd = "SELECT * FROM BOXES";
 		//std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
@@ -197,10 +234,7 @@ public:
 			if (isDataPop)
 				retCurs = "{ \"dataPopulated\" : true }";
 			std::cout << retCurs << std::endl;
-			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
-
-			// TO DO: if entire row BOXES table is populated, increment current Box ID
-			// update CURRENTBOX and add new row into BOXES
+			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));			
 		}
 		else if (relURIss == "/senddata") {
 
@@ -279,6 +313,33 @@ public:
 				retCurs = "{ \"dataSet\" : true }";
 			std::cout << retCurs << std::endl;
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+
+
+			// TO DO: if entire row BOXES table is populated, increment current Box ID
+			// update CURRENTBOX and add new row into BOXES
+			bool isDataFullPop = true;
+			for (auto it = listOfRows[0].begin(); it != listOfRows[0].end(); it++) {
+				std::string colName = it->first;
+				std::string colData = it->second;
+				std::cout << "Checking full row data:" << colName << " : " << colData << std::endl;
+				if (colData == "NULL") {
+					isDataFullPop = false;
+				}
+			}
+
+			if (isDataFullPop) {
+				std::cout << "Row is full, add a new box and update currentBoxID" << std::endl;
+				
+				std::string updatedBoxID = std::to_string(std::stoi(currentBoxID) + 1);
+				std::string sqlCmd = "UPDATE CURRENTBOX SET BOXID = " + updatedBoxID;
+				performSqlCommandMultiRow(sqlCmd.c_str());
+
+				sqlCmd = "INSERT INTO BOXES (ID, READY, SETID) VALUES (" + updatedBoxID + ",0," + currentSetID + ");";
+				performSqlCommandMultiRow(sqlCmd.c_str());
+			}
+			else {
+				std::cout << "Row is not full, keep accepting data" << std::endl;
+			}
 		}
 
 
