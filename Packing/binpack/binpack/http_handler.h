@@ -113,7 +113,7 @@ public:
 			std::string retCurs = "{ \"currentSetID\" : " + currentSetID2 + ", \"currentBoxID\" : " + currentBoxID2 + " }";
 			std::cout << retCurs << std::endl;
 
-			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+			//message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 
 			// TO DO: perform bin packing
 			std::string setToPack = currentSetID;
@@ -172,6 +172,8 @@ public:
 
 			// Do the packing:
 			// First sort unpackedBoxes by volume
+
+			// TO DO: remove this
 			std::cout << "lets start packing" << std::endl;
 			Box* box = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 1);
 			Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 2);
@@ -196,18 +198,43 @@ public:
 
 			std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
 			std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
-			for (int i = 0; i < openPallets.size(); i++) {
-				std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
-				for (int j = 0; j < openPallets[i]->items.size(); j++) {
-					std::cout << '\t' << *openPallets[i]->items.at(j);
-				}
-			}
+
+			auto jsonPallets = nlohmann::json::array();
 
 			// Spit out results inside openPallets to JSON and store it somewhere
 			for (int i = 0; i < openPallets.size(); i++) {
+				std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+
+				nlohmann::json jPallet;
+				jPallet["id"] = openPallets[i]->id;
+				jPallet["numBoxes"] = openPallets[i]->items.size();
+				auto palletItems = nlohmann::json::array();
+
 				for (int j = 0; j < openPallets[i]->items.size(); j++) {
+					std::cout << '\t' << *openPallets[i]->items.at(j);
+					nlohmann::json jBox;
+					jBox["id"] = openPallets[i]->items.at(j)->dbID;
+					jBox["length"] = openPallets[i]->items.at(j)->length;
+					jBox["width"] = openPallets[i]->items.at(j)->width;
+					jBox["height"] = openPallets[i]->items.at(j)->height;
+					jBox["position"] = { openPallets[i]->items.at(j)->position[0], openPallets[i]->items.at(j)->position[1], openPallets[i]->items.at(j)->position[2] };
+
+					palletItems.push_back(jBox);
 				}
+
+				jPallet["items"] = palletItems;
+				jsonPallets.push_back(jPallet);
+
 			}
+
+			std::string jsonString = jsonPallets.dump(4);
+			std::cout << "JSON:" << jsonString << std::endl;
+			message.reply(status_codes::OK, utility::conversions::to_string_t(jsonString));
+
+			// write to file with setID name
+			std::string fileName = "set" + setToPack + ".json";
+			std::ofstream o(fileName);
+			o << std::setw(4) << jsonPallets << std::endl;
 
 			// Teardown the pallets and boxes
 			teardown();
