@@ -19,7 +19,6 @@ using namespace concurrency::streams;       // Asynchronous streams
 using namespace web::http::experimental::listener;
 using namespace web::json;
 
-
 class HttpHandler {
 public:
 	utility::string_t port;
@@ -113,10 +112,107 @@ public:
 
 			std::string retCurs = "{ \"currentSetID\" : " + currentSetID2 + ", \"currentBoxID\" : " + currentBoxID2 + " }";
 			std::cout << retCurs << std::endl;
+
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 
 			// TO DO: perform bin packing
+			std::string setToPack = currentSetID;
+			sqlCmd = "SELECT * FROM BOXES WHERE (SETID = " + currentSetID + ")";
+			std::vector<std::map<std::string, std::string>> boxDimensions = performSqlCommandMultiRow(sqlCmd.c_str());
 
+			std::vector<Box *> unpackedBoxes;
+
+			for (int it1 = 0; it1 < boxDimensions.size(); it1++) {
+				bool isFullRow = true;
+				for (auto it = boxDimensions[it1].begin(); it != boxDimensions[it1].end(); it++) {
+					std::string colName = it->first;
+					std::string colData = it->second;
+					std::cout << "Checking full row data:" << colName << " : " << colData << std::endl;
+					if (colData == "NULL") {
+						isFullRow = false; // TO DO: flip to false when done testing
+					}
+				}
+				if (isFullRow) {
+					// calculate box dimensions based on p1 p2 focal length numbers
+
+					// cam1
+					double cam1dist = stod(boxDimensions[it1]["CAM1DIST"]);
+					double cam1len = stod(boxDimensions[it1]["CAM1LEN"]);
+					double cam1width = stod(boxDimensions[it1]["CAM1WIDTH"]);
+
+					double cam1focal = 63.0;
+					double cam1pointsize = (1.0 / 6.0); // TBD
+
+					double cam1len_real = (cam1dist - cam1focal) * (cam1len / cam1pointsize) / cam1focal;
+					double cam1width_real = (cam1dist - cam1focal) * (cam1width / cam1pointsize) / cam1focal;
+
+					// cam2
+					double cam2dist = stod(boxDimensions[it1]["CAM2DIST"]);
+					double cam2len = stod(boxDimensions[it1]["CAM2LEN"]);
+					double cam2width = stod(boxDimensions[it1]["CAM2WIDTH"]);
+
+					double cam2focal = 80.2;
+					double cam2pointsize = (1.0 / 6.0);
+
+					double cam2len_real = (cam2dist - cam2focal) * (cam2len / cam2pointsize) / cam2focal;
+					double cam2width_real = (cam2dist - cam2focal) * (cam2width / cam2pointsize) / cam2focal;
+					
+					int dbID = stoi(boxDimensions[it1]["ID"]);
+
+					double boxLength = cam1len_real;
+					double boxWidth = cam2len_real;
+					double boxHeight = (cam1width_real + cam2width_real) / 2.0;
+
+					// create new box object and add to unpacked Boxes
+					Box* box = new Box(boxLength, boxWidth, boxHeight, dbID);
+					unpackedBoxes.push_back(box);
+
+				}
+			}
+
+			// Do the packing:
+			// First sort unpackedBoxes by volume
+			std::cout << "lets start packing" << std::endl;
+			Box* box = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 1);
+			Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 2);
+			Box* box3 = new Box(1, 1, 1, 3);
+			unpackedBoxes.push_back(box);
+			unpackedBoxes.push_back(box2);
+			unpackedBoxes.push_back(box3);
+
+			// Perform packing
+			int iteration = 1;
+			while (unpackedBoxes.size() != 0) {
+				std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
+				std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+				std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
+				for (int i = 0; i < openPallets.size(); i++) {
+					std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+				}
+
+				unpackedBoxes = runFirstFit(unpackedBoxes);
+				++iteration;
+			}
+
+			std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+			std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
+			for (int i = 0; i < openPallets.size(); i++) {
+				std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+				for (int j = 0; j < openPallets[i]->items.size(); j++) {
+					std::cout << '\t' << *openPallets[i]->items.at(j);
+				}
+			}
+
+			// Spit out results inside openPallets to JSON and store it somewhere
+			for (int i = 0; i < openPallets.size(); i++) {
+				for (int j = 0; j < openPallets[i]->items.size(); j++) {
+				}
+			}
+
+			// Teardown the pallets and boxes
+			teardown();
+			openPallets.clear();
+			std::cout << "After teardown, num pallets: " << openPallets.size() << std::endl;
 		}
 
 		//std::string sqlCmd = "SELECT * FROM BOXES";
@@ -205,7 +301,7 @@ public:
 				deviceFields.push_back("CAM2DIST");
 			}
 
-			// TODO: Compare the JSON values to BOXES table
+			// Compare the JSON values to BOXES table
 			// get current box
 			std::string sqlCmd = "SELECT * FROM CURRENTBOX";
 			std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
@@ -315,7 +411,7 @@ public:
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 
 
-			// TO DO: if entire row BOXES table is populated, increment current Box ID
+			// if entire row BOXES table is populated, increment current Box ID
 			// update CURRENTBOX and add new row into BOXES
 			bool isDataFullPop = true;
 			for (auto it = listOfRows[0].begin(); it != listOfRows[0].end(); it++) {

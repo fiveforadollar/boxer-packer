@@ -13,6 +13,9 @@
 #define WIDTH_AXIS_ID 1
 #define HEIGHT_AXIS_ID 2
 
+extern std::vector<Pallet*> openPallets;
+
+
 /* Adds a new, empty pallet of (P_LENGTH, P_WIDTH, P_HEIGHT) dimensions to a vector of open pallets */
 void openNewPallet(); 
 

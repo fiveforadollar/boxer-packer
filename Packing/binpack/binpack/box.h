@@ -12,6 +12,7 @@ public:
 	double height;
 	double volume;
 	std::vector<double> position;
+	int dbID;
 
 	Box(double _length, double _width, double _height) {
 		length = _length;
@@ -19,6 +20,15 @@ public:
 		height = _height;
 		volume = length * width * height;
 		id = idCounter++;
+	}
+
+	Box(double _length, double _width, double _height, int _dbID) {
+		length = _length;
+		width = _width;
+		height = _height;
+		volume = length * width * height;
+		id = idCounter++;
+		dbID = _dbID;
 	}
 
 	Box(double _length, double _width, double _height, std::vector<double> _position) {
@@ -54,7 +64,7 @@ int Box::idCounter = 0;
 
 std::ostream& operator<<(std::ostream& os, const Box& box)
 {
-	os << "Box " << box.id << " dimensions (L,W,H): (" << box.length << "," << box.width << "," << box.height << ")";
+	os << "Box " << box.id << " | DBID: " << box.dbID << " | dimensions (L,W,H): (" << box.length << "," << box.width << "," << box.height << ")";
 	if (box.position.size())
 		os << " at position: " << "(" << box.position[0] << "," << box.position[1] << "," << box.position[2] << ")";
 	os << std::endl;
