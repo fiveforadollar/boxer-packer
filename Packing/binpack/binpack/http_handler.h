@@ -141,7 +141,7 @@ public:
 					double cam1width = stod(boxDimensions[it1]["CAM1WIDTH"]);
 
 					double cam1focal = 63.0;
-					double cam1pointsize = (1.0 / 6.0); // TBD
+					double cam1pointsize = (1.0 / 6.0);
 
 					double cam1len_real = (cam1dist - cam1focal) * (cam1len / cam1pointsize) / cam1focal;
 					double cam1width_real = (cam1dist - cam1focal) * (cam1width / cam1pointsize) / cam1focal;
@@ -175,12 +175,12 @@ public:
 
 			// TO DO: remove this
 			std::cout << "lets start packing" << std::endl;
-			Box* box = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 1);
-			Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 2);
-			Box* box3 = new Box(1, 1, 1, 3);
-			unpackedBoxes.push_back(box);
-			unpackedBoxes.push_back(box2);
-			unpackedBoxes.push_back(box3);
+			//Box* box = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 1);
+			//Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 2);
+			//Box* box3 = new Box(1, 1, 1, 3);
+			//unpackedBoxes.push_back(box);
+			//unpackedBoxes.push_back(box2);
+			//unpackedBoxes.push_back(box3);
 
 			// Perform packing
 			int iteration = 1;
