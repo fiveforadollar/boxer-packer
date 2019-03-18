@@ -250,7 +250,6 @@ int main()
 
 	initializeDatabase();
 
-
 	// Use a mock client to test the http listener
 	if (USE_HTTP_CLIENT) {
 		utility::string_t outputPath = U("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\mock_client_results.txt");
@@ -266,7 +265,7 @@ int main()
 	}
 
 	if (USE_HTTP_LISTENER) {
-		HttpHandler *  h = new HttpHandler(U("http://192.168.1.83:"), U("8080"));
+		HttpHandler *  h = new HttpHandler(U("http://127.0.0.1:"), U("8080"));
 		h->open().wait();
 		ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
 	}

@@ -10,6 +10,7 @@
 #include "cpprest/containerstream.h"
 #include "cpprest/producerconsumerstream.h" 
 #include "binpack.h"
+#include <ctime>
 
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.
@@ -18,7 +19,6 @@ using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams
 using namespace web::http::experimental::listener;
 using namespace web::json;
-
 
 class HttpHandler {
 public:
@@ -80,6 +80,192 @@ public:
 			sqlCmd = "UPDATE BOXES SET ready = 1 WHERE (ID = " + currentBoxID + " and SETID = " + currentSetID + ")";
 			performSqlCommand(sqlCmd.c_str());
 			message.reply(status_codes::OK, utility::conversions::to_string_t(""));
+		}
+		else if (relURIss == "/setdone") {
+
+			// get the current box
+			std::string sqlCmd = "SELECT * FROM CURRENTBOX";
+			std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
+
+			std::string currentSetID;
+			std::string currentBoxID;
+			currentSetID = listOfRows[0]["SETID"];
+			currentBoxID = listOfRows[0]["BOXID"];
+
+			// increment both currentSetID and currentBoxID
+			// update currentbox
+			// create new row in boxes
+			std::string updatedBoxID = std::to_string(std::stoi(currentBoxID) + 1);
+			std::string updatedSetID = std::to_string(std::stoi(currentSetID) + 1);
+
+			sqlCmd = "UPDATE CURRENTBOX SET BOXID = " + updatedBoxID + ", SETID = " + updatedSetID;
+			performSqlCommandMultiRow(sqlCmd.c_str());
+
+			sqlCmd = "INSERT INTO BOXES (ID, READY, SETID) VALUES (" + updatedBoxID + ",0," + updatedSetID + ");";
+			performSqlCommandMultiRow(sqlCmd.c_str());
+
+			// get the updated box (sanity check)
+			sqlCmd = "SELECT * FROM CURRENTBOX";
+			std::vector<std::map<std::string, std::string>> listOfNewRows = performSqlCommandMultiRow(sqlCmd.c_str());
+
+			std::string  currentSetID2 = listOfNewRows[0]["SETID"];
+			std::string  currentBoxID2 = listOfNewRows[0]["BOXID"];
+
+			std::string retCurs = "{ \"currentSetID\" : " + currentSetID2 + ", \"currentBoxID\" : " + currentBoxID2 + " }";
+			std::cout << retCurs << std::endl;
+
+			//message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+
+			// TO DO: perform bin packing
+			std::string setToPack = currentSetID;
+			sqlCmd = "SELECT * FROM BOXES WHERE (SETID = " + currentSetID + ")";
+			std::vector<std::map<std::string, std::string>> boxDimensions = performSqlCommandMultiRow(sqlCmd.c_str());
+
+			std::vector<Box *> unpackedBoxes;
+			std::vector<double> sortedPalletDims{ P_HEIGHT, P_LENGTH, P_WIDTH };
+			std::sort(sortedPalletDims.begin(), sortedPalletDims.end());
+
+			for (int it1 = 0; it1 < boxDimensions.size(); it1++) {
+				bool isFullRow = true;
+				for (auto it = boxDimensions[it1].begin(); it != boxDimensions[it1].end(); it++) {
+					std::string colName = it->first;
+					std::string colData = it->second;
+					std::cout << "Checking full row data:" << colName << " : " << colData << std::endl;
+					if (colData == "NULL") {
+						isFullRow = false; // TO DO: flip to false when done testing
+					}
+				}
+				if (isFullRow) {
+					// calculate box dimensions based on p1 p2 focal length numbers
+
+					// cam1
+					double cam1dist = stod(boxDimensions[it1]["CAM1DIST"]);
+					double cam1len = stod(boxDimensions[it1]["CAM1LEN"]);
+					double cam1width = stod(boxDimensions[it1]["CAM1WIDTH"]);
+
+					double cam1focal = 63.0;
+					double cam1pointsize = (1.0 / 6.0);
+
+					double cam1len_real = (cam1dist - cam1focal) * (cam1len / cam1pointsize) / cam1focal;
+					double cam1width_real = (cam1dist - cam1focal) * (cam1width / cam1pointsize) / cam1focal;
+
+					// cam2
+					double cam2dist = stod(boxDimensions[it1]["CAM2DIST"]);
+					double cam2len = stod(boxDimensions[it1]["CAM2LEN"]);
+					double cam2width = stod(boxDimensions[it1]["CAM2WIDTH"]);
+
+					double cam2focal = 80.2;
+					double cam2pointsize = (1.0 / 6.0);
+
+					double cam2len_real = (cam2dist - cam2focal) * (cam2len / cam2pointsize) / cam2focal;
+					double cam2width_real = (cam2dist - cam2focal) * (cam2width / cam2pointsize) / cam2focal;
+					
+					int dbID = stoi(boxDimensions[it1]["ID"]);
+
+					double boxLength = cam1len_real;
+					double boxWidth = cam2len_real;
+					double boxHeight = (cam1width_real + cam2width_real) / 2.0;
+
+					bool notOversize = true;
+					std::vector<double> sortedDims{ boxLength, boxWidth, boxHeight };
+					std::sort(sortedDims.begin(), sortedDims.end());
+
+					if (sortedDims[0] > sortedPalletDims[0] || sortedDims[1] > sortedPalletDims[1] || sortedDims[2] > sortedPalletDims[2])
+						notOversize = false;
+
+					if (notOversize) {
+						// create new box object and add to unpacked Boxes
+						Box* box = new Box(boxLength, boxWidth, boxHeight, dbID);
+						unpackedBoxes.push_back(box);
+					}
+					else {
+						std::cout << "Oversized box detected with dbID: " << dbID << std::endl;
+					}
+
+				}
+			}
+
+			// Do the packing:
+			// TO DO: sort unpackedBoxes by volume
+
+			// TO DO: remove this
+			std::cout << "lets start packing" << std::endl;
+			//Box* box = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 1);
+			//Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 2);
+			//Box* box3 = new Box(1, 1, 1, 3);
+			//unpackedBoxes.push_back(box);
+			//unpackedBoxes.push_back(box2);
+			//unpackedBoxes.push_back(box3);
+
+			// Perform packing
+			int iteration = 1;
+			while (unpackedBoxes.size() != 0) {
+				std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
+				std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+				std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
+				for (int i = 0; i < openPallets.size(); i++) {
+					std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+				}
+
+				unpackedBoxes = runFirstFit(unpackedBoxes);
+				++iteration;
+			}
+
+			std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+			std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
+
+			nlohmann::json jsonObject;
+			jsonObject["setID"] = setToPack;
+			auto jsonPallets = nlohmann::json::array();
+
+			// Spit out results inside openPallets to JSON and store it somewhere
+			for (int i = 0; i < openPallets.size(); i++) {
+				std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+
+				nlohmann::json jPallet;
+				jPallet["id"] = openPallets[i]->id;
+				jPallet["numBoxes"] = openPallets[i]->items.size();
+				auto palletItems = nlohmann::json::array();
+
+				for (int j = 0; j < openPallets[i]->items.size(); j++) {
+					std::cout << '\t' << *openPallets[i]->items.at(j);
+					nlohmann::json jBox;
+					jBox["id"] = openPallets[i]->items.at(j)->id;
+					jBox["length"] = openPallets[i]->items.at(j)->length;
+					jBox["width"] = openPallets[i]->items.at(j)->width;
+					jBox["height"] = openPallets[i]->items.at(j)->height;
+					jBox["position"] = { openPallets[i]->items.at(j)->position[0], openPallets[i]->items.at(j)->position[1], openPallets[i]->items.at(j)->position[2] };
+
+					palletItems.push_back(jBox);
+				}
+
+				jPallet["items"] = palletItems;
+				jsonPallets.push_back(jPallet);
+
+			}
+			jsonObject["pallets"] = jsonPallets;
+
+			time_t now;
+			time(&now);
+			char buf[sizeof "2011-10-08T07:07:09Z"];
+			strftime(buf, sizeof buf, "%FT%TZ", gmtime(&now));
+
+			jsonObject["datetime"] = std::string(buf);
+
+			std::string jsonString = jsonObject.dump(4);
+			std::cout << "JSON:" << jsonString << std::endl;
+			message.reply(status_codes::OK, utility::conversions::to_string_t(jsonString));
+
+			// write to file with setID name
+			std::string fileName = "set" + setToPack + ".json";
+			std::ofstream o(fileName);
+			o << std::setw(4) << jsonPallets << std::endl;
+
+			// Teardown the pallets and boxes
+			teardown();
+			openPallets.clear();
+			Box::resetCounter();
+			std::cout << "After teardown, num pallets: " << openPallets.size() << std::endl;
 		}
 
 		//std::string sqlCmd = "SELECT * FROM BOXES";
@@ -168,7 +354,7 @@ public:
 				deviceFields.push_back("CAM2DIST");
 			}
 
-			// TODO: Compare the JSON values to BOXES table
+			// Compare the JSON values to BOXES table
 			// get current box
 			std::string sqlCmd = "SELECT * FROM CURRENTBOX";
 			std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
@@ -197,10 +383,7 @@ public:
 			if (isDataPop)
 				retCurs = "{ \"dataPopulated\" : true }";
 			std::cout << retCurs << std::endl;
-			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
-
-			// TO DO: if entire row BOXES table is populated, increment current Box ID
-			// update CURRENTBOX and add new row into BOXES
+			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));			
 		}
 		else if (relURIss == "/senddata") {
 
@@ -279,6 +462,33 @@ public:
 				retCurs = "{ \"dataSet\" : true }";
 			std::cout << retCurs << std::endl;
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+
+
+			// if entire row BOXES table is populated, increment current Box ID
+			// update CURRENTBOX and add new row into BOXES
+			bool isDataFullPop = true;
+			for (auto it = listOfRows[0].begin(); it != listOfRows[0].end(); it++) {
+				std::string colName = it->first;
+				std::string colData = it->second;
+				std::cout << "Checking full row data:" << colName << " : " << colData << std::endl;
+				if (colData == "NULL") {
+					isDataFullPop = false;
+				}
+			}
+
+			if (isDataFullPop) {
+				std::cout << "Row is full, add a new box and update currentBoxID" << std::endl;
+				
+				std::string updatedBoxID = std::to_string(std::stoi(currentBoxID) + 1);
+				std::string sqlCmd = "UPDATE CURRENTBOX SET BOXID = " + updatedBoxID;
+				performSqlCommandMultiRow(sqlCmd.c_str());
+
+				sqlCmd = "INSERT INTO BOXES (ID, READY, SETID) VALUES (" + updatedBoxID + ",0," + currentSetID + ");";
+				performSqlCommandMultiRow(sqlCmd.c_str());
+			}
+			else {
+				std::cout << "Row is not full, keep accepting data" << std::endl;
+			}
 		}
 
 
