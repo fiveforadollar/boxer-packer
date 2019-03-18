@@ -14,6 +14,7 @@ struct set {
     var setName : String!
     var setID : Int!
     var date : String!
+    var boxCount : Int!
 }
 
 class SetTableViewController: UITableViewController {
@@ -30,7 +31,8 @@ class SetTableViewController: UITableViewController {
                     for set_ in setNames {
                         let setName = "Set " + set_["setID"].stringValue
                         let date = set_["datetime"].stringValue
-                        let newSet = set(setName: setName, setID: set_["setID"].intValue, date: date)
+                        let boxCount = set_["numBoxes"].intValue
+                        let newSet = set(setName: setName, setID: set_["setID"].intValue, date: date, boxCount: boxCount)
                         self.sets.append(newSet)
                     }
                     self.tableView.reloadData()
@@ -66,6 +68,7 @@ class SetTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "setTableViewCell", for: indexPath) as! SetTableViewCell
         cell.setNameLabel.text = sets[indexPath.row].setName
         cell.setDateLabel.text = sets[indexPath.row].date
+        cell.boxCountLabel.text = "Box count: " + String(sets[indexPath.row].boxCount)
         return cell
     }
     
@@ -74,6 +77,10 @@ class SetTableViewController: UITableViewController {
         performSegue(withIdentifier: "setSegue", sender: self)
     }
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
