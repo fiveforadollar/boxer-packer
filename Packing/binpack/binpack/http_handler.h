@@ -10,6 +10,7 @@
 #include "cpprest/containerstream.h"
 #include "cpprest/producerconsumerstream.h" 
 #include "binpack.h"
+#include <ctime>
 
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.
@@ -199,6 +200,8 @@ public:
 			std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
 			std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
 
+			nlohmann::json jsonObject;
+			jsonObject["setID"] = setToPack;
 			auto jsonPallets = nlohmann::json::array();
 
 			// Spit out results inside openPallets to JSON and store it somewhere
@@ -213,7 +216,7 @@ public:
 				for (int j = 0; j < openPallets[i]->items.size(); j++) {
 					std::cout << '\t' << *openPallets[i]->items.at(j);
 					nlohmann::json jBox;
-					jBox["id"] = openPallets[i]->items.at(j)->dbID;
+					jBox["id"] = openPallets[i]->items.at(j)->id;
 					jBox["length"] = openPallets[i]->items.at(j)->length;
 					jBox["width"] = openPallets[i]->items.at(j)->width;
 					jBox["height"] = openPallets[i]->items.at(j)->height;
@@ -226,8 +229,16 @@ public:
 				jsonPallets.push_back(jPallet);
 
 			}
+			jsonObject["pallets"] = jsonPallets;
 
-			std::string jsonString = jsonPallets.dump(4);
+			time_t now;
+			time(&now);
+			char buf[sizeof "2011-10-08T07:07:09Z"];
+			strftime(buf, sizeof buf, "%FT%TZ", gmtime(&now));
+
+			jsonObject["datetime"] = std::string(buf);
+
+			std::string jsonString = jsonObject.dump(4);
 			std::cout << "JSON:" << jsonString << std::endl;
 			message.reply(status_codes::OK, utility::conversions::to_string_t(jsonString));
 
@@ -239,6 +250,7 @@ public:
 			// Teardown the pallets and boxes
 			teardown();
 			openPallets.clear();
+			Box::resetCounter();
 			std::cout << "After teardown, num pallets: " << openPallets.size() << std::endl;
 		}
 

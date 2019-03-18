@@ -57,10 +57,14 @@ public:
 		return myOrientations;
 	}
 
+	static void resetCounter() {
+		idCounter = 1;
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const Box& box);
 };
 
-int Box::idCounter = 0;
+int Box::idCounter = 1;
 
 std::ostream& operator<<(std::ostream& os, const Box& box)
 {
