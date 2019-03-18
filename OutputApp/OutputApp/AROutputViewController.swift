@@ -14,7 +14,8 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     // MARK: - Properties
     @IBOutlet weak var sceneView: ARSCNView!
-    var pallets = [Pallet]()
+    var set : Set!
+    var palletCenter = simd_float3(0,0,0)
     let arr = [1,2,3,4,5]
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
@@ -45,56 +46,57 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         collectionView.dataSource = self
         
         let json = """
-        [
-            {
-                "id": 0,
-                "items":
-                [
-                    {
-                        "id": 0,
-                        "length": 5,
-                        "width": 10,
-                        "height": 11,
-                        "position": [0, 0, 11]
-                    },
-                    {
-                        "id": 1,
-                        "length": 15,
-                        "width": 9,
-                        "height": 7,
-                        "position": [0, 15, 0]
-                        
-                    },
-                    {
-                        "id": 2,
-                        "length": 15,
-                        "width": 9,
-                        "height": 7,
-                        "position": [12, 0, 0]
-                    },
-                    {
-                        "id": 4,
-                        "length": 12,
-                        "width": 15,
-                        "height": 11,
-                        "position": [0, 0, 0]
-                    }
-                ]
-            },
-            {
-                "id": 1,
-                "items":
-                [
-                    {
-                        "id": 3,
-                        "length": 40,
-                        "width": 40,
-                        "height": 50,
-                        "position": [0, 0, 0]
-                    }
-                ]
-            }
-        ]
+        {
+            "datetime": "2019-03-18T16:51:55Z",
+            "pallets": [
+                {
+                    "id": 0,
+                    "items": [
+                        {
+                            "height": 1.0,
+                            "id": 3,
+                            "length": 1.0,
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 1.0
+                        },
+                        {
+                            "height": 51.0,
+                            "id": 2,
+                            "length": 39.0,
+                            "position": [
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 47.0
+                        }
+                    ],
+                    "numBoxes": 2
+                },
+                {
+                    "id": 1,
+                    "items": [
+                        {
+                            "height": 51.0,
+                            "id": 1,
+                            "length": 39.0,
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 47.0
+                        }
+                    ],
+                    "numBoxes": 1
+                }
+            ],
+            "setID": 0
+        }
         """.data(using: .utf8)!
         
         parseJSON(json)
@@ -164,7 +166,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         sceneView.scene.rootNode.addChildNode(boxNode)
         self.collectionView?.reloadData()
     }
-
+    
     func addBoxesForPallet(_ palletID: Int){
         // remove box nodes from previously selected pallet
         let children = sceneView.scene.rootNode.childNodes
@@ -173,14 +175,31 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                 child.removeFromParentNode()
             }
         }
-        
-        for i in 0...pallets[palletID].items.count {
+        let pallet = set.pallets[palletID]
+        for i in 0...pallet.items.count {
             
+            let width = CGFloat(pallet.items[i].width)
+            let height = CGFloat(pallet.items[i].height)
+            let length = CGFloat(pallet.items[i].length)
             
-
+            let x = pallet.items[i].position[0]
+            let y = pallet.items[i].position[1]
+            let z = pallet.items[i].position[2]
+            let box = SCNBox(width: width, height: height, length: length, chamferRadius: 0)
+            let boxNode = SCNNode(geometry: box)
+            
+            boxNode.position = SCNVector3(x,y,z)
+            boxNode.name = "box"
+            sceneView.scene.rootNode.addChildNode(boxNode)
+            
         }
     }
-
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath){
+        print(indexPath)
+    }
+    
     
 }
 
@@ -210,7 +229,11 @@ extension AROutputViewController: ARSCNViewDelegate {
         // 6
         node.addChildNode(planeNode)
         
-        buttonConfirmPlane.isHidden = false
+        DispatchQueue.main.async {
+            self.buttonConfirmPlane.isHidden = false
+        }
+        
+        palletCenter = planeAnchor.center
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -251,11 +274,12 @@ extension float4x4 {
 extension AROutputViewController{
     func parseJSON(_ json: Data){
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         do {
-            pallets = try decoder.decode([Pallet].self, from: json)
+            set = try decoder.decode(Set.self, from: json)
         }
         catch {
-            return
+            print("caught: \(error)")
         }
     }
 }
@@ -266,8 +290,8 @@ extension AROutputViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("pallet count: ", pallets.count)
-        return pallets.count
+        print("pallet count: ", set.pallets.count)
+        return set.pallets.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -275,7 +299,7 @@ extension AROutputViewController: UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
         //2
         let photo = UIImage(named: "pallet-icon.png")
-     
+        
         cell.imageView.image = photo
         
         return cell
@@ -301,5 +325,5 @@ extension AROutputViewController : UICollectionViewDelegateFlowLayout {
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
     }
-
+    
 }

@@ -9,16 +9,22 @@
 import Foundation
 
 struct Box: Codable {
-    let id: Int
-    let length: Float
-    let width: Float
-    let height: Float
-    let position: [Float]
+    var id: Int
+    var length: Float
+    var width: Float
+    var height: Float
+    var position: [Float]
 }
 
 struct Pallet: Codable {
-    let id: Int
-    let items: [Box]
+    var id: Int
+    var items: [Box]
+}
+
+struct Set: Codable {
+    var pallets: [Pallet]
+    var datetime: Date
+    var setID: Int
 }
 
 
