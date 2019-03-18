@@ -12,6 +12,7 @@ class SetTableViewCell: UITableViewCell {
 
     @IBOutlet weak var setNameLabel: UILabel!
     @IBOutlet weak var setDateLabel: UILabel!
+    @IBOutlet weak var boxCountLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
