@@ -122,6 +122,8 @@ public:
 			std::vector<std::map<std::string, std::string>> boxDimensions = performSqlCommandMultiRow(sqlCmd.c_str());
 
 			std::vector<Box *> unpackedBoxes;
+			std::vector<double> sortedPalletDims{ P_HEIGHT, P_LENGTH, P_WIDTH };
+			std::sort(sortedPalletDims.begin(), sortedPalletDims.end());
 
 			for (int it1 = 0; it1 < boxDimensions.size(); it1++) {
 				bool isFullRow = true;
@@ -164,15 +166,27 @@ public:
 					double boxWidth = cam2len_real;
 					double boxHeight = (cam1width_real + cam2width_real) / 2.0;
 
-					// create new box object and add to unpacked Boxes
-					Box* box = new Box(boxLength, boxWidth, boxHeight, dbID);
-					unpackedBoxes.push_back(box);
+					bool notOversize = true;
+					std::vector<double> sortedDims{ boxLength, boxWidth, boxHeight };
+					std::sort(sortedDims.begin(), sortedDims.end());
+
+					if (sortedDims[0] > sortedPalletDims[0] || sortedDims[1] > sortedPalletDims[1] || sortedDims[2] > sortedPalletDims[2])
+						notOversize = false;
+
+					if (notOversize) {
+						// create new box object and add to unpacked Boxes
+						Box* box = new Box(boxLength, boxWidth, boxHeight, dbID);
+						unpackedBoxes.push_back(box);
+					}
+					else {
+						std::cout << "Oversized box detected with dbID: " << dbID << std::endl;
+					}
 
 				}
 			}
 
 			// Do the packing:
-			// First sort unpackedBoxes by volume
+			// TO DO: sort unpackedBoxes by volume
 
 			// TO DO: remove this
 			std::cout << "lets start packing" << std::endl;
