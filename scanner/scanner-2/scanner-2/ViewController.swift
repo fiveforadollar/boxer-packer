@@ -26,6 +26,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var set_id:Int?
     var box_ready = false
     var timer = Timer()
+    var backButton : UIBarButtonItem!
     
     private let visionSequenceHandler = VNSequenceRequestHandler()
     private var lastRectObservation: VNRectangleObservation?
@@ -97,8 +98,36 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return session
     }()
     
+    // Then handle the button selection
+    @objc func goBack() {
+        // Here we just remove the back button, you could also disabled it or better yet show an activityIndicator
+        self.navigationItem.leftBarButtonItem = nil
+        
+        let alert = UIAlertController(title: "Are you use you want to exit?", message: "All set data will be lost.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.navigationController?.popViewController(animated: true)
+            // Don't forget to re-enable the interactive gesture
+            self.navigationController?.interactivePopGestureRecognizer!.isEnabled = true
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { action in
+            self.navigationItem.leftBarButtonItem = self.backButton
+        }))
+        
+        self.present(alert, animated: true)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.interactivePopGestureRecognizer!.isEnabled = false
+        
+        // Replace the default back button
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.backButton = UIBarButtonItem(title: "Back", style: UIBarButtonItem.Style.plain, target: self, action: #selector(goBack))
+        self.navigationItem.leftBarButtonItem = backButton
         
         //self.widthLabel.text = String(Int(self.view.frame.width))
         //self.heightLabel.text = String(Int(self.view.frame.height))
@@ -150,7 +179,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func getCurrent() {
         print("getting current box and set")
-        Alamofire.request("http://192.168.1.83:8080/current", method: .get)
+        Alamofire.request(Constants.baseURL + "current", method: .get)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
@@ -176,7 +205,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             "Content-Type": "application/json"
         ]
         
-        Alamofire.request("http://192.168.1.83:8080/boxready", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        Alamofire.request(Constants.baseURL + "boxready", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
@@ -212,7 +241,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             "Content-Type": "application/json"
         ]
         
-        Alamofire.request("http://192.168.1.83:8080/senddata", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        Alamofire.request(Constants.baseURL + "senddata", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
@@ -242,7 +271,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             "Content-Type": "application/json"
         ]
         
-        Alamofire.request("http://192.168.1.83:8080/datacheck", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        Alamofire.request(Constants.baseURL + "datacheck", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
@@ -262,7 +291,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     @IBAction func setDonePressed(_ sender: Any) {
-        Alamofire.request("http://192.168.1.83:8080/setdone", method: .get)
+        Alamofire.request(Constants.baseURL + "setdone", method: .get)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
@@ -283,7 +312,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             return;
         }
         
-        Alamofire.request("http://192.168.1.83:8080/setboxready", method: .get)
+        Alamofire.request(Constants.baseURL + "setboxready", method: .get)
             .responseData { response in
                 if (response.response?.statusCode ?? 0 >= 200 && response.response?.statusCode ?? 0 < 300) {
                     print("set current box to ready")
