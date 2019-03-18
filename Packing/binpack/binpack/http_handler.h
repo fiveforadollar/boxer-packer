@@ -94,12 +94,28 @@ public:
 					std::string curSetID = it->second;
 					std::string fName = "set" + curSetID + ".json";
 					std::ifstream infile(fName);
-					if (infile.good())
-						jsonSetIDs.push_back(stoi(curSetID));
+					if (infile.good()) {
+						std::ifstream i(fName);
+						nlohmann::json jFile;
+						nlohmann::json jOut;
+
+						i >> jFile;
+						std::string curDate = jFile["datetime"];
+						int numBoxes = 0;
+						for (auto& x : jFile["pallets"].items()) {
+							numBoxes += x.value()["numBoxes"];
+						}
+						std::cout << curDate << std::endl;
+
+						jOut["setID"] = stoi(curSetID);
+						jOut["datetime"] = curDate;
+						jOut["numBoxes"] = numBoxes;
+						jsonSetIDs.push_back(jOut);
+					}
 				}
 			}
-			std::cout << jsonSetIDs.dump() << std::endl;
-			message.reply(status_codes::OK, utility::conversions::to_string_t(jsonSetIDs.dump()));
+			std::cout << jsonSetIDs.dump(4) << std::endl;
+			message.reply(status_codes::OK, utility::conversions::to_string_t(jsonSetIDs.dump(4)));
 		}
 		else if (relURIss == "/setdone") {
 
@@ -285,7 +301,7 @@ public:
 			// write to file with setID name
 			std::string fileName = "set" + setToPack + ".json";
 			std::ofstream o(fileName);
-			o << std::setw(4) << jsonPallets << std::endl;
+			o << std::setw(4) << jsonObject << std::endl;
 
 			// Teardown the pallets and boxes
 			teardown();

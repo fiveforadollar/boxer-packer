@@ -53,26 +53,26 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                     "id": 0,
                     "items": [
                         {
-                            "height": 1.0,
+                            "height": 0.01,
                             "id": 3,
-                            "length": 1.0,
+                            "length": 0.01,
                             "position": [
                                 0.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 1.0
+                            "width": 0.01
                         },
                         {
-                            "height": 51.0,
+                            "height": 0.51,
                             "id": 2,
-                            "length": 39.0,
+                            "length": 0.39,
                             "position": [
                                 1.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 47.0
+                            "width": 0.47
                         }
                     ],
                     "numBoxes": 2
@@ -81,15 +81,15 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                     "id": 1,
                     "items": [
                         {
-                            "height": 51.0,
+                            "height": 0.51,
                             "id": 1,
-                            "length": 39.0,
+                            "length": 0.39,
                             "position": [
                                 0.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 47.0
+                            "width": 0.47
                         }
                     ],
                     "numBoxes": 1
@@ -169,6 +169,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     func addBoxesForPallet(_ palletID: Int){
         // remove box nodes from previously selected pallet
+        print("in addBoxesForPallet ")
         let children = sceneView.scene.rootNode.childNodes
         for child in children{
             if child.name == "box"{
@@ -176,8 +177,10 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             }
         }
         let pallet = set.pallets[palletID]
-        for i in 0...pallet.items.count {
-            
+        print("got pallet \(palletID) in addBoxesForPallet")
+        print("pallet.items.count = \(pallet.items.count)")
+        for i in 0...(pallet.items.count - 1){
+            print("box number \(i)")
             let width = CGFloat(pallet.items[i].width)
             let height = CGFloat(pallet.items[i].height)
             let length = CGFloat(pallet.items[i].length)
@@ -198,6 +201,10 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath){
         print(indexPath)
+        print(set.pallets.count)
+        print(indexPath.item)
+        addBoxesForPallet(indexPath.item)
+        
     }
     
     
@@ -205,6 +212,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
 
 extension AROutputViewController: ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        print("in renderer")
         // 1
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
@@ -218,6 +226,7 @@ extension AROutputViewController: ARSCNViewDelegate {
         
         // 4
         let planeNode = SCNNode(geometry: plane)
+        planeNode.name = "plane"
         
         // 5
         let x = CGFloat(planeAnchor.center.x)
