@@ -19,6 +19,7 @@ class CollectionImageCell: UICollectionViewCell {
                 let photo = UIImage(named: "pallet-icon-blue.png")
                 
                 self.imageView.image = photo
+                
             }
             else
             {
