@@ -4,10 +4,10 @@
 #include <iostream>
 #include "box.h"
 
-/* Pallet dimensions in inches */
-#define P_LENGTH 40.0
-#define P_WIDTH 48.0
-#define P_HEIGHT 52.0
+/* Pallet dimensions in meters */
+#define P_LENGTH 1.016
+#define P_WIDTH 1.2192
+#define P_HEIGHT 1.3208
 /*******************************/
 
 class Pallet {

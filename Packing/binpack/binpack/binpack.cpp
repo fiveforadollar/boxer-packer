@@ -265,7 +265,7 @@ int main()
 	}
 
 	if (USE_HTTP_LISTENER) {
-		HttpHandler *  h = new HttpHandler(U("http://127.0.0.1:"), U("8080"));
+		HttpHandler *  h = new HttpHandler(U("http://100.65.49.80:"), U("8080"));
 		h->open().wait();
 		ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
 	}

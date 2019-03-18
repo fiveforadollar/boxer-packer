@@ -81,6 +81,26 @@ public:
 			performSqlCommand(sqlCmd.c_str());
 			message.reply(status_codes::OK, utility::conversions::to_string_t(""));
 		}
+		else if (relURIss == "/sets") {
+
+			std::string sqlCmd = "SELECT DISTINCT SETID FROM BOXES";
+
+			auto jsonSetIDs = nlohmann::json::array();
+
+			std::vector<std::map<std::string, std::string>> listOfRows = performSqlCommandMultiRow(sqlCmd.c_str());
+			for (int it1 = 0; it1 < listOfRows.size(); it1++) {
+				bool isFullRow = true;
+				for (auto it = listOfRows[it1].begin(); it != listOfRows[it1].end(); it++) {
+					std::string curSetID = it->second;
+					std::string fName = "set" + curSetID + ".json";
+					std::ifstream infile(fName);
+					if (infile.good())
+						jsonSetIDs.push_back(stoi(curSetID));
+				}
+			}
+			std::cout << jsonSetIDs.dump() << std::endl;
+			message.reply(status_codes::OK, utility::conversions::to_string_t(jsonSetIDs.dump()));
+		}
 		else if (relURIss == "/setdone") {
 
 			// get the current box
@@ -166,6 +186,12 @@ public:
 					double boxWidth = cam2len_real;
 					double boxHeight = (cam1width_real + cam2width_real) / 2.0;
 
+					// convert mm to m
+					boxLength = boxLength /1000.0;
+					boxWidth = boxWidth / 1000.0;
+					boxHeight = boxHeight / 1000.0;
+
+
 					bool notOversize = true;
 					std::vector<double> sortedDims{ boxLength, boxWidth, boxHeight };
 					std::sort(sortedDims.begin(), sortedDims.end());
@@ -190,12 +216,12 @@ public:
 
 			// TO DO: remove this
 			std::cout << "lets start packing" << std::endl;
-			//Box* box = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 1);
-			//Box* box2 = new Box(P_HEIGHT - 1, P_LENGTH - 1, P_WIDTH - 1, 2);
-			//Box* box3 = new Box(1, 1, 1, 3);
-			//unpackedBoxes.push_back(box);
-			//unpackedBoxes.push_back(box2);
-			//unpackedBoxes.push_back(box3);
+			Box* box = new Box(P_HEIGHT - 0.01, P_LENGTH - 0.01, P_WIDTH - 0.01, 1);
+			Box* box2 = new Box(P_HEIGHT - 0.01, P_LENGTH - 0.01, P_WIDTH - 0.01, 2);
+			Box* box3 = new Box(1, 1, 1, 3);
+			unpackedBoxes.push_back(box);
+			unpackedBoxes.push_back(box2);
+			unpackedBoxes.push_back(box3);
 
 			// Perform packing
 			int iteration = 1;
@@ -215,7 +241,7 @@ public:
 			std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
 
 			nlohmann::json jsonObject;
-			jsonObject["setID"] = setToPack;
+			jsonObject["setID"] = stoi(setToPack);
 			auto jsonPallets = nlohmann::json::array();
 
 			// Spit out results inside openPallets to JSON and store it somewhere
@@ -321,6 +347,26 @@ public:
 			std::string retCurs = "{ \"boxReady\" : false }";
 			if (readyFlag == "1")
 				retCurs = "{ \"boxReady\" : true }";
+			std::cout << retCurs << std::endl;
+			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+		}
+		else if (relURIss == "/getset") {
+
+			std::string JSONstring = utility::conversions::to_utf8string(jsonval);
+			std::cout << "JSONstring: " << JSONstring << std::endl;
+
+			nlohmann::json j = nlohmann::json::parse(JSONstring);
+
+			// Read in the json file
+			int setID = j["setID"];
+			std::cout << "Parsed JSON:" << setID << std::endl;
+
+			std::string fName = "set" + std::to_string(setID) + ".json";
+			std::ifstream i(fName);
+			nlohmann::json jOut;
+			i >> jOut;
+
+			std::string retCurs = jOut.dump(4);
 			std::cout << retCurs << std::endl;
 			message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
 		}
