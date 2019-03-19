@@ -9,6 +9,7 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import ChameleonFramework
 
 class LayoutViewController: UIViewController {
 
@@ -17,6 +18,9 @@ class LayoutViewController: UIViewController {
     
     // Pallets data structure to be filled by incoming data
     var pallets = [Pallet]()
+    
+    // Get all colors from color library - each box will 
+    var available_colors = Colors.getAllColors()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +96,7 @@ class LayoutViewController: UIViewController {
         // Draw each box in their corresponding pallets
         // TODO: currently only does pallet 1
         for box in (pallets[0].items) {
-            let cubeGeometry = SCNBox(width: CGFloat(box.width), height: CGFloat(box.height), length: CGFloat(box.length), chamferRadius: 0.0)
+            let cube = SCNBox(width: CGFloat(box.width), height: CGFloat(box.height), length: CGFloat(box.length), chamferRadius: 0.0)
             // Create the cube's pivot point to be its back left corner
             let cubePivot = SCNMatrix4MakeTranslation(-(box.width/2), -(box.height/2), (box.length/2))
             let cubePosition = SCNVector3 (
@@ -100,9 +104,23 @@ class LayoutViewController: UIViewController {
                 y: box.position[1],
                 z: box.position[2]
             )
+            
+            // Set cube's color to be unique - take and remove from master list of colors
+            if available_colors.count > 0 {
+                let colorIndex = Int.random(in: 0..<available_colors.count)
+                let cubeColor = available_colors[colorIndex]
+                available_colors.remove(at: colorIndex)
+                let cubeMaterial = SCNMaterial()
+                cubeMaterial.diffuse.contents = cubeColor
+                cubeMaterial.locksAmbientWithDiffuse = true
+                cube.materials = [cubeMaterial]
+            }
+            else {
+                print("Error: Max number of boxes per pallet reached!")
+            }
 
             // Set the cube's dimensions, pivot and position through its node
-            let cubeNode = SCNNode(geometry: cubeGeometry)
+            let cubeNode = SCNNode(geometry: cube)
             cubeNode.position = cubePosition
             cubeNode.pivot = cubePivot
             scene.rootNode.addChildNode(cubeNode)

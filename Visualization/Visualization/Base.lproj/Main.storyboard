@@ -18,9 +18,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" sceneName="LayoutScene.scn" translatesAutoresizingMaskIntoConstraints="NO" id="lYa-wI-vXi">
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" sceneName="LayoutScene.scn" translatesAutoresizingMaskIntoConstraints="NO" id="lYa-wI-vXi">
                                 <rect key="frame" x="0.0" y="58" width="375" height="609"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="lYa-wI-vXi" secondAttribute="height" multiplier="125:203" id="wAW-9s-bmn"/>
+                                </constraints>
                             </sceneKitView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uH0-Ne-2El">
                                 <rect key="frame" x="16" y="20" width="34" height="30"/>
@@ -32,6 +34,11 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="leading" secondItem="Cw7-aS-owj" secondAttribute="leading" id="S1E-sP-G6B"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="bottom" secondItem="Cw7-aS-owj" secondAttribute="bottom" id="WgZ-pR-bpN"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="trailing" secondItem="Cw7-aS-owj" secondAttribute="trailing" id="ia4-lp-FmS"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Cw7-aS-owj"/>
                     </view>
                     <connections>
