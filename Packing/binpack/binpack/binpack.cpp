@@ -5,7 +5,8 @@
 #define DEBUG 1
 #define USE_FILE_INPUT 1
 #define USE_HTTP_CLIENT 0
-#define USE_HTTP_LISTENER 0
+#define USE_HTTP_LISTENER 1
+#define USE_MAIN_BINPACK 0
 
 /******************* Globals ******************/
 
@@ -246,6 +247,9 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 
 int main()
 {	
+
+	initializeDatabase();
+
 	// Use a mock client to test the http listener
 	if (USE_HTTP_CLIENT) {
 		utility::string_t outputPath = U("C:\\Users\\james\\OneDrive\\Desktop\\My_Stuff\\Senior (2018-2019)\\Courses\\Capstone\\boxer-packer\\Packing\\binpack\\binpack\\mock_client_results.txt");
@@ -265,28 +269,32 @@ int main()
 		h->open().wait();
 		ucout << utility::string_t(U("Listening for requests at: ")) << h->listener->uri().to_string() << std::endl;
 	}
-	std::vector<Box *> unpackedBoxes = initiatePacking();
 
-	int iteration = 1;
-	while (unpackedBoxes.size() != 0) {
-		std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
-		std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
-		std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
-		for (int i = 0; i < openPallets.size(); i++) {
-			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+	if (USE_MAIN_BINPACK) {
+
+		std::vector<Box *> unpackedBoxes = initiatePacking();
+
+		int iteration = 1;
+		while (unpackedBoxes.size() != 0) {
+			std::cout << "\nStarting iteration " << iteration << "..." << std::endl;
+			std::cout << "Before packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+			std::cout << "Before packing, number of pallets: " << openPallets.size() << std::endl;
+			for (int i = 0; i < openPallets.size(); i++) {
+				std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+			}
+
+			unpackedBoxes = runFirstFit(unpackedBoxes);
+			++iteration;
+
+			std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
+			std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
+			for (int i = 0; i < openPallets.size(); i++) {
+				std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
+			}
 		}
 
-		unpackedBoxes = runFirstFit(unpackedBoxes);
-		++iteration;
-
-		std::cout << "After packing, number of unpacked boxes: " << unpackedBoxes.size() << std::endl;
-		std::cout << "After packing, number of pallets: " << openPallets.size() << std::endl;
-		for (int i = 0; i < openPallets.size(); i++) {
-			std::cout << "\tPallet " << i << " contains " << openPallets[i]->items.size() << " boxes" << std::endl;
-		}
+		teardown();
 	}
-
-	teardown();
 
 	std::cin.get();
 	return 0;

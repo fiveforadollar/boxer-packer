@@ -14,12 +14,15 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     // MARK: - Properties
     @IBOutlet weak var sceneView: ARSCNView!
-    var pallets = [Pallet]()
+    var set : Set!
+    var palletCenter = simd_float3(0,0,0)
     let arr = [1,2,3,4,5]
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var buttonConfirmPlane: UIButton!
     
     // MARK: - Gestures, Actions
     
@@ -27,6 +30,11 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         performSegue(withIdentifier: "ARToChoose", sender: self)
     }
     
+    @IBAction func confirmPlane(_ sender: Any) {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = []
+        sceneView.session.run(configuration)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Uncomment to configure lighting
@@ -38,56 +46,57 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         collectionView.dataSource = self
         
         let json = """
-        [
-            {
-                "id": 0,
-                "items":
-                [
-                    {
-                        "id": 0,
-                        "length": 5,
-                        "width": 10,
-                        "height": 11,
-                        "position": [0, 0, 11]
-                    },
-                    {
-                        "id": 1,
-                        "length": 15,
-                        "width": 9,
-                        "height": 7,
-                        "position": [0, 15, 0]
-                        
-                    },
-                    {
-                        "id": 2,
-                        "length": 15,
-                        "width": 9,
-                        "height": 7,
-                        "position": [12, 0, 0]
-                    },
-                    {
-                        "id": 4,
-                        "length": 12,
-                        "width": 15,
-                        "height": 11,
-                        "position": [0, 0, 0]
-                    }
-                ]
-            },
-            {
-                "id": 1,
-                "items":
-                [
-                    {
-                        "id": 3,
-                        "length": 40,
-                        "width": 40,
-                        "height": 50,
-                        "position": [0, 0, 0]
-                    }
-                ]
-            }
-        ]
+        {
+            "datetime": "2019-03-18T16:51:55Z",
+            "pallets": [
+                {
+                    "id": 0,
+                    "items": [
+                        {
+                            "height": 0.01,
+                            "id": 3,
+                            "length": 0.01,
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 0.01
+                        },
+                        {
+                            "height": 0.51,
+                            "id": 2,
+                            "length": 0.39,
+                            "position": [
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 0.47
+                        }
+                    ],
+                    "numBoxes": 2
+                },
+                {
+                    "id": 1,
+                    "items": [
+                        {
+                            "height": 0.51,
+                            "id": 1,
+                            "length": 0.39,
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 0.47
+                        }
+                    ],
+                    "numBoxes": 1
+                }
+            ],
+            "setID": 0
+        }
         """.data(using: .utf8)!
         
         parseJSON(json)
@@ -95,6 +104,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        buttonConfirmPlane.isHidden = true
         setUpSceneView()
         
     }
@@ -152,16 +162,57 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         let boxNode = SCNNode(geometry: box)
         
         boxNode.position = SCNVector3(x,y,z)
+        boxNode.name = "box"
         sceneView.scene.rootNode.addChildNode(boxNode)
         self.collectionView?.reloadData()
     }
     
-
+    func addBoxesForPallet(_ palletID: Int){
+        // remove box nodes from previously selected pallet
+        print("in addBoxesForPallet ")
+        let children = sceneView.scene.rootNode.childNodes
+        for child in children{
+            if child.name == "box"{
+                child.removeFromParentNode()
+            }
+        }
+        let pallet = set.pallets[palletID]
+        print("got pallet \(palletID) in addBoxesForPallet")
+        print("pallet.items.count = \(pallet.items.count)")
+        for i in 0...(pallet.items.count - 1){
+            print("box number \(i)")
+            let width = CGFloat(pallet.items[i].width)
+            let height = CGFloat(pallet.items[i].height)
+            let length = CGFloat(pallet.items[i].length)
+            
+            let x = pallet.items[i].position[0]
+            let y = pallet.items[i].position[1]
+            let z = pallet.items[i].position[2]
+            let box = SCNBox(width: width, height: height, length: length, chamferRadius: 0)
+            let boxNode = SCNNode(geometry: box)
+            
+            boxNode.position = SCNVector3(x,y,z)
+            boxNode.name = "box"
+            sceneView.scene.rootNode.addChildNode(boxNode)
+            
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath){
+        print(indexPath)
+        print(set.pallets.count)
+        print(indexPath.item)
+        addBoxesForPallet(indexPath.item)
+        
+    }
+    
     
 }
 
 extension AROutputViewController: ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        print("in renderer")
         // 1
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
@@ -175,6 +226,7 @@ extension AROutputViewController: ARSCNViewDelegate {
         
         // 4
         let planeNode = SCNNode(geometry: plane)
+        planeNode.name = "plane"
         
         // 5
         let x = CGFloat(planeAnchor.center.x)
@@ -185,6 +237,12 @@ extension AROutputViewController: ARSCNViewDelegate {
         
         // 6
         node.addChildNode(planeNode)
+        
+        DispatchQueue.main.async {
+            self.buttonConfirmPlane.isHidden = false
+        }
+        
+        palletCenter = planeAnchor.center
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -225,11 +283,12 @@ extension float4x4 {
 extension AROutputViewController{
     func parseJSON(_ json: Data){
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         do {
-            pallets = try decoder.decode([Pallet].self, from: json)
+            set = try decoder.decode(Set.self, from: json)
         }
         catch {
-            return
+            print("caught: \(error)")
         }
     }
 }
@@ -240,18 +299,16 @@ extension AROutputViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("pallet count: ", arr.count)
-        return arr.count
+        print("pallet count: ", set.pallets.count)
+        return set.pallets.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //1
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
         //2
-        let photo = UIImage(named: "pallet-icon")
-     
-//        cell.backgroundColor = .white
-        //3
+        let photo = UIImage(named: "pallet-icon.png")
+        
         cell.imageView.image = photo
         
         return cell
@@ -260,11 +317,11 @@ extension AROutputViewController: UICollectionViewDataSource{
 
 // MARK: - Collection View Flow Layout Delegate
 extension AROutputViewController : UICollectionViewDelegateFlowLayout {
-    //1
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //2
+        
         let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
         let availableWidth = sceneView.frame.width - paddingSpace
         let widthPerItem = availableWidth / CGFloat(itemsPerRow)
@@ -272,18 +329,10 @@ extension AROutputViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: widthPerItem)
     }
     
-//    //3
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return sectionInsets
-//    }
-    
-    // 4
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
     }
-
+    
 }
