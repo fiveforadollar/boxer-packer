@@ -16,14 +16,14 @@ class CollectionImageCell: UICollectionViewCell {
         willSet{
             if newValue
             {
-                let photo = UIImage(named: "pallet-icon-blue.png")
+                let photo = UIImage(named: "pallet-blue.png")
                 
                 self.imageView.image = photo
                 
             }
             else
             {
-                let photo = UIImage(named: "pallet-icon.png")
+                let photo = UIImage(named: "pallet.png")
                 
                 self.imageView.image = photo
             }

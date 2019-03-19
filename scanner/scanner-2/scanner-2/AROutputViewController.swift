@@ -20,7 +20,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     @IBOutlet weak var buttonConfirmPlane: UIButton!
     
     var set : Set!
-    var palletCenter = simd_float3(0,0,0)
+    var palletCenter = SCNVector3(0,0,0)
     let arr = [1,2,3,4,5]
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
@@ -65,18 +65,18 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                                 0.0,
                                 0.0
                             ],
-                            "width": 0.01
+                            "width": 0.02
                         },
                         {
-                            "height": 0.51,
+                            "height": 0.051,
                             "id": 2,
-                            "length": 0.39,
+                            "length": 0.039,
                             "position": [
-                                0.01,
+                                0.07,
                                 0.0,
                                 0.0
                             ],
-                            "width": 0.47
+                            "width": 0.047
                         }
                     ],
                     "numBoxes": 2
@@ -85,15 +85,15 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                     "id": 1,
                     "items": [
                         {
-                            "height": 0.51,
+                            "height": 0.02,
                             "id": 1,
-                            "length": 0.39,
+                            "length": 0.08,
                             "position": [
                                 0.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 0.47
+                            "width": 0.01
                         }
                     ],
                     "numBoxes": 1
@@ -129,16 +129,16 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     }
     
     func configureLighting() {
-        sceneView.autoenablesDefaultLighting = false
+        sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
         
-        let spotLight = SCNLight();
-        spotLight.type = SCNLight.LightType.directional;
-        
-        let spotNode = SCNNode();
-        spotNode.light = spotLight;
-        spotNode.position = SCNVector3(x: -30, y: 30, z: 60);
-        sceneView.scene.rootNode.addChildNode(spotNode);
+//        let spotLight = SCNLight();
+//        spotLight.type = SCNLight.LightType.directional;
+//
+//        let spotNode = SCNNode();
+//        spotNode.light = spotLight;
+//        spotNode.position = SCNVector3(x: -30, y: 30, z: 60);
+//        sceneView.scene.rootNode.addChildNode(spotNode);
         
     }
     
@@ -174,8 +174,12 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     func addBoxesForPallet(_ palletID: Int){
         // remove box nodes from previously selected pallet
         print("in addBoxesForPallet ")
-        let children = sceneView.scene.rootNode.childNodes
-        for child in children{
+        let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
+        guard let children = planeNode?.childNodes
+            else{
+                return
+        }
+        for child in children {
             if child.name == "box"{
                 child.removeFromParentNode()
             }
@@ -185,20 +189,26 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         print("pallet.items.count = \(pallet.items.count)")
         for i in 0...(pallet.items.count - 1){
             print("box number \(i)")
-            let width = CGFloat(pallet.items[i].width)
-            let height = CGFloat(pallet.items[i].height)
-            let length = CGFloat(pallet.items[i].length)
+            let w = CGFloat(pallet.items[i].width)
+            let h = CGFloat(pallet.items[i].height)
+            let l = CGFloat(pallet.items[i].length)
             
-            let x = pallet.items[i].position[0] + palletCenter.x
-            let y = pallet.items[i].position[1] + palletCenter.y
-            let z = pallet.items[i].position[2] + palletCenter.z
-            print("x: \(x), y: \(y), z: \(z)")
-            let box = SCNBox(width: width, height: height, length: length, chamferRadius: 0)
+            let x = pallet.items[i].position[0]
+            let y = pallet.items[i].position[1]
+            let z = pallet.items[i].position[2]
+           
+            print("width: \(w), length: \(l), height: \(h)")
+            let box = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
             let boxNode = SCNNode(geometry: box)
             
             boxNode.position = SCNVector3(x,y,z)
             boxNode.name = "box"
-            sceneView.scene.rootNode.addChildNode(boxNode)
+            guard let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
+                else{
+                    print("plane does not exist")
+                    return
+            }
+            planeNode.addChildNode(boxNode)
             
         }
     }
@@ -247,7 +257,7 @@ extension AROutputViewController: ARSCNViewDelegate {
             self.buttonConfirmPlane.isHidden = false
         }
         
-        palletCenter = planeAnchor.center
+        palletCenter = planeNode.position
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -268,6 +278,8 @@ extension AROutputViewController: ARSCNViewDelegate {
         let y = CGFloat(planeAnchor.center.y)
         let z = CGFloat(planeAnchor.center.z)
         planeNode.position = SCNVector3(x, y, z)
+        
+        palletCenter = planeNode.position
     }
 }
 
@@ -313,9 +325,10 @@ extension AROutputViewController: UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
         //2
         print("pallet iconnnnnn")
-        let photo = UIImage(named: "pallet-icon.png")
-        
+        let photo = UIImage(named: "pallet.png")
+
         cell.imageView.image = photo
+//        cell.backgroundColor = .black
         
         return cell
     }
