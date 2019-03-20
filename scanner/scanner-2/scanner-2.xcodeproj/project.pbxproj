@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		0E2484B221DD3B76001173D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2484B121DD3B76001173D2 /* AppDelegate.swift */; };
 		0E2484B421DD3B76001173D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2484B321DD3B76001173D2 /* ViewController.swift */; };
-		0E2484B721DD3B76001173D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E2484B521DD3B76001173D2 /* Main.storyboard */; };
 		0E2484B921DD3B7A001173D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E2484B821DD3B7A001173D2 /* Assets.xcassets */; };
 		0E2484BC21DD3B7A001173D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E2484BA21DD3B7A001173D2 /* LaunchScreen.storyboard */; };
 		0EB66BAF224011A50043B114 /* SetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB66BAE224011A50043B114 /* SetTableViewController.swift */; };
 		0EB66BB122401D120043B114 /* ChooseOutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB66BB022401D120043B114 /* ChooseOutputViewController.swift */; };
 		0EB66BB322401EFA0043B114 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB66BB222401EFA0043B114 /* Constants.swift */; };
 		0EB66BB6224022AA0043B114 /* SetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB66BB4224022AA0043B114 /* SetTableViewCell.swift */; };
+		828C8BA12242D3E100497810 /* BoxCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828C8BA02242D3E100497810 /* BoxCollectionViewCell.swift */; };
+		828C8BA42242D63000497810 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 828C8BA22242D63000497810 /* Main.storyboard */; };
 		82B6F2B12241DDBA002BFE17 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B6F2AE2241DDBA002BFE17 /* Colors.swift */; };
 		82B6F2B22241DDBA002BFE17 /* LayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B6F2AF2241DDBA002BFE17 /* LayoutViewController.swift */; };
 		82B6F2B32241DDBA002BFE17 /* pallet_texture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 82B6F2B02241DDBA002BFE17 /* pallet_texture.jpg */; };
@@ -33,7 +34,6 @@
 		0E2484AE21DD3B76001173D2 /* scanner-2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "scanner-2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E2484B121DD3B76001173D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0E2484B321DD3B76001173D2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		0E2484B621DD3B76001173D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0E2484B821DD3B7A001173D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0E2484BB21DD3B7A001173D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0E2484BD21DD3B7A001173D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -42,6 +42,8 @@
 		0EB66BB222401EFA0043B114 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		0EB66BB4224022AA0043B114 /* SetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTableViewCell.swift; sourceTree = "<group>"; };
 		7B0F6E7ECF12D73CB600168F /* Pods-scanner-2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-scanner-2.debug.xcconfig"; path = "Target Support Files/Pods-scanner-2/Pods-scanner-2.debug.xcconfig"; sourceTree = "<group>"; };
+		828C8BA02242D3E100497810 /* BoxCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxCollectionViewCell.swift; sourceTree = "<group>"; };
+		828C8BA32242D63000497810 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		82B6F2AE2241DDBA002BFE17 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Colors.swift; path = ../../../Visualization/Visualization/Colors.swift; sourceTree = "<group>"; };
 		82B6F2AF2241DDBA002BFE17 /* LayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LayoutViewController.swift; path = ../../../Visualization/Visualization/LayoutViewController.swift; sourceTree = "<group>"; };
 		82B6F2B02241DDBA002BFE17 /* pallet_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = pallet_texture.jpg; path = ../../../Visualization/Visualization/pallet_texture.jpg; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 		0E2484B021DD3B76001173D2 /* scanner-2 */ = {
 			isa = PBXGroup;
 			children = (
+				828C8BA22242D63000497810 /* Main.storyboard */,
 				82B6F2B42241E88A002BFE17 /* Layout.scnassets */,
 				82B6F2AE2241DDBA002BFE17 /* Colors.swift */,
 				82B6F2AF2241DDBA002BFE17 /* LayoutViewController.swift */,
@@ -98,10 +101,10 @@
 				82CF274522402E7A00DB17D3 /* Images */,
 				82CF273F22402A5C00DB17D3 /* AROutputViewController.swift */,
 				82CF274022402A5C00DB17D3 /* CollectionImageCell.swift */,
+				828C8BA02242D3E100497810 /* BoxCollectionViewCell.swift */,
 				82CF273E22402A5C00DB17D3 /* Pallets.swift */,
 				0E2484B121DD3B76001173D2 /* AppDelegate.swift */,
 				0E2484B321DD3B76001173D2 /* ViewController.swift */,
-				0E2484B521DD3B76001173D2 /* Main.storyboard */,
 				0EB66BB4224022AA0043B114 /* SetTableViewCell.swift */,
 				0EB66BAE224011A50043B114 /* SetTableViewController.swift */,
 				0EB66BB022401D120043B114 /* ChooseOutputViewController.swift */,
@@ -193,11 +196,11 @@
 				82B6F2B32241DDBA002BFE17 /* pallet_texture.jpg in Resources */,
 				82FDC5E222418284003CAF33 /* pallet.png in Resources */,
 				82FDC5E42241836B003CAF33 /* pallet-blue.png in Resources */,
+				828C8BA42242D63000497810 /* Main.storyboard in Resources */,
 				82B6F2B52241E88A002BFE17 /* Layout.scnassets in Resources */,
 				82CF274622402E7A00DB17D3 /* Images in Resources */,
 				0E2484BC21DD3B7A001173D2 /* LaunchScreen.storyboard in Resources */,
 				0E2484B921DD3B7A001173D2 /* Assets.xcassets in Resources */,
-				0E2484B721DD3B76001173D2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +272,7 @@
 				0E2484B221DD3B76001173D2 /* AppDelegate.swift in Sources */,
 				0EB66BAF224011A50043B114 /* SetTableViewController.swift in Sources */,
 				82CF274122402A5C00DB17D3 /* Pallets.swift in Sources */,
+				828C8BA12242D3E100497810 /* BoxCollectionViewCell.swift in Sources */,
 				82B6F2B22241DDBA002BFE17 /* LayoutViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,20 +280,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		0E2484B521DD3B76001173D2 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0E2484B621DD3B76001173D2 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		0E2484BA21DD3B7A001173D2 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0E2484BB21DD3B7A001173D2 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		828C8BA22242D63000497810 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				828C8BA32242D63000497810 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
