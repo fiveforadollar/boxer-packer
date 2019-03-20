@@ -27,16 +27,20 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     // MARK: - Gestures, Actions
     
-//    @IBAction func ARToChooseButton(_ sender: Any) {
-//        performSegue(withIdentifier: "ARToChoose", sender: self)
-//    }
-//
-    
-    
     @IBAction func confirmPlane(_ sender: Any) {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = []
         sceneView.session.run(configuration)
+        
+        // remove plane node, add new plane with texture, or just edit it
+        let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
+        let pallet = SCNBox(width: CGFloat(Constants.palletLength), height: CGFloat(Constants.palletWidth), length: CGFloat(0.1), chamferRadius: 0)
+        pallet.materials.first?.diffuse.contents = UIColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 0.85)
+        let palletNode = SCNNode(geometry: pallet)
+        palletNode.position = SCNVector3(0,0,-0.1)
+        planeNode?.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0)
+        planeNode?.addChildNode(palletNode)
+        
     }
     
     override func viewDidLoad() {
@@ -164,14 +168,6 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
         
-//        let spotLight = SCNLight();
-//        spotLight.type = SCNLight.LightType.directional;
-//
-//        let spotNode = SCNNode();
-//        spotNode.light = spotLight;
-//        spotNode.position = SCNVector3(x: -30, y: 30, z: 60);
-//        sceneView.scene.rootNode.addChildNode(spotNode);
-        
     }
     
     // ADD OBJECTS
@@ -232,8 +228,8 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             print("width: \(w), length: \(l), height: \(h)")
             print("x: \(x), y: \(y), z: \(z)")
             let box = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
-            let boxNode = SCNNode(geometry: box)
             
+            let boxNode = SCNNode(geometry: box)
             boxNode.position = SCNVector3(x,y,z)
             boxNode.name = "box"
             guard let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
