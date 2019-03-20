@@ -57,26 +57,26 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                     "id": 0,
                     "items": [
                         {
-                            "height": 0.01,
+                            "height": 10,
                             "id": 3,
-                            "length": 0.01,
+                            "length": 10,
                             "position": [
-                                0.0,
-                                0.0,
+                                500,
+                                600,
                                 0.0
                             ],
-                            "width": 0.02
+                            "width": 20
                         },
                         {
-                            "height": 0.051,
+                            "height": 51,
                             "id": 2,
-                            "length": 0.039,
+                            "length": 39,
                             "position": [
-                                0.07,
+                                70.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 0.047
+                            "width": 47
                         }
                     ],
                     "numBoxes": 2
@@ -85,15 +85,15 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                     "id": 1,
                     "items": [
                         {
-                            "height": 0.02,
+                            "height": 20,
                             "id": 1,
-                            "length": 0.08,
+                            "length": 80,
                             "position": [
                                 0.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 0.01
+                            "width": 10
                         }
                     ],
                     "numBoxes": 1
@@ -306,6 +306,21 @@ extension AROutputViewController{
         }
         catch {
             print("caught: \(error)")
+        }
+        var temp: Float
+        for pallet in set.pallets{
+            for var box in pallet.items{
+                temp = box.width
+                box.width = box.height / 1000
+                box.height = temp / 1000
+                box.length = box.length / 1000
+                
+                box.position[0] = box.position[0]/1000 + Constants.palletWidth - box.width/2
+                temp = box.position[1]
+                box.position[1] = box.position[2] / 1000 + box.height/2
+                box.position[2] = temp / 1000 + Constants.palletLength - box.length/2
+                
+            }
         }
     }
 }

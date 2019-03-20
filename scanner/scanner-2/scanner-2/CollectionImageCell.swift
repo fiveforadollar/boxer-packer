@@ -10,8 +10,11 @@ import UIKit
 
 class CollectionImageCell: UICollectionViewCell {
     
+    // For AR pallet selection bar
     @IBOutlet weak var imageView: UIImageView!
     
+    // For 3d representation's pallet selection bar
+
     override var isSelected: Bool{
         willSet{
             if newValue
@@ -19,6 +22,7 @@ class CollectionImageCell: UICollectionViewCell {
                 let photo = UIImage(named: "pallet-blue.png")
                 
                 self.imageView.image = photo
+           
                 
             }
             else
@@ -26,6 +30,7 @@ class CollectionImageCell: UICollectionViewCell {
                 let photo = UIImage(named: "pallet.png")
                 
                 self.imageView.image = photo
+               
             }
         }
     }
