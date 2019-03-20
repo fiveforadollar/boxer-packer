@@ -19,7 +19,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet weak var buttonConfirmPlane: UIButton!
     
-    var set : Set!
+    var set = Set()
     var palletCenter = SCNVector3(0,0,0)
     let arr = [1,2,3,4,5]
     private let itemsPerRow = 4
@@ -57,43 +57,76 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                     "id": 0,
                     "items": [
                         {
-                            "height": 10,
-                            "id": 3,
-                            "length": 10,
+                            "height": 0.09,
+                            "id": 1,
+                            "length": 0.08,
                             "position": [
-                                500,
-                                600,
+                                0.0,
+                                0.04,
                                 0.0
                             ],
-                            "width": 20
+                            "width": 0.06
                         },
                         {
-                            "height": 51,
+                            "height": 0.04,
                             "id": 2,
-                            "length": 39,
+                            "length": 0.03,
                             "position": [
-                                70.0,
+                                0.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 47
+                            "width": 0.04
+                        },
+                {
+                            "height": 0.06,
+                            "id": 3,
+                            "length": 0.03,
+                            "position": [
+                                0.08,
+                                0.04,
+                                0.0
+                            ],
+                            "width": 0.06
+                        },
+                        {
+                            "height": 0.07,
+                            "id": 4,
+                            "length": 0.01,
+                            "position": [
+                                0.11,
+                                0.05,
+                                0.0
+                            ],
+                            "width": 0.05
+                        },
+                {
+                            "height": 0.05,
+                            "id": 5,
+                            "length": 0.06,
+                            "position": [
+                                0.03,
+                                0.0,
+                                0.0
+                            ],
+                            "width": 0.03
                         }
                     ],
-                    "numBoxes": 2
+                    "numBoxes": 5
                 },
                 {
                     "id": 1,
                     "items": [
                         {
-                            "height": 20,
+                            "height": 0.51,
                             "id": 1,
-                            "length": 80,
+                            "length": 0.4,
                             "position": [
                                 0.0,
                                 0.0,
                                 0.0
                             ],
-                            "width": 10
+                            "width": 0.3
                         }
                     ],
                     "numBoxes": 1
@@ -102,7 +135,6 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             "setID": 0
         }
         """.data(using: .utf8)!
-        
         set = parseJSON(json, set, output: "AR")
     }
     
@@ -198,6 +230,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             let z = pallet.items[i].position[2]
            
             print("width: \(w), length: \(l), height: \(h)")
+            print("x: \(x), y: \(y), z: \(z)")
             let box = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
             let boxNode = SCNNode(geometry: box)
             
