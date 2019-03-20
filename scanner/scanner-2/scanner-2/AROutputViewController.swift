@@ -15,7 +15,10 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Properties
 
     @IBOutlet weak var sceneView: ARSCNView!
-    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var collectionView: UICollectionView!
+    
+    
+    @IBOutlet weak var collectionViewPallet: UICollectionView!
     
     @IBOutlet weak var buttonConfirmPlane: UIButton!
     
@@ -48,10 +51,10 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         // Uncomment to configure lighting
         configureLighting()
         
-        collectionView.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        collectionViewPallet.backgroundColor = UIColor(white: 1, alpha: 0.5)
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionViewPallet.delegate = self
+        collectionViewPallet.dataSource = self
         
         let json = """
         {
@@ -196,7 +199,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         boxNode.position = SCNVector3(x,y,z)
         boxNode.name = "box"
         sceneView.scene.rootNode.addChildNode(boxNode)
-        self.collectionView?.reloadData()
+        self.collectionViewPallet?.reloadData()
     }
     
     func addBoxesForPallet(_ palletID: Int){
@@ -336,16 +339,21 @@ extension AROutputViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //1
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
-        //2
-        print("pallet iconnnnnn")
-        let photo = UIImage(named: "pallet.png")
-
-        cell.imageView.image = photo
-//        cell.backgroundColor = .black
         
-        return cell
+        if collectionView == self.collectionViewPallet {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "palletCell",for: indexPath) as! CollectionImageCell
+            
+            let photo = UIImage(named: "pallet.png")
+
+            cell.imageView.image = photo
+    //        cell.backgroundColor = .black
+            
+            return cell
+        }
+        else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "palletCell",for: indexPath) as! CollectionImageCell
+            return cell
+        }
     }
 }
 

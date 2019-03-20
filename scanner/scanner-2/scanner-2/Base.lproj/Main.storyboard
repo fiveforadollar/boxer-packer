@@ -341,7 +341,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="E8q-XU-6AD" customClass="CollectionImageCell" customModule="scanner_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="palletCell" id="E8q-XU-6AD" customClass="CollectionImageCell" customModule="scanner_2" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="-0.5" width="61" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -365,8 +365,8 @@
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="6J7-nc-mOI" id="aor-8H-oSS"/>
-                                    <outlet property="delegate" destination="6J7-nc-mOI" id="PQO-Yx-YRp"/>
+                                    <outlet property="dataSource" destination="6J7-nc-mOI" id="VDr-Js-RVz"/>
+                                    <outlet property="delegate" destination="6J7-nc-mOI" id="bJV-ce-ZVc"/>
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VtX-4F-EHW">
@@ -394,7 +394,7 @@
                     </view>
                     <connections>
                         <outlet property="buttonConfirmPlane" destination="VtX-4F-EHW" id="l7g-0w-J0E"/>
-                        <outlet property="collectionView" destination="C4P-mU-kng" id="rta-Cr-6UP"/>
+                        <outlet property="collectionViewPallet" destination="C4P-mU-kng" id="IKQ-Ax-O74"/>
                         <outlet property="sceneView" destination="cLl-nD-t9E" id="bs9-NV-5Ob"/>
                     </connections>
                 </viewController>
