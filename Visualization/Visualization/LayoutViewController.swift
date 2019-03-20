@@ -19,24 +19,32 @@ class LayoutViewController: UIViewController {
     // Pallets data structure to be filled by incoming data
     var pallets = [Pallet]()
     
-    // Get all colors from color library - each box will 
+    // Counter to keep track of how many pallet icons we have rendered
+    var curNumPallets = 0
+    
+    // Get all colors from color library for box identification
     var available_colors = Colors.getAllColors()
+    
+    // Collection view bar containing the pallet selection interface
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Initialize collectionVIew
+        collectionView.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        
         
         // Create scene
         let scene = SCNScene(named:"Layout.scnassets/Scenes/LayoutScene.scn")!
     
         // Set the scene to the view
         scnView.scene = scene
-        
+
         // Allows the user to manipulate the camera
         scnView.allowsCameraControl = true
         
-        // Show statistics such as fps and timing information
-        scnView.showsStatistics = true
-  
         // Add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         scnView.addGestureRecognizer(tapGesture)
@@ -93,8 +101,22 @@ class LayoutViewController: UIViewController {
         """.data(using: .utf8)!
         parseJSON(json)
         
+//        // Draw pallet selection options
+//        for pallet in pallets {
+//            // Draw pallet selection options
+//            let newPalletIcon = UITableViewCell()
+//            let photo = UIImage(named: "art.scnassets/pallet-icon.png")
+//
+//            newPalletIcon.imageView.image = photo
+//
+//            let insertPath = IndexPath(row: self.curNumPallets, section: 0)
+//            comments.append(your_object) //add your object to data source first
+//            self.collectionView?.insertItems(at: [indexPath])
+//            collectionVIew.addChild
+//
+//        }
+    
         // Draw each box in their corresponding pallets
-        // TODO: currently only does pallet 1
         for box in (pallets[0].items) {
             let cube = SCNBox(width: CGFloat(box.width), height: CGFloat(box.height), length: CGFloat(box.length), chamferRadius: 0.0)
             // Create the cube's pivot point to be its back left corner
@@ -138,6 +160,10 @@ class LayoutViewController: UIViewController {
         }
     }
     
+    // Handle gestures, allows:
+    // 1. Pinch for zooming
+    // 2. Tap for selection
+    // 3. Panning
     @objc
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
         // check what nodes are tapped
@@ -186,5 +212,25 @@ class LayoutViewController: UIViewController {
             return .all
         }
     }
+}
 
+extension LayoutViewController: UICollectionViewDataSource{
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("pallet count: ", pallets.count)
+        return pallets.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",for: indexPath) as! CollectionImageCell
+    
+        let photo = UIImage(named: "pallet-icon.png")
+        
+        cell.imageView.image = photo
+        
+        return cell
+    }
 }

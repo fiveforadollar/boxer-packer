@@ -24,31 +24,86 @@
                                     <constraint firstAttribute="width" secondItem="lYa-wI-vXi" secondAttribute="height" multiplier="125:203" id="wAW-9s-bmn"/>
                                 </constraints>
                             </sceneKitView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uH0-Ne-2El">
-                                <rect key="frame" x="16" y="20" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Back"/>
-                                <connections>
-                                    <segue destination="7mC-xB-G0f" kind="show" id="Ape-eN-zwT"/>
-                                </connections>
-                            </button>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CB4-H7-fGR">
-                                <rect key="frame" x="-28" y="14" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TYw-Lg-vEW">
+                                <rect key="frame" x="0.0" y="20" width="375" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="1XB-2b-W8j"/>
+                                </constraints>
                                 <items>
-                                    <navigationItem title="Title" id="sTo-C5-mhV"/>
+                                    <navigationItem title="Pallet #X" id="LJb-GY-Zvu">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" id="cfz-Uf-BXV">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="uH0-Ne-2El">
+                                                <rect key="frame" x="16" y="7" width="34" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Back"/>
+                                                <connections>
+                                                    <segue destination="7mC-xB-G0f" kind="show" id="Ape-eN-zwT"/>
+                                                </connections>
+                                            </button>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GDq-CQ-HRg">
+                                <rect key="frame" x="0.0" y="58" width="375" height="54"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="E4Q-21-Zrk"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LpA-ib-CDs">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="eN6-u8-edC" customClass="CollectionImageCell" customModule="Visualization" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="2" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pallet-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="225-i4-gXi">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="225-i4-gXi" secondAttribute="trailing" id="Fnl-Kw-YXX"/>
+                                            <constraint firstItem="225-i4-gXi" firstAttribute="top" secondItem="eN6-u8-edC" secondAttribute="top" id="HAG-Y3-XKT"/>
+                                            <constraint firstItem="225-i4-gXi" firstAttribute="leading" secondItem="eN6-u8-edC" secondAttribute="leading" id="WBx-xe-nlW"/>
+                                            <constraint firstAttribute="bottom" secondItem="225-i4-gXi" secondAttribute="bottom" id="zcj-T6-Edh"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="225-i4-gXi" id="gE4-pR-gfw"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BV1-FR-VrT" id="D5U-wU-BJI"/>
+                                    <outlet property="delegate" destination="BV1-FR-VrT" id="77B-0z-DF5"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="lYa-wI-vXi" firstAttribute="leading" secondItem="Cw7-aS-owj" secondAttribute="leading" id="S1E-sP-G6B"/>
-                            <constraint firstItem="lYa-wI-vXi" firstAttribute="bottom" secondItem="Cw7-aS-owj" secondAttribute="bottom" id="WgZ-pR-bpN"/>
-                            <constraint firstItem="lYa-wI-vXi" firstAttribute="trailing" secondItem="Cw7-aS-owj" secondAttribute="trailing" id="ia4-lp-FmS"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="trailing" secondItem="Cw7-aS-owj" secondAttribute="trailing" id="4LH-AF-jPS"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="top" secondItem="TYw-Lg-vEW" secondAttribute="bottom" id="BPm-U6-gP7"/>
+                            <constraint firstItem="GDq-CQ-HRg" firstAttribute="leading" secondItem="Cw7-aS-owj" secondAttribute="leading" id="M2b-Sq-A32"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="top" secondItem="TYw-Lg-vEW" secondAttribute="bottom" id="MFl-3i-3WE"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="leading" secondItem="Cw7-aS-owj" secondAttribute="leading" id="Red-Ic-XPE"/>
+                            <constraint firstItem="TYw-Lg-vEW" firstAttribute="top" secondItem="Cw7-aS-owj" secondAttribute="top" id="S4s-BW-dbC"/>
+                            <constraint firstItem="TYw-Lg-vEW" firstAttribute="trailing" secondItem="Cw7-aS-owj" secondAttribute="trailing" id="XZ5-Nh-8H0"/>
+                            <constraint firstItem="TYw-Lg-vEW" firstAttribute="leading" secondItem="Cw7-aS-owj" secondAttribute="leading" id="jT2-KE-Z8W"/>
+                            <constraint firstItem="lYa-wI-vXi" firstAttribute="bottom" secondItem="Cw7-aS-owj" secondAttribute="bottom" id="mUb-lP-lXL"/>
+                            <constraint firstItem="GDq-CQ-HRg" firstAttribute="trailing" secondItem="Cw7-aS-owj" secondAttribute="trailing" id="njk-Zs-trQ"/>
+                            <constraint firstItem="GDq-CQ-HRg" firstAttribute="top" secondItem="TYw-Lg-vEW" secondAttribute="bottom" id="w2x-zs-6u6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Cw7-aS-owj"/>
                     </view>
                     <connections>
+                        <outlet property="collectionView" destination="GDq-CQ-HRg" id="ndE-7t-vm0"/>
                         <outlet property="scnView" destination="lYa-wI-vXi" id="WJ0-qr-dRc"/>
                     </connections>
                 </viewController>
@@ -99,4 +154,7 @@
             <point key="canvasLocation" x="-626.39999999999998" y="26.53673163418291"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="pallet-icon.png" width="879" height="879"/>
+    </resources>
 </document>
