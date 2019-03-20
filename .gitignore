@@ -347,3 +347,4 @@ mock_client_results.txt
 # CUSTOM IGNORE
 .DS_Store
 scanner/.DS_Store
+*.xcuserstate
