@@ -103,7 +103,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         }
         """.data(using: .utf8)!
         
-        parseJSON(json)
+        set = parseJSON(json, set, output: "AR")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -293,35 +293,6 @@ extension float4x4 {
     var translation: float3 {
         let translation = self.columns.3
         return float3(translation.x, translation.y, translation.z)
-    }
-}
-
-// MARK: - Box Packing
-extension AROutputViewController{
-    func parseJSON(_ json: Data){
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        do {
-            set = try decoder.decode(Set.self, from: json)
-        }
-        catch {
-            print("caught: \(error)")
-        }
-        var temp: Float
-        for pallet in set.pallets{
-            for var box in pallet.items{
-                temp = box.width
-                box.width = box.height / 1000
-                box.height = temp / 1000
-                box.length = box.length / 1000
-                
-                box.position[0] = box.position[0]/1000 + Constants.palletWidth - box.width/2
-                temp = box.position[1]
-                box.position[1] = box.position[2] / 1000 + box.height/2
-                box.position[2] = temp / 1000 + Constants.palletLength - box.length/2
-                
-            }
-        }
     }
 }
 

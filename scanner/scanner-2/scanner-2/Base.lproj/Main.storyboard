@@ -261,21 +261,21 @@
                                     <constraint firstAttribute="height" constant="64" id="N0U-jV-Rh4"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QTm-aJ-vH2">
-                                    <size key="itemSize" width="61" height="65"/>
+                                    <size key="itemSize" width="54" height="62"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="8wH-9J-g5z" customClass="CollectionImageCell" customModule="scanner_2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="-0.5" width="61" height="65"/>
+                                        <rect key="frame" x="0.0" y="1" width="54" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="61" height="65"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="54" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pallet.png" translatesAutoresizingMaskIntoConstraints="NO" id="NN4-XG-CFm">
-                                                    <rect key="frame" x="0.0" y="0.0" width="61" height="65"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="pallet.png" translatesAutoresizingMaskIntoConstraints="NO" id="NN4-XG-CFm">
+                                                    <rect key="frame" x="3" y="2" width="49" height="53"/>
                                                 </imageView>
                                             </subviews>
                                         </view>
