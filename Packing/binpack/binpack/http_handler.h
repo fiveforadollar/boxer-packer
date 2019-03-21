@@ -182,19 +182,19 @@ public:
 					double cam1focal = 63.0;
 					double cam1pointsize = (1.0 / 6.0);
 
-					double cam1len_real = (cam1dist - cam1focal) * (cam1len / cam1pointsize) / cam1focal;
-					double cam1width_real = (cam1dist - cam1focal) * (cam1width / cam1pointsize) / cam1focal;
+					double cam1len_real = (cam1dist - cam1focal) * (cam1len * cam1pointsize) / cam1focal;
+					double cam1width_real = (cam1dist - cam1focal) * (cam1width * cam1pointsize) / cam1focal;
 
 					// cam2
 					double cam2dist = stod(boxDimensions[it1]["CAM2DIST"]);
 					double cam2len = stod(boxDimensions[it1]["CAM2LEN"]);
 					double cam2width = stod(boxDimensions[it1]["CAM2WIDTH"]);
 
-					double cam2focal = 80.2;
+					double cam2focal = 70.2;
 					double cam2pointsize = (1.0 / 6.0);
 
-					double cam2len_real = (cam2dist - cam2focal) * (cam2len / cam2pointsize) / cam2focal;
-					double cam2width_real = (cam2dist - cam2focal) * (cam2width / cam2pointsize) / cam2focal;
+					double cam2len_real = (cam2dist - cam2focal) * (cam2len * cam2pointsize) / cam2focal;
+					double cam2width_real = (cam2dist - cam2focal) * (cam2width * cam2pointsize) / cam2focal;
 					
 					int dbID = stoi(boxDimensions[it1]["ID"]);
 
@@ -551,6 +551,95 @@ public:
 			else {
 				std::cout << "Row is not full, keep accepting data" << std::endl;
 			}
+		}
+		else if (relURIss == "/checkrejected") {
+
+			std::string JSONstring = utility::conversions::to_utf8string(jsonval);
+
+			std::cout << "JSONstring: " << JSONstring << std::endl;
+
+			nlohmann::json j = nlohmann::json::parse(JSONstring);
+
+			// Compare the JSON values to BOXES table
+			int currentSetID = j["setID"];
+			int currentBoxID = j["boxID"];
+			std::cout << "Parsed JSON:" << currentSetID << " and " << currentBoxID << std::endl;
+
+			std::string sqlCmd = "SELECT * FROM BOXES WHERE (SETID = " + std::to_string(currentSetID) + " AND ID = "+ std::to_string(currentBoxID) + ")";
+			std::vector<std::map<std::string, std::string>> boxDimensions = performSqlCommandMultiRow(sqlCmd.c_str());
+
+			std::vector<double> sortedPalletDims{ P_HEIGHT, P_LENGTH, P_WIDTH };
+			std::sort(sortedPalletDims.begin(), sortedPalletDims.end());
+
+			for (int it1 = 0; it1 < boxDimensions.size(); it1++) {
+				bool isFullRow = true;
+				for (auto it = boxDimensions[it1].begin(); it != boxDimensions[it1].end(); it++) {
+					std::string colName = it->first;
+					std::string colData = it->second;
+					std::cout << "Checking full row data:" << colName << " : " << colData << std::endl;
+					if (colData == "NULL") {
+						isFullRow = false; // TO DO: flip to false when done testing
+					}
+				}
+				if (isFullRow) {
+					// calculate box dimensions based on p1 p2 focal length numbers
+
+					// cam1
+					double cam1dist = stod(boxDimensions[it1]["CAM1DIST"]);
+					double cam1len = stod(boxDimensions[it1]["CAM1LEN"]);
+					double cam1width = stod(boxDimensions[it1]["CAM1WIDTH"]);
+
+					double cam1focal = 63.0;
+					double cam1pointsize = (1.0 / 6.0);
+
+					double cam1len_real = (cam1dist - cam1focal) * (cam1len * cam1pointsize) / cam1focal;
+					double cam1width_real = (cam1dist - cam1focal) * (cam1width * cam1pointsize) / cam1focal;
+
+					// cam2
+					double cam2dist = stod(boxDimensions[it1]["CAM2DIST"]);
+					double cam2len = stod(boxDimensions[it1]["CAM2LEN"]);
+					double cam2width = stod(boxDimensions[it1]["CAM2WIDTH"]);
+
+					double cam2focal = 70.2;
+					double cam2pointsize = (1.0 / 6.0);
+
+					double cam2len_real = (cam2dist - cam2focal) * (cam2len * cam2pointsize) / cam2focal;
+					double cam2width_real = (cam2dist - cam2focal) * (cam2width * cam2pointsize) / cam2focal;
+
+					int dbID = stoi(boxDimensions[it1]["ID"]);
+
+					double boxLength = cam1len_real;
+					double boxWidth = cam2len_real;
+					double boxHeight = (cam1width_real + cam2width_real) / 2.0;
+
+					// convert mm to m
+					boxLength = boxLength / 1000.0;
+					boxWidth = boxWidth / 1000.0;
+					boxHeight = boxHeight / 1000.0;
+
+					std::cout << "Box with dimensions (meters): " << boxLength << " x " << boxWidth << " x " << boxHeight << std::endl;
+
+					bool notOversize = true;
+					std::vector<double> sortedDims{ boxLength, boxWidth, boxHeight };
+					std::sort(sortedDims.begin(), sortedDims.end());
+
+					if (sortedDims[0] > sortedPalletDims[0] || sortedDims[1] > sortedPalletDims[1] || sortedDims[2] > sortedPalletDims[2])
+						notOversize = false;
+
+					std::string retCurs = "{ \"rejected\" : true }";
+					if (notOversize){
+						retCurs = "{ \"rejected\" : false }";
+						std::cout << "Not rejected, Box with ID: " << currentBoxID << std::endl;
+					}
+					else {
+						std::cout << "Rejected, Box with ID: " << currentBoxID << std::endl;
+					}
+					std::cout << retCurs << std::endl;
+					message.reply(status_codes::OK, utility::conversions::to_string_t(retCurs));
+
+				}
+			}
+
 		}
 
 
