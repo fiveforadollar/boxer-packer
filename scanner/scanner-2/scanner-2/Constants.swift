@@ -14,3 +14,9 @@ struct Constants {
     static let palletLength : Float = 1.2192
     static let palletHeight : Float = 1.3208
 }
+
+struct BaseColors {
+    static let yellow = UIColor(red: 249/255.0, green: 211/255.0, blue: 92/255.0, alpha: 1.0)
+    static let grey = UIColor(red: 64/255.0, green: 64/255.0, blue: 64/255.0, alpha: 1.0)
+    static let white = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0)
+}
