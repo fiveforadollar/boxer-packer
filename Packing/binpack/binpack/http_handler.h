@@ -228,18 +228,19 @@ public:
 			}
 
 			// Do the packing:
+			unpackedBoxes = readBoxesFromJson("C:\\Users\\WLaptop\\test.json");
 
 			// TO DO: remove this
-			Box* box = new Box(P_LENGTH, P_WIDTH, 0.3, 1);
-			Box* box2 = new Box(P_LENGTH, P_WIDTH, 0.4, 2);
-			Box* box3 = new Box(P_LENGTH, P_WIDTH, 0.5, 3);
-			unpackedBoxes.push_back(box);
-			unpackedBoxes.push_back(box2);
-			unpackedBoxes.push_back(box3);
+			//Box* box = new Box(P_LENGTH*0.76, P_WIDTH*0.76, 0.3, 1);
+			//Box* box2 = new Box(P_LENGTH*0.5, P_WIDTH*0.5, 0.4, 2);
+			//Box* box3 = new Box(P_LENGTH*0.25, P_WIDTH*0.25, 0.1, 3);
+			//unpackedBoxes.push_back(box);
+			//unpackedBoxes.push_back(box2);
+			//unpackedBoxes.push_back(box3);
 
 			// sort unpackedBoxes by volume
 			std::sort(unpackedBoxes.begin(), unpackedBoxes.end(), comparePtrToBox);
-			std::reverse(unpackedBoxes.begin(), unpackedBoxes.end());
+			//std::reverse(unpackedBoxes.begin(), unpackedBoxes.end());
 
 			// Perform packing
 			int iteration = 1;
