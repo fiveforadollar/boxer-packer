@@ -228,16 +228,18 @@ public:
 			}
 
 			// Do the packing:
-			// TO DO: sort unpackedBoxes by volume
 
 			// TO DO: remove this
-			std::cout << "lets start packing" << std::endl;
-			Box* box = new Box(P_HEIGHT - 0.01, P_LENGTH - 0.01, P_WIDTH - 0.01, 1);
-			Box* box2 = new Box(P_HEIGHT - 0.01, P_LENGTH - 0.01, P_WIDTH - 0.01, 2);
-			Box* box3 = new Box(1, 1, 1, 3);
+			Box* box = new Box(P_LENGTH, P_WIDTH, 0.3, 1);
+			Box* box2 = new Box(P_LENGTH, P_WIDTH, 0.4, 2);
+			Box* box3 = new Box(P_LENGTH, P_WIDTH, 0.5, 3);
 			unpackedBoxes.push_back(box);
 			unpackedBoxes.push_back(box2);
 			unpackedBoxes.push_back(box3);
+
+			// sort unpackedBoxes by volume
+			std::sort(unpackedBoxes.begin(), unpackedBoxes.end(), comparePtrToBox);
+			std::reverse(unpackedBoxes.begin(), unpackedBoxes.end());
 
 			// Perform packing
 			int iteration = 1;
@@ -618,7 +620,9 @@ public:
 					boxHeight = boxHeight / 1000.0;
 
 					std::cout << "Box with dimensions (meters): " << boxLength << " x " << boxWidth << " x " << boxHeight << std::endl;
-
+					std::cout << "cam1width real: " << cam1width_real << std::endl;
+					std::cout << "cam2width real: " << cam2width_real << std::endl;
+					
 					bool notOversize = true;
 					std::vector<double> sortedDims{ boxLength, boxWidth, boxHeight };
 					std::sort(sortedDims.begin(), sortedDims.end());

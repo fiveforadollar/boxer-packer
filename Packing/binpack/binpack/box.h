@@ -74,3 +74,7 @@ std::ostream& operator<<(std::ostream& os, const Box& box)
 	os << std::endl;
 	return os;
 }
+
+
+bool comparePtrToBox(Box* a, Box* b) { return (a->volume < b->volume); }
+
