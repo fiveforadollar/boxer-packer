@@ -240,8 +240,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         let parameters = [
             "device" : "p1",
-            "CAM1LEN" : 99.0,
-            "CAM1WIDTH" : 129.0
+            "CAM1LEN" : self.highlightView.frame.width,
+            "CAM1WIDTH" : self.highlightView.frame.height
             ] as [String : Any]
         
         let headers: HTTPHeaders = [
