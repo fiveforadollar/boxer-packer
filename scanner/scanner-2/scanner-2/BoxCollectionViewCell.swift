@@ -13,24 +13,25 @@ class BoxCollectionViewCell: UICollectionViewCell {
     // For AR pallet selection bar
     
     // For 3d representation's pallet selection bar
+    @IBOutlet weak var boxImageView: UIImageView!
     
-//    override var isSelected: Bool{
-//        willSet{
-//            if newValue
-//            {
-//                let photo = UIImage(named: "pallet-blue.png")
-//
-//                self.imageView.image = photo
-//
-//
-//            }
-//            else
-//            {
-//                let photo = UIImage(named: "pallet.png")
-//
-//                self.imageView.image = photo
-//
-//            }
-//        }
-//    }
+    override var isSelected: Bool{
+        willSet{
+            if newValue
+            {
+                let photo = UIImage(named: "box-blue.png")
+
+                self.boxImageView.image = photo
+
+
+            }
+            else
+            {
+                let photo = UIImage(named: "box.png")
+
+                self.boxImageView.image = photo
+
+            }
+        }
+    }
 }

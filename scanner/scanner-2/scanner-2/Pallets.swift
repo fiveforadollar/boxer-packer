@@ -79,16 +79,16 @@ func parseJSON(_ json: Data, _ set: Set, output: String) -> Set {
         
     else if output == "3D" {
         for palletIndex in 0..<set.pallets.count {
-            let mm_per_inch = Float(25.4)
+            let m_per_inch = Float(0.0254)
             for boxIndex in 0..<set.pallets[palletIndex].items.count {
                 let box = set.pallets[palletIndex].items[boxIndex]
-                set.pallets[palletIndex].items[boxIndex].width = box.width / mm_per_inch
-                set.pallets[palletIndex].items[boxIndex].height = box.height / mm_per_inch
-                set.pallets[palletIndex].items[boxIndex].length = box.length / mm_per_inch
+                set.pallets[palletIndex].items[boxIndex].width = box.length / m_per_inch
+                set.pallets[palletIndex].items[boxIndex].height = box.height / m_per_inch
+                set.pallets[palletIndex].items[boxIndex].length = box.width / m_per_inch
             
-                set.pallets[palletIndex].items[boxIndex].position[0] = box.position[0] / mm_per_inch
-                set.pallets[palletIndex].items[boxIndex].position[1] = box.position[1] / mm_per_inch
-                set.pallets[palletIndex].items[boxIndex].position[2] = box.position[2] / mm_per_inch
+                set.pallets[palletIndex].items[boxIndex].position[0] = box.position[0] / m_per_inch
+                set.pallets[palletIndex].items[boxIndex].position[1] = box.position[2] / m_per_inch
+                set.pallets[palletIndex].items[boxIndex].position[2] = (box.position[1] - Constants.palletWidth) / m_per_inch
             }
         }
     }

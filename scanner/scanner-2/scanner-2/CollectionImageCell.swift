@@ -13,6 +13,7 @@ class CollectionImageCell: UICollectionViewCell {
     // For AR pallet selection bar
     @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var palletNumber: UILabel!
     // For 3d representation's pallet selection bar
 
     override var isSelected: Bool{

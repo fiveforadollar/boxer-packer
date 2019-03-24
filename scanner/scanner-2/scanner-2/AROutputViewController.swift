@@ -20,11 +20,13 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet weak var collectionViewPallet: UICollectionView!
     
+    @IBOutlet weak var collectionViewBox: UICollectionView!
+    
     @IBOutlet weak var buttonConfirmPlane: UIButton!
     
     var set = Set()
     var palletCenter = SCNVector3(0,0,0)
-    let arr = [1,2,3,4,5]
+    var selectedPalletID : Int?
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
@@ -40,6 +42,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         let pallet = SCNBox(width: CGFloat(Constants.palletLength), height: CGFloat(Constants.palletWidth), length: CGFloat(0.1), chamferRadius: 0)
         pallet.materials.first?.diffuse.contents = UIColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 0.85)
         let palletNode = SCNNode(geometry: pallet)
+        palletNode.name = "pallet"
         palletNode.position = SCNVector3(0,0,-0.1)
         planeNode?.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0)
         planeNode?.addChildNode(palletNode)
@@ -52,6 +55,8 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         configureLighting()
         
         collectionViewPallet.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        collectionViewBox.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        collectionViewBox.isHidden = true
         
         collectionViewPallet.delegate = self
         collectionViewPallet.dataSource = self
@@ -107,7 +112,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                             ],
                             "width": 0.05
                         },
-                {
+                        {
                             "height": 0.05,
                             "id": 5,
                             "length": 0.06,
@@ -199,7 +204,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         boxNode.position = SCNVector3(x,y,z)
         boxNode.name = "box"
         sceneView.scene.rootNode.addChildNode(boxNode)
-        self.collectionViewPallet?.reloadData()
+  
     }
     
     func addBoxesForPallet(_ palletID: Int){
@@ -211,7 +216,12 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                 return
         }
         for child in children {
-            if child.name == "box"{
+            guard let name = child.name
+                else{
+                    print("no name")
+                    return
+            }
+            if name.contains("box") {
                 child.removeFromParentNode()
             }
         }
@@ -234,7 +244,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             
             let boxNode = SCNNode(geometry: box)
             boxNode.position = SCNVector3(x,y,z)
-            boxNode.name = "box"
+            boxNode.name = "box" + String(i)
             guard let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
                 else{
                     print("plane does not exist")
@@ -247,11 +257,52 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath){
-        print(indexPath)
-        print(set.pallets.count)
-        print(indexPath.item)
-        addBoxesForPallet(indexPath.item)
         
+        if collectionView == self.collectionViewPallet{
+            print(indexPath)
+            print(set.pallets.count)
+            print(indexPath.item)
+            addBoxesForPallet(indexPath.item)
+            selectedPalletID = indexPath.item
+            self.collectionViewBox.isHidden = false
+            self.collectionViewBox?.reloadData()
+        }
+        else{
+            // highlight selected box
+            let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
+            
+            let name = "box" + String(indexPath.item)
+            guard let children = planeNode?.childNodes
+                else{
+                    return
+            }
+            for child in children{
+                if child.name == name{
+                    child.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                }
+                else if child.name != "pallet" {
+                    child.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0.7)
+                }
+            }
+            
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didDeselectItemAt indexPath: IndexPath){
+        if collectionView == self.collectionViewPallet{
+            
+        }
+        else {
+            // unhighlight
+//            let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
+//
+//            let name = "box" + String(indexPath.item)
+//            let boxNode = planeNode?.childNode(withName: name, recursively: true)
+//            boxNode?.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+        }
+    
     }
     
     
@@ -334,8 +385,20 @@ extension AROutputViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("pallet count: ", set.pallets.count)
-        return set.pallets.count
+        
+        if collectionView == self.collectionViewPallet {
+            print("pallet count: ", set.pallets.count)
+            return set.pallets.count
+        }
+        else {
+            if selectedPalletID != nil{
+                return set.pallets[selectedPalletID!].items.count
+            }
+            else {
+                return 0
+            }
+        
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -346,12 +409,18 @@ extension AROutputViewController: UICollectionViewDataSource{
             let photo = UIImage(named: "pallet.png")
 
             cell.imageView.image = photo
+            cell.palletNumber.text = "1"
     //        cell.backgroundColor = .black
             
             return cell
         }
         else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "palletCell",for: indexPath) as! CollectionImageCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "boxCell",for: indexPath) as! BoxCollectionViewCell
+            
+            let photo = UIImage(named: "box.png")
+            
+            cell.boxImageView.image = photo
+            
             return cell
         }
     }
