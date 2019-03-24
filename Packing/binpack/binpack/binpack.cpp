@@ -233,7 +233,17 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 			}
 
 			// check if pivotPoint sits on top of a level floor
-			bool levelFloorExists = false;
+			bool corner0sitting = false;
+			bool corner1sitting = false;
+			bool corner2sitting = false;
+			bool corner3sitting = false;
+
+			double myXmin = pivotPoint[LENGTH_AXIS_ID];
+			double myXmax = myXmin + itemOrientation->length;
+
+			double myYmin = pivotPoint[WIDTH_AXIS_ID];
+			double myYmax = myYmin + itemOrientation->width;
+
 			for (int i = 0; i < levelBoxes.size(); i++) {
 				Box *currBox = levelBoxes[i];
 				double xmin = currBox->position[LENGTH_AXIS_ID];
@@ -242,19 +252,38 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 				double ymin = currBox->position[WIDTH_AXIS_ID];
 				double ymax = ymin + currBox->width;
 
-				// check along axes
-				double myXmin = pivotPoint[LENGTH_AXIS_ID];
-				double myXmax = myXmin + itemOrientation->length;
-
-				double myYmin = pivotPoint[WIDTH_AXIS_ID];
-				double myYmax = myYmin + itemOrientation->width;
-
-				if (myXmin >= xmin && myXmax <= xmax && myYmin >= ymin && myYmax <= ymax) {
-					levelFloorExists = true;
-					break;
+				// check along axes per corner
+				
+				// corner 0
+				double myX = myXmin;
+				double myY = myYmin;
+				if (myX >= xmin && myX <= xmax && myY >= ymin && myY <= ymax) {
+					corner0sitting = true;
 				}
+
+				// corner 1
+				myX = myXmax;
+				myY = myYmin;
+				if (myX >= xmin && myX <= xmax && myY >= ymin && myY <= ymax) {
+					corner1sitting = true;
+				}
+
+				// corner 2
+				myX = myXmin;
+				myY = myYmax;
+				if (myX >= xmin && myX <= xmax && myY >= ymin && myY <= ymax) {
+					corner2sitting = true;
+				}
+
+				// corner 3
+				myX = myXmax;
+				myY = myYmax;
+				if (myX >= xmin && myX <= xmax && myY >= ymin && myY <= ymax) {
+					corner3sitting = true;
+				}
+
 			}
-			if (levelFloorExists)
+			if (corner0sitting && corner1sitting && corner2sitting && corner3sitting)
 				overhangExists = false;
 			else
 				overhangExists = true;
