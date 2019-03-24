@@ -9,6 +9,7 @@
 import UIKit
 import ARKit
 import Foundation
+import SwiftyJSON
 
 class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
@@ -27,6 +28,8 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     var set = Set()
     var palletCenter = SCNVector3(0,0,0)
     var selectedPalletID : Int?
+    var setData : String!
+    
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
@@ -61,93 +64,25 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         collectionViewPallet.delegate = self
         collectionViewPallet.dataSource = self
         
-        let json = """
-        {
-            "datetime": "2019-03-18T16:51:55Z",
-            "pallets": [
-                {
-                    "id": 0,
-                    "items": [
-                        {
-                            "height": 0.09,
-                            "id": 1,
-                            "length": 0.08,
-                            "position": [
-                                0.0,
-                                0.04,
-                                0.0
-                            ],
-                            "width": 0.06
-                        },
-                        {
-                            "height": 0.04,
-                            "id": 2,
-                            "length": 0.03,
-                            "position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "width": 0.04
-                        },
-                {
-                            "height": 0.06,
-                            "id": 3,
-                            "length": 0.03,
-                            "position": [
-                                0.08,
-                                0.04,
-                                0.0
-                            ],
-                            "width": 0.06
-                        },
-                        {
-                            "height": 0.07,
-                            "id": 4,
-                            "length": 0.01,
-                            "position": [
-                                0.11,
-                                0.05,
-                                0.0
-                            ],
-                            "width": 0.05
-                        },
-                        {
-                            "height": 0.05,
-                            "id": 5,
-                            "length": 0.06,
-                            "position": [
-                                0.03,
-                                0.0,
-                                0.0
-                            ],
-                            "width": 0.03
-                        }
-                    ],
-                    "numBoxes": 5
-                },
-                {
-                    "id": 1,
-                    "items": [
-                        {
-                            "height": 0.51,
-                            "id": 1,
-                            "length": 0.4,
-                            "position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "width": 0.3
-                        }
-                    ],
-                    "numBoxes": 1
-                }
-            ],
-            "setID": 0
-        }
-        """.data(using: .utf8)!
+//        let json = """
+//
+//        """.data(using: .utf8)!
+        
+//        if let path = Bundle.main.path(forResource: "test", ofType: "json")
+//        {
+//            do {
+//                let fileUrl = URL(fileURLWithPath: path)
+//                let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
+//                set = parseJSON(data, set, output: "AR")
+//            }
+//            catch {
+//
+//            }
+//        }
+        let json = setData.data(using: .utf8)!
         set = parseJSON(json, set, output: "AR")
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -14,6 +14,8 @@ class ChooseOutputViewController: UIViewController {
 
     var setID : Int!
     
+    var setData : String!
+    
     func getSetData() {
         let parameters = [
             "setID" : self.setID,
@@ -28,7 +30,7 @@ class ChooseOutputViewController: UIViewController {
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
                     let test = json["datetime"].stringValue
-                    
+                    self.setData = utf8Text
                     let alert = UIAlertController(title: test, message: test, preferredStyle: .alert)
                     
                     alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
@@ -55,5 +57,19 @@ class ChooseOutputViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "to3D" {
+            let destination = segue.destination as? LayoutViewController
+            destination?.setData = self.setData
+        }
+        else if segue.identifier == "toAR" {
+            let destination = segue.destination as? AROutputViewController
+            destination?.setData = self.setData
+        }
+    }
+    
 
 }

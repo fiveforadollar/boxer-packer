@@ -128,7 +128,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="View Layout"/>
                                 <connections>
-                                    <segue destination="KsR-WF-Zip" kind="show" id="an9-Iu-mia"/>
+                                    <segue destination="lDQ-a7-7V2" kind="show" id="t9c-mg-Fud"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -223,7 +223,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="AR Represenation"/>
                                 <connections>
-                                    <segue destination="6J7-nc-mOI" kind="show" id="Lah-Nx-CQb"/>
+                                    <segue destination="6J7-nc-mOI" kind="show" identifier="toAR" id="Lah-Nx-CQb"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0v6-ml-lOP">
@@ -231,7 +231,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="3D Representation"/>
                                 <connections>
-                                    <segue destination="zC2-YI-IKc" kind="show" id="nSD-Yg-iVh"/>
+                                    <segue destination="zC2-YI-IKc" kind="show" identifier="to3D" id="nSD-Yg-iVh"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -513,7 +513,4 @@
         <image name="box.png" width="256" height="256"/>
         <image name="pallet.png" width="879" height="879"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="an9-Iu-mia"/>
-    </inferredMetricsTieBreakers>
 </document>
