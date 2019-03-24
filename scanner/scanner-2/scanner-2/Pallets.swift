@@ -55,8 +55,8 @@ func parseJSON(_ json: Data, _ set: Set, output: String) -> Set {
 
                 
                 // using unchanged constant box dimensions
-                set.pallets[palletIndex].items[boxIndex].position[0] = box.position[0] + box.length/2
-                set.pallets[palletIndex].items[boxIndex].position[1] = box.position[1]*(-1) - box.width/2
+                set.pallets[palletIndex].items[boxIndex].position[0] = box.position[0] + box.length/2 - Constants.palletLength/2
+                set.pallets[palletIndex].items[boxIndex].position[1] = box.position[1]*(-1) - box.width/2 + Constants.palletWidth/2
                 set.pallets[palletIndex].items[boxIndex].position[2] = box.position[2] + box.height/2
             }
         }
@@ -88,7 +88,7 @@ func parseJSON(_ json: Data, _ set: Set, output: String) -> Set {
             
                 set.pallets[palletIndex].items[boxIndex].position[0] = box.position[0] / m_per_inch
                 set.pallets[palletIndex].items[boxIndex].position[1] = box.position[2] / m_per_inch
-                set.pallets[palletIndex].items[boxIndex].position[2] = (box.position[1] - Constants.palletWidth) / m_per_inch
+                set.pallets[palletIndex].items[boxIndex].position[2] = (box.position[1]) / m_per_inch
             }
         }
     }

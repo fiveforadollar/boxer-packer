@@ -128,7 +128,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="View Layout"/>
                                 <connections>
-                                    <segue destination="lDQ-a7-7V2" kind="show" id="t9c-mg-Fud"/>
+                                    <segue destination="lDQ-a7-7V2" kind="show" id="3xF-1r-m9a"/>
                                 </connections>
                             </button>
                         </subviews>

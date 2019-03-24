@@ -46,7 +46,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         pallet.materials.first?.diffuse.contents = UIColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 0.85)
         let palletNode = SCNNode(geometry: pallet)
         palletNode.name = "pallet"
-        palletNode.position = SCNVector3(0,0,-0.1)
+        palletNode.position = SCNVector3(0,0,-0.05)
         planeNode?.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0)
         planeNode?.addChildNode(palletNode)
         
@@ -64,11 +64,8 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         collectionViewPallet.delegate = self
         collectionViewPallet.dataSource = self
         
-//        let json = """
-//
-//        """.data(using: .utf8)!
-        
-//        if let path = Bundle.main.path(forResource: "test", ofType: "json")
+        // start: to use json from file
+//        if let path = Bundle.main.path(forResource: "test1", ofType: "json")
 //        {
 //            do {
 //                let fileUrl = URL(fileURLWithPath: path)
@@ -79,6 +76,8 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
 //
 //            }
 //        }
+        // end
+        
         let json = setData.data(using: .utf8)!
         set = parseJSON(json, set, output: "AR")
         
@@ -173,8 +172,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             let y = pallet.items[i].position[1]
             let z = pallet.items[i].position[2]
            
-            print("width: \(w), length: \(l), height: \(h)")
-            print("x: \(x), y: \(y), z: \(z)")
+            print("box \(i): position: (\(x),\(y),\(z), length: \(l), width: \(w), height: \(h)")
             let box = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
             
             let boxNode = SCNNode(geometry: box)
