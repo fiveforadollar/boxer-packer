@@ -22,6 +22,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet weak var widthLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
     
+    @IBOutlet weak var boxIDLabel: UILabel!
+    @IBOutlet weak var setIDLabel: UILabel!
+    
     var box_id:Int?
     var set_id:Int?
     var box_ready = false
@@ -121,7 +124,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = BaseColors.yellow
+        self.cameraView?.backgroundColor = BaseColors.yellow
         self.navigationController?.interactivePopGestureRecognizer!.isEnabled = false
         
         // Replace the default back button
@@ -188,6 +192,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     
                     self.box_id = currentBox
                     self.set_id = currentSet
+                    
+                    self.boxIDLabel.text = String(currentBox)
+                    self.setIDLabel.text = String(currentSet)
                     
                     self.checkBoxReady(box_id: currentBox, set_id: currentSet)
                 }

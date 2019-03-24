@@ -214,8 +214,54 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 			}
 		}
 
+		// Check if placing box in current location would cause an overhang
+		bool overhangExists = false;
+		
+		if (pivotPoint[HEIGHT_AXIS_ID] == 0) {
+			// no overhang if we are placing on the floor of pallet
+			bool overhangExists = false;
+		}
+		else {
+			// get all boxes that create a "level floor" at that pivot
+			std::vector<Box * > levelBoxes;
+
+			for (Box *currBox : pallet->items) {
+				double currBoxLevelHeight = currBox->position[HEIGHT_AXIS_ID] + currBox->height;
+				if (currBoxLevelHeight == pivotPoint[HEIGHT_AXIS_ID])
+					levelBoxes.push_back(currBox);
+				std::cout << "LevelHeight: " << currBoxLevelHeight << " | TestHeight:" << pivotPoint[HEIGHT_AXIS_ID] <<  std::endl;
+			}
+
+			// check if pivotPoint sits on top of a level floor
+			bool levelFloorExists = false;
+			for (int i = 0; i < levelBoxes.size(); i++) {
+				Box *currBox = levelBoxes[i];
+				double xmin = currBox->position[LENGTH_AXIS_ID];
+				double xmax = xmin + currBox->length;
+
+				double ymin = currBox->position[WIDTH_AXIS_ID];
+				double ymax = ymin + currBox->width;
+
+				// check along axes
+				double myXmin = pivotPoint[LENGTH_AXIS_ID];
+				double myXmax = myXmin + itemOrientation->length;
+
+				double myYmin = pivotPoint[WIDTH_AXIS_ID];
+				double myYmax = myYmin + itemOrientation->width;
+
+				if (myXmin >= xmin && myXmax <= xmax && myYmin >= ymin && myYmax <= ymax) {
+					levelFloorExists = true;
+					break;
+				}
+			}
+			if (levelFloorExists)
+				overhangExists = false;
+			else
+				overhangExists = true;
+		}
+
 		// Valid placement of item
-		if (!intersectExists) {
+		if (!intersectExists && !overhangExists) {
 			item->position = pivotPoint;
 			item->length = itemOrientation->length;
 			item->width = itemOrientation->width;
