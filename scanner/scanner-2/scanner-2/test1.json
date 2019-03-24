@@ -1,0 +1,40 @@
+{
+    "datetime": "2019-03-18T16:51:55Z",
+    "pallets": [
+        {
+            "id": 0,
+            "items": [
+                {
+                    "height": 0.4,
+                    "id": 1,
+                    "length": 0.1,
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "width": 0.2
+                }
+            ],
+            "numBoxes": 1
+        },
+        {
+            "id": 1,
+            "items": [
+                {
+                    "height": 0.51,
+                    "id": 1,
+                    "length": 0.4,
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "width": 0.3
+                }
+            ],
+            "numBoxes": 1
+        }
+    ],
+    "setID": 0
+    }
