@@ -92,7 +92,7 @@ bool overlap(Box* box1, Box* box2, const int axisId1, const int axisId2) {
 	else
 		overallY = midpointY2 - midpointY1;
 
-	return overallX < (dimBox1[axisId1] + dimBox2[axisId1]) / 2.0 && overallY < (dimBox1[axisId2] + dimBox2[axisId2]) / 2.0;
+	return overallX < ((dimBox1[axisId1] + dimBox2[axisId1]) / 2.0) && overallY < ((dimBox1[axisId2] + dimBox2[axisId2]) / 2.0);
 }
 
 bool boxInBounds(Box *item, Pallet *pallet, std::vector<double> pivot) {
@@ -208,7 +208,7 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 		// Check if the box's placement would overlap with any other boxes in the pallet
 		bool intersectExists = false;
 		for (Box *currBox : pallet->items) {
-			if (intersect(currBox, item)) {
+			if (intersect(currBox, itemOrientation)) {
 				intersectExists = true;
 				break;
 			}
