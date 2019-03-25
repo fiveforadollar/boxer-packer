@@ -229,7 +229,7 @@ bool placeItem(Box *item, Pallet *pallet, std::vector<double> pivotPoint) {
 				double currBoxLevelHeight = currBox->position[HEIGHT_AXIS_ID] + currBox->height;
 				if (currBoxLevelHeight == pivotPoint[HEIGHT_AXIS_ID])
 					levelBoxes.push_back(currBox);
-				std::cout << "LevelHeight: " << currBoxLevelHeight << " | TestHeight:" << pivotPoint[HEIGHT_AXIS_ID] <<  std::endl;
+				//std::cout << "LevelHeight: " << currBoxLevelHeight << " | TestHeight:" << pivotPoint[HEIGHT_AXIS_ID] <<  std::endl;
 			}
 
 			// check if pivotPoint sits on top of a level floor
