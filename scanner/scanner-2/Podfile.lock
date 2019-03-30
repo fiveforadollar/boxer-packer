@@ -4,16 +4,19 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - SwiftyJSON (4.2.0)
+  - Toast-Swift (4.0.1)
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
   - SwiftyJSON (~> 4.0)
+  - Toast-Swift (~> 4.0.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - SwiftyJSON
+    - Toast-Swift
 
 EXTERNAL SOURCES:
   ChameleonFramework:
@@ -28,7 +31,8 @@ SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
 
-PODFILE CHECKSUM: 44ba1c76694e7017060fed9d31aa26cd70af0f84
+PODFILE CHECKSUM: b6bde8e8ed3c7a51fb5f600b37bc69d62d8f4342
 
 COCOAPODS: 1.6.1

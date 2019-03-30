@@ -13,6 +13,7 @@ import SceneKit
 import ARKit
 import Alamofire
 import SwiftyJSON
+import Toast_Swift
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
@@ -25,6 +26,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet weak var boxIDLabel: UILabel!
     @IBOutlet weak var setIDLabel: UILabel!
     
+    var firstRun = false
     var box_id:Int?
     var set_id:Int?
     var box_ready = false
@@ -181,6 +183,30 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         //getCurrent()
     }
     
+    func checkBoxSuccess() {
+        let parameters = [
+            "boxID" : box_id,
+            "setID" : set_id
+        ]
+        
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        
+        Alamofire.request(Constants.baseURL + "checkrejected", method: .post, parameters: parameters as Parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseData { response in
+                if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
+                    let json = JSON.init(parseJSON: utf8Text)
+                    let rejected = json["rejected"].boolValue
+                    
+                    if (rejected) {
+                        self.view.makeToast("REJECTED", duration: 5.0, position: .center)
+                    }
+                    self.view.makeToast("ACCEPTED", duration: 5.0, position: .center)
+                }
+        }
+    }
+    
     func getCurrent() {
         print("getting current box and set")
         Alamofire.request(Constants.baseURL + "current", method: .get)
@@ -189,6 +215,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     let json = JSON.init(parseJSON: utf8Text)
                     let currentBox = json["currentBoxID"].intValue
                     let currentSet = json["currentSetID"].intValue
+                    
+//                    if (!self.firstRun) {
+//                        self.firstRun = false
+//                        self.checkBoxSuccess()
+//                    }
+                    
+                    if (self.box_id != nil && self.box_id != currentBox) {
+                        self.checkBoxSuccess()
+                    }
                     
                     self.box_id = currentBox
                     self.set_id = currentSet
@@ -222,7 +257,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                         print("box not ready!")
                         
                         // delay and loop back to getting current box and set
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                             self.getCurrent()
                         }
                         

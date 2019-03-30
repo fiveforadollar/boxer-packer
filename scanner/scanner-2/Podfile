@@ -5,6 +5,7 @@ target 'scanner-2' do
   use_frameworks!
   pod 'Alamofire', '~> 4.0'
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'Toast-Swift', '~> 4.0.0'
   
   # Pods for 3D Visualization
   pod "ChameleonFramework/Swift", :git => "https://github.com/ViccAlexander/Chameleon.git"
