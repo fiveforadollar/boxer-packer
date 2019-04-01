@@ -56,7 +56,7 @@ class LayoutViewController: UIViewController {
         
 //         Get pallet/box data to be visualized
 //         start: to use json from file
-                if let path = Bundle.main.path(forResource: "test", ofType: "json")
+                if let path = Bundle.main.path(forResource: "stacked_setdone", ofType: "json")
                 {
                     do {
                         let fileUrl = URL(fileURLWithPath: path)
@@ -266,28 +266,28 @@ extension LayoutViewController: UICollectionViewDelegate {
     
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool{
-        if collectionView.cellForItem(at: indexPath)?.isSelected ?? false {
-            collectionView.deselectItem(at: indexPath, animated: true)
-            
-            if collectionView == self.collectionViewBox{
-                let pallet = set.pallets[selectedPalletID!]
-                for i in 0...(pallet.items.count - 1){
-                    guard let child = scnView.scene!.rootNode.childNode(withName: "box"+String(i), recursively: true)
-                        else {
-                            return false
-                            // node with name not found
+        if collectionView == self.collectionViewBox{
+            if collectionView.cellForItem(at: indexPath)?.isSelected ?? false {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                
+                    let pallet = set.pallets[selectedPalletID!]
+                    for i in 0...(pallet.items.count - 1){
+                        guard let child = scnView.scene!.rootNode.childNode(withName: "box"+String(i), recursively: true)
+                            else {
+                                return false
+                                // node with name not found
+                        }
+                        child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
                     }
-                    child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
-                }
+                
+                return false
             }
-            
-            return false
+            else{
+                collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                return true
+            }
         }
-        else{
-            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
-            return true
-        }
-        
+        return true
     }
 }
 
