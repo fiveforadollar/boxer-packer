@@ -274,9 +274,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         print("sending device data...")
         
         let parameters = [
-            "device" : "p1",
-            "CAM1LEN" : self.highlightView.frame.width,
-            "CAM1WIDTH" : self.highlightView.frame.height
+            "device" : "p2",
+            "CAM2LEN" : self.highlightView.frame.width,
+            "CAM2WIDTH" : self.highlightView.frame.height
             ] as [String : Any]
         
         let headers: HTTPHeaders = [
@@ -306,7 +306,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func checkIfDataPopulated() {
         let parameters = [
-            "device" : "p1",
+            "device" : "p2",
         ]
         
         let headers: HTTPHeaders = [

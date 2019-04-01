@@ -65,21 +65,21 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         collectionViewPallet.dataSource = self
         
         // start: to use json from file
-//        if let path = Bundle.main.path(forResource: "test1", ofType: "json")
-//        {
-//            do {
-//                let fileUrl = URL(fileURLWithPath: path)
-//                let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
-//                set = parseJSON(data, set, output: "AR")
-//            }
-//            catch {
-//
-//            }
-//        }
+        if let path = Bundle.main.path(forResource: "test", ofType: "json")
+        {
+            do {
+                let fileUrl = URL(fileURLWithPath: path)
+                let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
+                set = parseJSON(data, set, output: "AR")
+            }
+            catch {
+
+            }
+        }
         // end
         
-        let json = setData.data(using: .utf8)!
-        set = parseJSON(json, set, output: "AR")
+//        let json = setData.data(using: .utf8)!
+//        set = parseJSON(json, set, output: "AR")
         
 
     }
