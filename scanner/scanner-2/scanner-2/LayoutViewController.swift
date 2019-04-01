@@ -21,6 +21,8 @@ class LayoutViewController: UIViewController {
     
     @IBOutlet weak var collectionViewBox: UICollectionView!
     
+    var selectedPalletID : Int?
+    
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     var setData : String!
@@ -76,11 +78,7 @@ class LayoutViewController: UIViewController {
         }
     
         // Initially, the 0th pallet is selected
-        let palletId = 0
-        for box in (set.pallets[palletId].items) {
-            let cubeNode = createBox(box)
-            scnView.scene!.rootNode.addChildNode(cubeNode)
-        }
+        addBoxesForPallet(0)
     }
     
     // Generates and returns a SCNNode, given the Box parameters
@@ -120,14 +118,22 @@ class LayoutViewController: UIViewController {
     func addBoxesForPallet(_ palletID: Int){
         // Remove box nodes from previously selected pallet
         for child in scnView.scene!.rootNode.childNodes {
-            if child.name == "box" {
+            guard let name = child.name
+                else{
+                    print("no name")
+                    return
+            }
+            if name.contains("box") {
                 child.removeFromParentNode()
             }
         }
         
         // Add all boxes in newly selected pallet
-        for box in set.pallets[palletID].items {
-            let box = createBox(box)
+        let pallet = set.pallets[palletID]
+        for i in 0...(pallet.items.count - 1){
+            
+            let box = createBox(pallet.items[i])
+            box.name = "box" + String(i)
             scnView.scene!.rootNode.addChildNode(box)
         }
     }
@@ -192,7 +198,19 @@ extension LayoutViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return set.pallets.count
+        if collectionView == self.collectionViewPallet {
+            print("pallet count: ", set.pallets.count)
+            return set.pallets.count
+        }
+        else {
+            if selectedPalletID != nil{
+                return set.pallets[selectedPalletID!].items.count
+            }
+            else {
+                return 0
+            }
+            
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -222,7 +240,29 @@ extension LayoutViewController: UICollectionViewDelegate {
     // Pallet icon clicked - changing pallets
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath){
-        addBoxesForPallet(indexPath.item)
+        if collectionView == self.collectionViewPallet{
+            print(indexPath)
+            print(set.pallets.count)
+            print(indexPath.item)
+            addBoxesForPallet(indexPath.item)
+            selectedPalletID = indexPath.item
+            self.collectionViewBox?.reloadData()
+        }
+        else{
+            // highlight selected box
+            
+            let name = "box" + String(indexPath.item)
+          
+            for child in scnView.scene!.rootNode.childNodes {
+                if child.name == name{
+                    child.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                }
+                else if child.name != "pallet" {
+                    child.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0.7)
+                }
+            }
+            
+        }
     }
 }
 

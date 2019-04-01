@@ -63,6 +63,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         
         collectionViewPallet.delegate = self
         collectionViewPallet.dataSource = self
+        selectedPalletID = 0
         
         // start: to use json from file
         if let path = Bundle.main.path(forResource: "test", ofType: "json")
