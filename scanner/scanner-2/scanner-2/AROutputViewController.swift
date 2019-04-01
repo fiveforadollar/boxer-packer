@@ -10,6 +10,7 @@ import UIKit
 import ARKit
 import Foundation
 import SwiftyJSON
+import ChameleonFramework
 
 class AROutputViewController: UIViewController, UICollectionViewDelegate {
     
@@ -29,6 +30,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     var palletCenter = SCNVector3(0,0,0)
     var selectedPalletID : Int?
     var setData : String!
+    var available_colors = Colors.getAllColors()
     
     private let itemsPerRow = 4
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
@@ -145,11 +147,13 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     func addBoxesForPallet(_ palletID: Int){
         // remove box nodes from previously selected pallet
         print("in addBoxesForPallet ")
-        let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
-        guard let children = planeNode?.childNodes
+        guard let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
             else{
+                print("plane does not exist")
                 return
         }
+        let children = planeNode.childNodes
+        
         for child in children {
             guard let name = child.name
                 else{
@@ -161,10 +165,9 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             }
         }
         let pallet = set.pallets[palletID]
-        print("got pallet \(palletID) in addBoxesForPallet")
-        print("pallet.items.count = \(pallet.items.count)")
+        
         for i in 0...(pallet.items.count - 1){
-            print("box number \(i)")
+            
             let w = CGFloat(pallet.items[i].width)
             let h = CGFloat(pallet.items[i].height)
             let l = CGFloat(pallet.items[i].length)
@@ -172,18 +175,13 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             let x = pallet.items[i].position[0]
             let y = pallet.items[i].position[1]
             let z = pallet.items[i].position[2]
-           
-            print("box \(i): position: (\(x),\(y),\(z), length: \(l), width: \(w), height: \(h)")
+            
             let box = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
             
             let boxNode = SCNNode(geometry: box)
             boxNode.position = SCNVector3(x,y,z)
             boxNode.name = "box" + String(i)
-            guard let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
-                else{
-                    print("plane does not exist")
-                    return
-            }
+            boxNode.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
             planeNode.addChildNode(boxNode)
             
         }
@@ -223,20 +221,29 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        didDeselectItemAt indexPath: IndexPath){
-        if collectionView == self.collectionViewPallet{
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool{
+        if collectionView.cellForItem(at: indexPath)?.isSelected ?? false {
+            collectionView.deselectItem(at: indexPath, animated: true)
             
+            if collectionView == self.collectionViewBox{
+                let pallet = set.pallets[selectedPalletID!]
+                for i in 0...(pallet.items.count - 1){
+                    guard let child = sceneView.scene.rootNode.childNode(withName: "box"+String(i), recursively: true)
+                        else {
+                            return false
+                            // node with name not found
+                    }
+                    child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
+                }
+            }
+            
+            return false
         }
-        else {
-            // unhighlight
-//            let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
-//
-//            let name = "box" + String(indexPath.item)
-//            let boxNode = planeNode?.childNode(withName: name, recursively: true)
-//            boxNode?.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+        else{
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+            return true
         }
-    
+        
     }
     
     

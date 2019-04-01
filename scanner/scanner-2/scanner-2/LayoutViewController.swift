@@ -40,7 +40,7 @@ class LayoutViewController: UIViewController {
         // Initialize collectionVIew
         collectionViewPallet.backgroundColor = UIColor(white: 1, alpha: 0.5)
         collectionViewBox.backgroundColor = UIColor(white: 1, alpha: 0.5)
-
+        selectedPalletID = 0
         // Create scene
         let scene = SCNScene(named:"LayoutScene.scn")!
 
@@ -56,7 +56,7 @@ class LayoutViewController: UIViewController {
         
 //         Get pallet/box data to be visualized
 //         start: to use json from file
-                if let path = Bundle.main.path(forResource: "test1", ofType: "json")
+                if let path = Bundle.main.path(forResource: "test", ofType: "json")
                 {
                     do {
                         let fileUrl = URL(fileURLWithPath: path)
@@ -82,7 +82,7 @@ class LayoutViewController: UIViewController {
     }
     
     // Generates and returns a SCNNode, given the Box parameters
-    func createBox(_ box: Box) -> SCNNode {
+    func createBox(_ box: Box, _ boxNum: Int) -> SCNNode {
         let cube = SCNBox(width: CGFloat(box.width), height: CGFloat(box.height), length: CGFloat(box.length), chamferRadius: 0.0)
         // Create the cube's pivot point to be its back left corner
         let cubePivot = SCNMatrix4MakeTranslation(-(box.width/2), -(box.height/2), -(box.length/2))
@@ -93,10 +93,8 @@ class LayoutViewController: UIViewController {
         )
         
         // Set cube's color to be unique - take and remove from master list of colors
-        if available_colors.count > 0 {
-            let colorIndex = Int.random(in: 0..<available_colors.count)
-            let cubeColor = available_colors[colorIndex]
-            available_colors.remove(at: colorIndex)
+        if boxNum < available_colors.count {
+            let cubeColor = available_colors[boxNum]
             let cubeMaterial = SCNMaterial()
             cubeMaterial.diffuse.contents = cubeColor
             cubeMaterial.locksAmbientWithDiffuse = true
@@ -132,7 +130,7 @@ class LayoutViewController: UIViewController {
         let pallet = set.pallets[palletID]
         for i in 0...(pallet.items.count - 1){
             
-            let box = createBox(pallet.items[i])
+            let box = createBox(pallet.items[i], i)
             box.name = "box" + String(i)
             scnView.scene!.rootNode.addChildNode(box)
         }
@@ -262,7 +260,34 @@ extension LayoutViewController: UICollectionViewDelegate {
                 }
             }
             
+            
         }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool{
+        if collectionView.cellForItem(at: indexPath)?.isSelected ?? false {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            
+            if collectionView == self.collectionViewBox{
+                let pallet = set.pallets[selectedPalletID!]
+                for i in 0...(pallet.items.count - 1){
+                    guard let child = scnView.scene!.rootNode.childNode(withName: "box"+String(i), recursively: true)
+                        else {
+                            return false
+                            // node with name not found
+                    }
+                    child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
+                }
+            }
+            
+            return false
+        }
+        else{
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+            return true
+        }
+        
     }
 }
 
