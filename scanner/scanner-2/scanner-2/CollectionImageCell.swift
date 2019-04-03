@@ -20,8 +20,8 @@ class CollectionImageCell: UICollectionViewCell {
         willSet{
             if newValue
             {
-                let photo = UIImage(named: "pallet-blue.png")
-                
+                let photo = UIImage(named: "pallet.png")
+                self.backgroundColor = UIColor.flatYellow
                 self.imageView.image = photo
            
                 
@@ -29,7 +29,7 @@ class CollectionImageCell: UICollectionViewCell {
             else
             {
                 let photo = UIImage(named: "pallet.png")
-                
+                self.backgroundColor = UIColor.clear
                 self.imageView.image = photo
                
             }

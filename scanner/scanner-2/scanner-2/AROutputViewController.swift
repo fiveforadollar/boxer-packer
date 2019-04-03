@@ -32,7 +32,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     var setData : String!
     var available_colors = Colors.getAllColors()
     
-    private let itemsPerRow = 4
+    private let itemsPerRow = 6
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     
     // MARK: - Gestures, Actions
@@ -48,9 +48,13 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         pallet.materials.first?.diffuse.contents = UIColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 0.85)
         let palletNode = SCNNode(geometry: pallet)
         palletNode.name = "pallet"
-        palletNode.position = SCNVector3(0,0,-0.05)
+        palletNode.position = SCNVector3(0,0,-0.05/2)
         planeNode?.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0)
         planeNode?.addChildNode(palletNode)
+        
+        DispatchQueue.main.async {
+            self.buttonConfirmPlane.isHidden = true
+        }
         
     }
     
@@ -68,7 +72,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         selectedPalletID = 0
         
         // start: to use json from file
-        if let path = Bundle.main.path(forResource: "stacked_setdone", ofType: "json")
+        if let path = Bundle.main.path(forResource: "set0", ofType: "json")
         {
             do {
                 let fileUrl = URL(fileURLWithPath: path)
@@ -210,15 +214,20 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
             }
             for child in children{
                 if child.name == name{
-                    child.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                    child.geometry?.firstMaterial?.diffuse.contents = FlatYellow()
                 }
                 else if child.name != "pallet" {
                     child.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0.7)
                 }
             }
             
+            // Unselect colour all other collection view box cells
+            for boxCell in self.collectionViewBox.visibleCells {
+                if boxCell.isSelected == false {
+                    boxCell.backgroundColor = nil
+                }
+            }
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool{
@@ -236,12 +245,18 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
                         }
                         child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
                     }
-
+                
+                    // Recolour all other collection view box cells
+                    for cellIndex in 0..<self.collectionViewBox.visibleCells.count {
+                        let boxCell = self.collectionViewBox.visibleCells[cellIndex]
+                        boxCell.backgroundColor = available_colors[cellIndex]
+                    }
                 
                 return false
             }
             else{
                 collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                
                 return true
             }
         }
@@ -362,6 +377,7 @@ extension AROutputViewController: UICollectionViewDataSource{
             let photo = UIImage(named: "box.png")
             
             cell.boxImageView.image = photo
+            cell.backgroundColor = available_colors[indexPath.item]
             
             return cell
         }
@@ -375,7 +391,8 @@ extension AROutputViewController : UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
+//        let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
+        let paddingSpace = CGFloat(0)
         let availableWidth = sceneView.frame.width - paddingSpace
         let widthPerItem = availableWidth / CGFloat(itemsPerRow)
         
@@ -385,7 +402,7 @@ extension AROutputViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
+        return 0
     }
     
 }

@@ -321,7 +321,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     
                     if (!populated) {
                         print("populating data now!")
-                        self.sendDeviceData()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.sendDeviceData()
+                        }
+                        
                     } else {
                         // delay and loop back to getting current box and set
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {

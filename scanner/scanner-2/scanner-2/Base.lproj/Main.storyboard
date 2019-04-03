@@ -367,24 +367,33 @@
                                             <rect key="frame" x="0.0" y="0.0" width="61" height="64.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="box.png" translatesAutoresizingMaskIntoConstraints="NO" id="wM7-dq-dKb">
-                                                    <rect key="frame" x="5" y="5.5" width="51" height="54"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="box.png" translatesAutoresizingMaskIntoConstraints="NO" id="wM7-dq-dKb">
+                                                    <rect key="frame" x="14" y="3" width="32" height="34"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="54" id="Oca-AT-2HY"/>
                                                         <constraint firstAttribute="width" constant="51" id="pUa-sR-W5Z"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ys-ez-bZ6">
+                                                    <rect key="frame" x="9" y="39" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="5ys-ez-bZ6" firstAttribute="leading" secondItem="0tR-Br-SGg" secondAttribute="leading" constant="9" id="1BF-cd-Fqb"/>
                                             <constraint firstItem="wM7-dq-dKb" firstAttribute="centerX" secondItem="0tR-Br-SGg" secondAttribute="centerX" id="523-RP-ZiM"/>
-                                            <constraint firstAttribute="bottom" secondItem="wM7-dq-dKb" secondAttribute="bottom" constant="5" id="CBQ-48-8Vi"/>
+                                            <constraint firstItem="5ys-ez-bZ6" firstAttribute="centerX" secondItem="0tR-Br-SGg" secondAttribute="centerX" id="P9M-GO-qhK"/>
                                             <constraint firstItem="wM7-dq-dKb" firstAttribute="leading" secondItem="0tR-Br-SGg" secondAttribute="leading" constant="5" id="RA0-h3-xIW"/>
-                                            <constraint firstItem="wM7-dq-dKb" firstAttribute="centerY" secondItem="0tR-Br-SGg" secondAttribute="centerY" id="evF-cB-Pvm"/>
+                                            <constraint firstAttribute="trailing" secondItem="5ys-ez-bZ6" secondAttribute="trailing" constant="10" id="jLT-0L-ER2"/>
                                             <constraint firstAttribute="trailing" secondItem="wM7-dq-dKb" secondAttribute="trailing" constant="5" id="lxi-Yu-7kz"/>
+                                            <constraint firstAttribute="bottom" secondItem="5ys-ez-bZ6" secondAttribute="bottom" constant="0.5" id="noQ-Fk-aPG"/>
                                             <constraint firstItem="wM7-dq-dKb" firstAttribute="top" secondItem="0tR-Br-SGg" secondAttribute="top" constant="5.5" id="qkh-1d-xXt"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="boxImageLabel" destination="5ys-ez-bZ6" id="J2I-uz-gtd"/>
                                             <outlet property="boxImageView" destination="wM7-dq-dKb" id="HVX-eC-zus"/>
                                         </connections>
                                     </collectionViewCell>

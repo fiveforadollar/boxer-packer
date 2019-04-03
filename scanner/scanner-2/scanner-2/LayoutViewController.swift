@@ -23,7 +23,7 @@ class LayoutViewController: UIViewController {
     
     var selectedPalletID : Int?
     
-    private let itemsPerRow = 4
+    private let itemsPerRow = 6
     private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     var setData : String!
     // Pallets data structure to be filled by incoming data
@@ -56,7 +56,7 @@ class LayoutViewController: UIViewController {
         
 //         Get pallet/box data to be visualized
 //         start: to use json from file
-                if let path = Bundle.main.path(forResource: "stacked_setdone", ofType: "json")
+                if let path = Bundle.main.path(forResource: "set0", ofType: "json")
                 {
                     do {
                         let fileUrl = URL(fileURLWithPath: path)
@@ -92,7 +92,7 @@ class LayoutViewController: UIViewController {
             z: box.position[2]
         )
         
-        // Set cube's color to be unique - take and remove from master list of colors
+        // Set cube's color to be unique - take from master list of colors
         if boxNum < available_colors.count {
             let cubeColor = available_colors[boxNum]
             let cubeMaterial = SCNMaterial()
@@ -229,6 +229,12 @@ extension LayoutViewController: UICollectionViewDataSource{
             
             cell.boxImageView.image = photo
             
+            // Draw box id label under the box cell image
+            let boxId = String(set.pallets[selectedPalletID!].items[indexPath.item].id)
+            cell.boxImageLabel.text = boxId
+            
+            cell.backgroundColor = available_colors[indexPath.item]
+            
             return cell
         }
     }
@@ -247,20 +253,23 @@ extension LayoutViewController: UICollectionViewDelegate {
             self.collectionViewBox?.reloadData()
         }
         else{
-            // highlight selected box
-            
+            // highlight selected box and make all others transparent
             let name = "box" + String(indexPath.item)
-          
             for child in scnView.scene!.rootNode.childNodes {
                 if child.name == name{
-                    child.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                    child.geometry?.firstMaterial?.diffuse.contents = FlatYellow()
                 }
                 else if child.name != "pallet" {
                     child.geometry?.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0.7)
                 }
             }
             
-            
+            // Unselect colour all other collection view box cells
+            for boxCell in self.collectionViewBox.visibleCells {
+                if boxCell.isSelected == false {
+                    boxCell.backgroundColor = nil
+                }
+            }
         }
     }
     
@@ -280,6 +289,12 @@ extension LayoutViewController: UICollectionViewDelegate {
                         child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
                     }
                 
+                    // Recolour all other collection view box cells
+                    for cellIndex in 0..<self.collectionViewBox.visibleCells.count {
+                        let boxCell = self.collectionViewBox.visibleCells[cellIndex]
+                            boxCell.backgroundColor = available_colors[cellIndex]
+                    }
+        
                 return false
             }
             else{
@@ -297,7 +312,8 @@ extension LayoutViewController : UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
+//        let paddingSpace = sectionInsets.left * CGFloat(itemsPerRow + 1)
+        let paddingSpace = CGFloat(0)
         let availableWidth = scnView.frame.width - paddingSpace
         let widthPerItem = availableWidth / CGFloat(itemsPerRow)
         
@@ -307,7 +323,8 @@ extension LayoutViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
+//        return sectionInsets.left
+        return 0
     }
     
 }
