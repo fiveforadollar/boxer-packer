@@ -172,7 +172,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-Rd-BAR">
-                                <rect key="frame" x="0.0" y="338.5" width="375" height="70"/>
+                                <rect key="frame" x="0.0" y="249" width="375" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="FDL-El-nIJ"/>
                                 </constraints>
@@ -194,7 +194,7 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfq-ed-rED">
-                                <rect key="frame" x="0.0" y="258.5" width="375" height="70"/>
+                                <rect key="frame" x="0.0" y="171" width="375" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="Ysn-9a-Gb4"/>
                                 </constraints>
@@ -204,22 +204,57 @@
                                     <segue destination="BYZ-38-t0r" kind="show" id="jkp-oF-KWs"/>
                                 </connections>
                             </button>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ee-Qj-gcZ">
+                                <rect key="frame" x="0.0" y="384" width="375" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="hET-ah-Ijd"/>
+                                </constraints>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="08U-lg-dvr">
+                                <rect key="frame" x="0.0" y="472" width="375" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="3EO-0I-xKZ"/>
+                                </constraints>
+                                <state key="normal" title="Select"/>
+                                <connections>
+                                    <segue destination="KsR-WF-Zip" kind="show" identifier="chooseJSON" id="eDs-cs-lRE"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Load From File" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aMl-w3-8rc">
+                                <rect key="frame" x="0.0" y="345" width="375" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="H82-jt-Qxa"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="nfq-ed-rED" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="4Td-qV-Nlr"/>
-                            <constraint firstItem="8WB-y1-pLv" firstAttribute="trailing" secondItem="nfq-ed-rED" secondAttribute="trailing" id="8vW-ZV-eXs"/>
+                            <constraint firstItem="kk3-Rd-BAR" firstAttribute="trailing" secondItem="8WB-y1-pLv" secondAttribute="trailing" id="4z3-UU-suy"/>
+                            <constraint firstItem="aMl-w3-8rc" firstAttribute="trailing" secondItem="8WB-y1-pLv" secondAttribute="trailing" id="5Sq-VL-yEK"/>
+                            <constraint firstItem="8WB-y1-pLv" firstAttribute="bottom" secondItem="f3c-CA-UJr" secondAttribute="bottom" constant="20" id="5aU-jY-Fpl"/>
+                            <constraint firstItem="aMl-w3-8rc" firstAttribute="top" secondItem="kk3-Rd-BAR" secondAttribute="bottom" constant="26" id="9hf-ep-VBJ"/>
+                            <constraint firstItem="aMl-w3-8rc" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="Apm-oL-Xdb"/>
                             <constraint firstItem="f3c-CA-UJr" firstAttribute="centerX" secondItem="JQW-tC-bc1" secondAttribute="centerX" id="C9h-SQ-Ex0"/>
-                            <constraint firstItem="kk3-Rd-BAR" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="Guf-hX-Emx"/>
-                            <constraint firstItem="8WB-y1-pLv" firstAttribute="bottom" secondItem="f3c-CA-UJr" secondAttribute="bottom" constant="20" id="O89-X1-wAW"/>
-                            <constraint firstItem="8WB-y1-pLv" firstAttribute="trailing" secondItem="kk3-Rd-BAR" secondAttribute="trailing" id="Wkz-BU-kla"/>
-                            <constraint firstItem="nfq-ed-rED" firstAttribute="centerY" secondItem="JQW-tC-bc1" secondAttribute="centerY" constant="-40" id="avL-A0-8a4"/>
-                            <constraint firstItem="kk3-Rd-BAR" firstAttribute="centerY" secondItem="JQW-tC-bc1" secondAttribute="centerY" constant="40" id="gaS-QD-zFu"/>
+                            <constraint firstItem="nfq-ed-rED" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="EhG-lI-J46"/>
+                            <constraint firstItem="kk3-Rd-BAR" firstAttribute="top" secondItem="nfq-ed-rED" secondAttribute="bottom" constant="8" id="FH5-D5-ueL"/>
+                            <constraint firstItem="nfq-ed-rED" firstAttribute="trailing" secondItem="8WB-y1-pLv" secondAttribute="trailing" id="Jqa-tq-6r6"/>
+                            <constraint firstItem="0Ee-Qj-gcZ" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="VQR-na-tef"/>
+                            <constraint firstItem="08U-lg-dvr" firstAttribute="trailing" secondItem="8WB-y1-pLv" secondAttribute="trailing" id="VkB-0h-LRy"/>
+                            <constraint firstItem="08U-lg-dvr" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="cM2-a3-ziX"/>
+                            <constraint firstItem="08U-lg-dvr" firstAttribute="top" secondItem="0Ee-Qj-gcZ" secondAttribute="bottom" constant="8" id="iXw-I5-LgW"/>
+                            <constraint firstItem="kk3-Rd-BAR" firstAttribute="leading" secondItem="8WB-y1-pLv" secondAttribute="leading" id="ooL-Ff-BGk"/>
+                            <constraint firstItem="0Ee-Qj-gcZ" firstAttribute="trailing" secondItem="8WB-y1-pLv" secondAttribute="trailing" id="xZL-L5-5eD"/>
+                            <constraint firstItem="nfq-ed-rED" firstAttribute="top" secondItem="8WB-y1-pLv" secondAttribute="top" constant="107" id="xbB-Kf-B0c"/>
+                            <constraint firstItem="0Ee-Qj-gcZ" firstAttribute="top" secondItem="aMl-w3-8rc" secondAttribute="bottom" constant="8" id="zM2-mx-DfI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8WB-y1-pLv"/>
                     </view>
                     <navigationItem key="navigationItem" id="I3f-8c-HRi"/>
                     <connections>
+                        <outlet property="jsonPicker" destination="0Ee-Qj-gcZ" id="SOi-vG-Ujq"/>
                         <outlet property="logoView" destination="f3c-CA-UJr" id="1Kv-VD-oAf"/>
                         <outlet property="newSessionButton" destination="nfq-ed-rED" id="GD5-01-p3w"/>
                         <outlet property="viewLayoutButton" destination="kk3-Rd-BAR" id="CH6-mf-DxR"/>
@@ -620,4 +655,7 @@
         <image name="pallet.png" width="87.900001525878906" height="87.900001525878906"/>
         <image name="second_closet_logo.png" width="713" height="170"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="eDs-cs-lRE"/>
+    </inferredMetricsTieBreakers>
 </document>
