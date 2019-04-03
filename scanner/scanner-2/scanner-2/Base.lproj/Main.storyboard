@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Uue-rz-Zes">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Uue-rz-Zes">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -301,31 +301,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1S1-hc-D2c">
-                                <rect key="frame" x="123" y="238" width="128" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0v6-ml-lOP">
+                                <rect key="frame" x="99" y="240" width="177" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <state key="normal" title="3D Representation"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="00y-z6-xiJ">
-                                <rect key="frame" x="126" y="401" width="122" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="AR Represenation"/>
                                 <connections>
-                                    <segue destination="6J7-nc-mOI" kind="show" identifier="toAR" id="Lah-Nx-CQb"/>
+                                    <segue destination="zC2-YI-IKc" kind="show" identifier="to3D" id="pUY-wi-EXv"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0v6-ml-lOP">
-                                <rect key="frame" x="123" y="238" width="128" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="3D Representation"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="00y-z6-xiJ">
+                                <rect key="frame" x="103" y="401" width="169" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <state key="normal" title="AR Represenation"/>
                                 <connections>
-                                    <segue destination="zC2-YI-IKc" kind="show" identifier="to3D" id="nSD-Yg-iVh"/>
+                                    <segue destination="6J7-nc-mOI" kind="showDetail" id="lNL-tf-UQP"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="00y-z6-xiJ" firstAttribute="centerX" secondItem="wxl-H5-fCH" secondAttribute="centerX" id="3xe-a9-iI6"/>
+                            <constraint firstItem="0v6-ml-lOP" firstAttribute="top" secondItem="wxl-H5-fCH" secondAttribute="top" constant="176" id="fRo-y2-abu"/>
+                            <constraint firstItem="0v6-ml-lOP" firstAttribute="centerX" secondItem="wxl-H5-fCH" secondAttribute="centerX" id="tPy-Cp-gdb"/>
+                            <constraint firstItem="00y-z6-xiJ" firstAttribute="top" secondItem="0v6-ml-lOP" secondAttribute="bottom" constant="125" id="z5K-5r-UGZ"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="wxl-H5-fCH"/>
                     </view>
+                    <connections>
+                        <outlet property="to3DButton" destination="0v6-ml-lOP" id="1r5-xA-kWU"/>
+                        <outlet property="toARButton" destination="00y-z6-xiJ" id="eEh-Bw-q9U"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="52f-Tf-AEK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -465,10 +470,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cLl-nD-t9E">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </arscnView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="C4P-mU-kng">
-                                <rect key="frame" x="0.0" y="64" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="r0h-eS-qr7"/>
@@ -525,7 +530,7 @@
                                 </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NzQ-2Z-5Xh">
-                                <rect key="frame" x="0.0" y="128" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="84" width="375" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="3UZ-bU-0VT"/>
@@ -603,8 +608,8 @@
     </scenes>
     <resources>
         <image name="box.png" width="256" height="256"/>
-        <image name="pallet.png" width="879" height="879"/>
-        <image name="second_closet_logo.png" width="1426" height="340"/>
+        <image name="pallet.png" width="87.900001525878906" height="87.900001525878906"/>
+        <image name="second_closet_logo.png" width="713" height="170"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="U3d-fS-MMN"/>

@@ -44,7 +44,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         
         // remove plane node, add new plane with texture, or just edit it
         let planeNode = sceneView.scene.rootNode.childNode(withName: "plane", recursively: true)
-        let pallet = SCNBox(width: CGFloat(Constants.palletLength), height: CGFloat(Constants.palletWidth), length: CGFloat(0.1), chamferRadius: 0)
+        let pallet = SCNBox(width: CGFloat(Constants.palletLength/2), height: CGFloat(Constants.palletWidth/2), length: CGFloat(0.1/2), chamferRadius: 0)
         pallet.materials.first?.diffuse.contents = UIColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 0.85)
         let palletNode = SCNNode(geometry: pallet)
         palletNode.name = "pallet"
@@ -68,7 +68,7 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         selectedPalletID = 0
         
         // start: to use json from file
-        if let path = Bundle.main.path(forResource: "test", ofType: "json")
+        if let path = Bundle.main.path(forResource: "stacked_setdone", ofType: "json")
         {
             do {
                 let fileUrl = URL(fileURLWithPath: path)
@@ -168,13 +168,13 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
         
         for i in 0...(pallet.items.count - 1){
             
-            let w = CGFloat(pallet.items[i].width)
-            let h = CGFloat(pallet.items[i].height)
-            let l = CGFloat(pallet.items[i].length)
+            let w = CGFloat(pallet.items[i].width/2)
+            let h = CGFloat(pallet.items[i].height/2)
+            let l = CGFloat(pallet.items[i].length/2)
             
-            let x = pallet.items[i].position[0]
-            let y = pallet.items[i].position[1]
-            let z = pallet.items[i].position[2]
+            let x = pallet.items[i].position[0]/2
+            let y = pallet.items[i].position[1]/2
+            let z = pallet.items[i].position[2]/2
             
             let box = SCNBox(width: w, height: h, length: l, chamferRadius: 0)
             
@@ -222,30 +222,31 @@ class AROutputViewController: UIViewController, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool{
-        if collectionView.cellForItem(at: indexPath)?.isSelected ?? false {
-            collectionView.deselectItem(at: indexPath, animated: true)
-            
-            if collectionView == self.collectionViewBox{
-                let pallet = set.pallets[selectedPalletID!]
-                for i in 0...(pallet.items.count - 1){
-                    guard let child = sceneView.scene.rootNode.childNode(withName: "box"+String(i), recursively: true)
-                        else {
-                            return false
-                            // node with name not found
+        if collectionView == self.collectionViewBox{
+            if collectionView.cellForItem(at: indexPath)?.isSelected ?? false {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                
+                
+                    let pallet = set.pallets[selectedPalletID!]
+                    for i in 0...(pallet.items.count - 1){
+                        guard let child = sceneView.scene.rootNode.childNode(withName: "box"+String(i), recursively: true)
+                            else {
+                                return false
+                                // node with name not found
+                        }
+                        child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
                     }
-                    child.geometry?.firstMaterial?.diffuse.contents = available_colors[i]
-                }
+
+                
+                return false
             }
-            
-            return false
+            else{
+                collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                return true
+            }
         }
-        else{
-            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
-            return true
-        }
-        
+        return true
     }
-    
     
 }
 
@@ -350,7 +351,7 @@ extension AROutputViewController: UICollectionViewDataSource{
             let photo = UIImage(named: "pallet.png")
 
             cell.imageView.image = photo
-            cell.palletNumber.text = "1"
+            cell.palletNumber.text = String(indexPath.item + 1)
     //        cell.backgroundColor = .black
             
             return cell

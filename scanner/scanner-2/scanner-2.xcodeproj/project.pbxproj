@@ -19,8 +19,6 @@
 		0EE4C1C422482DEA009C1FEB /* second_closet_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EE4C1C322482DEA009C1FEB /* second_closet_logo.png */; };
 		8210FE1822519885006C9022 /* pallet_texture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8210FE1722519885006C9022 /* pallet_texture.jpg */; };
 		8210FE1A22519932006C9022 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210FE1922519932006C9022 /* Colors.swift */; };
-		8210FE202251A21A006C9022 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 8210FE1E2251A21A006C9022 /* test.json */; };
-		8210FE212251A21A006C9022 /* test1.json in Resources */ = {isa = PBXBuildFile; fileRef = 8210FE1F2251A21A006C9022 /* test1.json */; };
 		82249973225195F000196C94 /* LayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82249972225195F000196C94 /* LayoutViewController.swift */; };
 		82767AF32251A43E00C25998 /* LayoutScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 82767AF22251A43E00C25998 /* LayoutScene.scn */; };
 		828C8BA12242D3E100497810 /* BoxCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828C8BA02242D3E100497810 /* BoxCollectionViewCell.swift */; };
@@ -30,6 +28,7 @@
 		82CF274122402A5C00DB17D3 /* Pallets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF273E22402A5C00DB17D3 /* Pallets.swift */; };
 		82CF274222402A5C00DB17D3 /* AROutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF273F22402A5C00DB17D3 /* AROutputViewController.swift */; };
 		82CF274322402A5C00DB17D3 /* CollectionImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF274022402A5C00DB17D3 /* CollectionImageCell.swift */; };
+		82F831612252D1B100538FB0 /* stacked_setdone.json in Resources */ = {isa = PBXBuildFile; fileRef = 82F831602252D1B100538FB0 /* stacked_setdone.json */; };
 		82FDC5E222418284003CAF33 /* pallet.png in Resources */ = {isa = PBXBuildFile; fileRef = 82FDC5E122418284003CAF33 /* pallet.png */; };
 		82FDC5E42241836B003CAF33 /* pallet-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 82FDC5E32241836B003CAF33 /* pallet-blue.png */; };
 		8B511ABC49298E605293F8C8 /* Pods_scanner_2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A818A67DED4D45DF38D31DA3 /* Pods_scanner_2.framework */; };
@@ -51,8 +50,6 @@
 		7B0F6E7ECF12D73CB600168F /* Pods-scanner-2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-scanner-2.debug.xcconfig"; path = "Target Support Files/Pods-scanner-2/Pods-scanner-2.debug.xcconfig"; sourceTree = "<group>"; };
 		8210FE1722519885006C9022 /* pallet_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pallet_texture.jpg; sourceTree = "<group>"; };
 		8210FE1922519932006C9022 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		8210FE1E2251A21A006C9022 /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
-		8210FE1F2251A21A006C9022 /* test1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test1.json; sourceTree = "<group>"; };
 		82249972225195F000196C94 /* LayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutViewController.swift; sourceTree = "<group>"; };
 		82767AF22251A43E00C25998 /* LayoutScene.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = LayoutScene.scn; path = Layout.scnassets/Scenes/LayoutScene.scn; sourceTree = "<group>"; };
 		828C8BA02242D3E100497810 /* BoxCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -62,6 +59,7 @@
 		82CF273E22402A5C00DB17D3 /* Pallets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pallets.swift; sourceTree = "<group>"; };
 		82CF273F22402A5C00DB17D3 /* AROutputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AROutputViewController.swift; sourceTree = "<group>"; };
 		82CF274022402A5C00DB17D3 /* CollectionImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionImageCell.swift; sourceTree = "<group>"; };
+		82F831602252D1B100538FB0 /* stacked_setdone.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stacked_setdone.json; sourceTree = "<group>"; };
 		82FDC5E122418284003CAF33 /* pallet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pallet.png; sourceTree = "<group>"; };
 		82FDC5E32241836B003CAF33 /* pallet-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pallet-blue.png"; sourceTree = "<group>"; };
 		A818A67DED4D45DF38D31DA3 /* Pods_scanner_2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_scanner_2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,9 +99,8 @@
 		0E2484B021DD3B76001173D2 /* scanner-2 */ = {
 			isa = PBXGroup;
 			children = (
+				82F831602252D1B100538FB0 /* stacked_setdone.json */,
 				82767AF22251A43E00C25998 /* LayoutScene.scn */,
-				8210FE1E2251A21A006C9022 /* test.json */,
-				8210FE1F2251A21A006C9022 /* test1.json */,
 				8210FE1922519932006C9022 /* Colors.swift */,
 				8210FE1722519885006C9022 /* pallet_texture.jpg */,
 				0EE4C1C322482DEA009C1FEB /* second_closet_logo.png */,
@@ -209,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EE4C1C422482DEA009C1FEB /* second_closet_logo.png in Resources */,
+				82F831612252D1B100538FB0 /* stacked_setdone.json in Resources */,
 				82FDC5E222418284003CAF33 /* pallet.png in Resources */,
 				82FDC5E42241836B003CAF33 /* pallet-blue.png in Resources */,
 				828C8BA62242DCE800497810 /* box.png in Resources */,
@@ -216,10 +214,8 @@
 				0E2484BC21DD3B7A001173D2 /* LaunchScreen.storyboard in Resources */,
 				0E2484B921DD3B7A001173D2 /* Assets.xcassets in Resources */,
 				828C8BA82243461E00497810 /* box-blue.png in Resources */,
-				8210FE202251A21A006C9022 /* test.json in Resources */,
 				82767AF32251A43E00C25998 /* LayoutScene.scn in Resources */,
 				8210FE1822519885006C9022 /* pallet_texture.jpg in Resources */,
-				8210FE212251A21A006C9022 /* test1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

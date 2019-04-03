@@ -13,6 +13,8 @@ import SwiftyJSON
 class ChooseOutputViewController: UIViewController {
 
     var setID : Int!
+    @IBOutlet weak var to3DButton: UIButton!
+    @IBOutlet weak var toARButton: UIButton!
     
     var setData : String!
     
@@ -43,6 +45,9 @@ class ChooseOutputViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = BaseColors.yellow
+        self.to3DButton.setTitleColor(BaseColors.grey, for: .normal)
+        self.toARButton.setTitleColor(BaseColors.grey, for: .normal)
         getSetData()
         // Do any additional setup after loading the view.
     }
