@@ -27,6 +27,7 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         //logoView.layer.cornerRadius = 20
         logoView.clipsToBounds = true
         pickerData = ["set0", "stacked_setdone"]
+        selectedData = pickerData[0]
         self.jsonPicker.delegate = self
         self.jsonPicker.dataSource = self
         jsonPicker.selectRow(0, inComponent: 0, animated: true)
@@ -73,6 +74,7 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
                     let fileUrl = URL(fileURLWithPath: path)
                     let data = try String(contentsOf: fileUrl, encoding: .utf8)
                     destination?.setData = data
+                    destination?.setID = nil
                 }
                 catch {
     

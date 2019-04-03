@@ -48,7 +48,9 @@ class ChooseOutputViewController: UIViewController {
         self.view.backgroundColor = BaseColors.yellow
         self.to3DButton.setTitleColor(BaseColors.grey, for: .normal)
         self.toARButton.setTitleColor(BaseColors.grey, for: .normal)
-        getSetData()
+        if setID != nil {
+            getSetData()
+        }
         // Do any additional setup after loading the view.
     }
     

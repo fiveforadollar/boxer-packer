@@ -28,6 +28,7 @@
 		82CF274122402A5C00DB17D3 /* Pallets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF273E22402A5C00DB17D3 /* Pallets.swift */; };
 		82CF274222402A5C00DB17D3 /* AROutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF273F22402A5C00DB17D3 /* AROutputViewController.swift */; };
 		82CF274322402A5C00DB17D3 /* CollectionImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF274022402A5C00DB17D3 /* CollectionImageCell.swift */; };
+		82E72EBE22551AC2003AEBCD /* set0.json in Resources */ = {isa = PBXBuildFile; fileRef = 82E72EBD22551AC1003AEBCD /* set0.json */; };
 		82F831612252D1B100538FB0 /* stacked_setdone.json in Resources */ = {isa = PBXBuildFile; fileRef = 82F831602252D1B100538FB0 /* stacked_setdone.json */; };
 		82FDC5E222418284003CAF33 /* pallet.png in Resources */ = {isa = PBXBuildFile; fileRef = 82FDC5E122418284003CAF33 /* pallet.png */; };
 		82FDC5E42241836B003CAF33 /* pallet-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 82FDC5E32241836B003CAF33 /* pallet-blue.png */; };
@@ -59,6 +60,7 @@
 		82CF273E22402A5C00DB17D3 /* Pallets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pallets.swift; sourceTree = "<group>"; };
 		82CF273F22402A5C00DB17D3 /* AROutputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AROutputViewController.swift; sourceTree = "<group>"; };
 		82CF274022402A5C00DB17D3 /* CollectionImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionImageCell.swift; sourceTree = "<group>"; };
+		82E72EBD22551AC1003AEBCD /* set0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = set0.json; sourceTree = "<group>"; };
 		82F831602252D1B100538FB0 /* stacked_setdone.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stacked_setdone.json; sourceTree = "<group>"; };
 		82FDC5E122418284003CAF33 /* pallet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pallet.png; sourceTree = "<group>"; };
 		82FDC5E32241836B003CAF33 /* pallet-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pallet-blue.png"; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 		0E2484B021DD3B76001173D2 /* scanner-2 */ = {
 			isa = PBXGroup;
 			children = (
+				82E72EBD22551AC1003AEBCD /* set0.json */,
 				82F831602252D1B100538FB0 /* stacked_setdone.json */,
 				82767AF22251A43E00C25998 /* LayoutScene.scn */,
 				8210FE1922519932006C9022 /* Colors.swift */,
@@ -206,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EE4C1C422482DEA009C1FEB /* second_closet_logo.png in Resources */,
+				82E72EBE22551AC2003AEBCD /* set0.json in Resources */,
 				82F831612252D1B100538FB0 /* stacked_setdone.json in Resources */,
 				82FDC5E222418284003CAF33 /* pallet.png in Resources */,
 				82FDC5E42241836B003CAF33 /* pallet-blue.png in Resources */,
