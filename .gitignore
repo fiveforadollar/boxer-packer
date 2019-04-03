@@ -348,3 +348,5 @@ mock_client_results.txt
 .DS_Store
 scanner/.DS_Store
 *.xcuserstate
+scanner/scanner-2/scanner-2.xcworkspace/xcuserdata/michaelcesario.xcuserdatad/UserInterfaceState.xcuserstate
+scanner/scanner-2/scanner-2.xcodeproj/project.pbxproj
