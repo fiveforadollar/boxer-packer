@@ -30,7 +30,7 @@ class ChooseOutputViewController: UIViewController {
         Alamofire.request(Constants.baseURL + "getset", method: .post, parameters: parameters as Parameters, encoding: JSONEncoding.default, headers: headers)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
-                    let json = JSON.init(parseJSON: utf8Text)
+//                    let json = JSON.init(parseJSON: utf8Text)
                     //let test = json["datetime"].stringValue
                     self.setData = utf8Text
                     //let alert = UIAlertController(title: test, message: test, preferredStyle: .alert)
