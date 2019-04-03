@@ -21,6 +21,34 @@ class SetTableViewController: UITableViewController {
 
     var sets = [set]()
     var selectedSet : Int!
+    var setData: String!
+    
+    func getSetOrientationData() {
+        let parameters = [
+            "setID" : self.selectedSet,
+        ]
+
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+
+        Alamofire.request(Constants.baseURL + "getset", method: .post, parameters: parameters as Parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseData { response in
+                if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
+//                    let json = JSON.init(parseJSON: utf8Text)
+                    //let test = json["datetime"].stringValue
+                    self.setData = utf8Text
+                    
+                    self.performSegue(withIdentifier: "setSegue", sender: self)
+                    //let alert = UIAlertController(title: test, message: test, preferredStyle: .alert)
+
+                    //alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+
+                    //self.present(alert, animated: true)
+
+                }
+            }
+    }
     
     func getData() {
         Alamofire.request(Constants.baseURL + "sets", method: .get)
@@ -74,7 +102,7 @@ class SetTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedSet = sets[indexPath.row].setID
-        performSegue(withIdentifier: "setSegue", sender: self)
+        getSetOrientationData()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -125,7 +153,8 @@ class SetTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "setSegue" {
             let destination = segue.destination as? ChooseOutputViewController
-            destination?.setID = self.selectedSet
+//            destination?.setID = self.selectedSet
+            destination?.setData = self.setData
         }
     }
  

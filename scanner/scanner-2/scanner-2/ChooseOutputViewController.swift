@@ -22,11 +22,11 @@ class ChooseOutputViewController: UIViewController {
         let parameters = [
             "setID" : self.setID,
         ]
-        
+
         let headers: HTTPHeaders = [
             "Content-Type": "application/json"
         ]
-        
+
         Alamofire.request(Constants.baseURL + "getset", method: .post, parameters: parameters as Parameters, encoding: JSONEncoding.default, headers: headers)
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
@@ -34,11 +34,11 @@ class ChooseOutputViewController: UIViewController {
                     //let test = json["datetime"].stringValue
                     self.setData = utf8Text
                     //let alert = UIAlertController(title: test, message: test, preferredStyle: .alert)
-                    
+
                     //alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-                    
+
                     //self.present(alert, animated: true)
-                    
+
                 }
         }
     }
@@ -48,9 +48,9 @@ class ChooseOutputViewController: UIViewController {
         self.view.backgroundColor = BaseColors.yellow
         self.to3DButton.setTitleColor(BaseColors.grey, for: .normal)
         self.toARButton.setTitleColor(BaseColors.grey, for: .normal)
-        if setID != nil {
-            getSetData()
-        }
+//        if setID != nil {
+//            getSetData()
+//        }
         // Do any additional setup after loading the view.
     }
     
