@@ -56,21 +56,21 @@ class LayoutViewController: UIViewController {
         
 //         Get pallet/box data to be visualized
 //         start: to use json from file
-                if let path = Bundle.main.path(forResource: "set0", ofType: "json")
-                {
-                    do {
-                        let fileUrl = URL(fileURLWithPath: path)
-                        let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
-                        set = parseJSON(data, set, output: "3D")
-                    }
-                    catch {
-        
-                    }
-                }
+//                if let path = Bundle.main.path(forResource: "set0", ofType: "json")
+//                {
+//                    do {
+//                        let fileUrl = URL(fileURLWithPath: path)
+//                        let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
+//                        set = parseJSON(data, set, output: "3D")
+//                    }
+//                    catch {
+//        
+//                    }
+//                }
 //         end
         
-//        let json = setData.data(using: .utf8)!
-//        set = parseJSON(json, set, output: "3D")
+        let json = setData.data(using: .utf8)!
+        set = parseJSON(json, set, output: "3D")
         
         // Catch in case there are no pallets
         if set.pallets.count <= 0 {

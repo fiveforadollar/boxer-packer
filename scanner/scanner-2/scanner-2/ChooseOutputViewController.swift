@@ -68,7 +68,7 @@ class ChooseOutputViewController: UIViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "to3D" {
             let destination = segue.destination as? LayoutViewController
-            //destination?.setData = self.setData
+            destination?.setData = self.setData
         }
         else if segue.identifier == "toAR" {
             let destination = segue.destination as? AROutputViewController
