@@ -228,7 +228,7 @@ public:
 			}
 
 			// Do the packing:
-			unpackedBoxes = readBoxesFromJson("C:\\Users\\WLaptop\\testData.json");
+			//unpackedBoxes = readBoxesFromJson("C:\\Users\\WLaptop\\testData.json");
 
 			// TO DO: remove this
 			//Box* box = new Box(P_LENGTH/2, P_WIDTH/2, P_HEIGHT*0.9, 1);
