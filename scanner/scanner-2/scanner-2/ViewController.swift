@@ -200,9 +200,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     let rejected = json["rejected"].boolValue
                     
                     if (rejected) {
-                        self.view.makeToast("REJECTED", duration: 5.0, position: .center)
+                        self.view.makeToast("REJECTED", duration: 2.5, position: .center)
                     }
-                    self.view.makeToast("ACCEPTED", duration: 5.0, position: .center)
+                    self.view.makeToast("ACCEPTED", duration: 2.5, position: .center)
                 }
         }
     }

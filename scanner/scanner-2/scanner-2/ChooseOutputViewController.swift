@@ -29,13 +29,13 @@ class ChooseOutputViewController: UIViewController {
             .responseData { response in
                 if let data = response.result.value, let utf8Text = String(data: data, encoding: .utf8) {
                     let json = JSON.init(parseJSON: utf8Text)
-                    let test = json["datetime"].stringValue
+                    //let test = json["datetime"].stringValue
                     self.setData = utf8Text
-                    let alert = UIAlertController(title: test, message: test, preferredStyle: .alert)
+                    //let alert = UIAlertController(title: test, message: test, preferredStyle: .alert)
                     
-                    alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+                    //alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
                     
-                    self.present(alert, animated: true)
+                    //self.present(alert, animated: true)
                     
                 }
         }
